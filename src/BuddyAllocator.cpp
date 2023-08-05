@@ -211,7 +211,7 @@ bool BuddyAllocator::is2(size_t sz) {
 
 int BuddyAllocator::degreeOfTwo(size_t size){
     int counter = 0;
-    int myS = size;
+    int myS = (int)size/BLOCK_SIZE;
     while(myS != 1){
         counter++;
         myS = myS / 2;
