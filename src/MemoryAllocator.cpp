@@ -13,10 +13,9 @@ size_t MemoryAllocator::roundToNumOfBlocks(size_t size) {
 }
 
 void MemoryAllocator::init() {
-    freeMemHead->size = (char *) HEAP_END_ADDR - (char *) HEAP_START_ADDR;
-    freeMemHead = (FreeMem *) ((char*)HEAP_START_ADDR + freeMemHead->size/8 + 1);
+    freeMemHead = (FreeMem *) ((char*)HEAP_START_ADDR + ((char *) HEAP_END_ADDR - (char *) HEAP_START_ADDR)/8 + 1);
     freeMemHead->next = nullptr;
-    freeMemHead->size = freeMemHead->size/8 * 7;
+    freeMemHead->size = ((char *) HEAP_END_ADDR - (char *) HEAP_START_ADDR)/8*7;
 }
 
 void *MemoryAllocator::malloc(size_t sz) {
