@@ -16,7 +16,7 @@ void MemoryAllocator::init() {
     freeMemHead->size = (char *) HEAP_END_ADDR - (char *) HEAP_START_ADDR;
     freeMemHead = (FreeMem *) ((char*)HEAP_START_ADDR + freeMemHead->size/8 + 1);
     freeMemHead->next = nullptr;
-    freeMemHead->size = freeMemHead/8 * 7;
+    freeMemHead->size = freeMemHead->size/8 * 7;
 }
 
 void *MemoryAllocator::malloc(size_t sz) {
