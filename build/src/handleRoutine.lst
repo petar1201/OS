@@ -1,0 +1,2204 @@
+GAS LISTING /tmp/ccMzArNM.s 			page 1
+
+
+   1              		.file	"handleRoutine.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	handleRoutine
+   9              	handleRoutine:
+  10              	.LFB2:
+  11              		.file 1 "src/handleRoutine.cpp"
+   1:src/handleRoutine.cpp **** #include "../lib/console.h"
+   2:src/handleRoutine.cpp **** #include "../h/MemoryAllocator.hpp"
+   3:src/handleRoutine.cpp **** #include "../h/KernelThread.hpp"
+   4:src/handleRoutine.cpp **** #include "../h/KernelSemaphore.hpp"
+   5:src/handleRoutine.cpp **** #include "../h/KernelBuffer.hpp"
+   6:src/handleRoutine.cpp **** #include "../h/Timer.hpp"
+   7:src/handleRoutine.cpp **** #include "../lib/console.h"
+   8:src/handleRoutine.cpp **** 
+   9:src/handleRoutine.cpp **** extern "C" void handleRoutine(){//read a7...a0
+  12              		.loc 1 9 32
+  13              		.cfi_startproc
+  14 0000 130101F9 		addi	sp,sp,-112
+  15              		.cfi_def_cfa_offset 112
+  16 0004 23341106 		sd	ra,104(sp)
+  17 0008 23308106 		sd	s0,96(sp)
+  18 000c 233C9104 		sd	s1,88(sp)
+  19 0010 23382105 		sd	s2,80(sp)
+  20 0014 23343105 		sd	s3,72(sp)
+  21              		.cfi_offset 1, -8
+  22              		.cfi_offset 8, -16
+  23              		.cfi_offset 9, -24
+  24              		.cfi_offset 18, -32
+  25              		.cfi_offset 19, -40
+  26 0018 13040107 		addi	s0,sp,112
+  27              		.cfi_def_cfa 8, 0
+  10:src/handleRoutine.cpp **** 
+  11:src/handleRoutine.cpp ****     uint64 a7, a6, a5, a4, a3, a2, a1, a0;
+  28              		.loc 1 11 5
+  12:src/handleRoutine.cpp **** 
+  13:src/handleRoutine.cpp ****     __asm__ volatile("sd a7, %0":"=m"(a7));
+  29              		.loc 1 13 5
+  30              		.loc 1 13 43 is_stmt 0
+  31              	#APP
+  32              	# 13 "src/handleRoutine.cpp" 1
+  14              	    __asm__ volatile("sd a6, %0":"=m"(a6));
+  33              		sd a7, -56(s0)
+  34              	# 0 "" 2
+  35              		.loc 1 14 5 is_stmt 1
+  36              		.loc 1 14 43 is_stmt 0
+  37              	# 14 "src/handleRoutine.cpp" 1
+  15              	    __asm__ volatile("sd a5, %0":"=m"(a5));
+  38              		sd a6, -64(s0)
+  39              	# 0 "" 2
+  40              		.loc 1 15 5 is_stmt 1
+  41              		.loc 1 15 43 is_stmt 0
+  42              	# 15 "src/handleRoutine.cpp" 1
+  16              	    __asm__ volatile("sd a4, %0":"=m"(a4));
+GAS LISTING /tmp/ccMzArNM.s 			page 2
+
+
+  43              		sd a5, -72(s0)
+  44              	# 0 "" 2
+  45              		.loc 1 16 5 is_stmt 1
+  46              		.loc 1 16 43 is_stmt 0
+  47              	# 16 "src/handleRoutine.cpp" 1
+  17              	    __asm__ volatile("sd a3, %0":"=m"(a3));
+  48              		sd a4, -80(s0)
+  49              	# 0 "" 2
+  50              		.loc 1 17 5 is_stmt 1
+  51              		.loc 1 17 43 is_stmt 0
+  52              	# 17 "src/handleRoutine.cpp" 1
+  18              	    __asm__ volatile("sd a2, %0":"=m"(a2));
+  53              		sd a3, -88(s0)
+  54              	# 0 "" 2
+  55              		.loc 1 18 5 is_stmt 1
+  56              		.loc 1 18 43 is_stmt 0
+  57              	# 18 "src/handleRoutine.cpp" 1
+  19              	    __asm__ volatile("sd a1, %0":"=m"(a1));
+  58              		sd a2, -96(s0)
+  59              	# 0 "" 2
+  60              		.loc 1 19 5 is_stmt 1
+  61              		.loc 1 19 43 is_stmt 0
+  62              	# 19 "src/handleRoutine.cpp" 1
+  20              	    __asm__ volatile("sd a0, %0":"=m"(a0));
+  63              		sd a1, -104(s0)
+  64              	# 0 "" 2
+  65              		.loc 1 20 5 is_stmt 1
+  66              		.loc 1 20 43 is_stmt 0
+  67              	# 20 "src/handleRoutine.cpp" 1
+  21              	
+  22:src/handleRoutine.cpp **** /*
+  23:src/handleRoutine.cpp ****     printString("a4: ");
+  24:src/handleRoutine.cpp ****     printInteger(a4);
+  25:src/handleRoutine.cpp ****     __putc('\n');
+  26:src/handleRoutine.cpp **** 
+  27:src/handleRoutine.cpp ****     printString("a3: ");
+  28:src/handleRoutine.cpp ****     printInteger(a3);
+  29:src/handleRoutine.cpp ****     __putc('\n');
+  30:src/handleRoutine.cpp ****     printString("a2: ");
+  31:src/handleRoutine.cpp ****     printInteger(a2);
+  32:src/handleRoutine.cpp ****     __putc('\n');
+  33:src/handleRoutine.cpp ****     printString("a1: ");
+  34:src/handleRoutine.cpp ****     printInteger(a1);
+  35:src/handleRoutine.cpp ****     __putc('\n');
+  36:src/handleRoutine.cpp ****     printString("a0: ");
+  37:src/handleRoutine.cpp ****     printInteger(a0);
+  38:src/handleRoutine.cpp ****     __putc('\n');
+  39:src/handleRoutine.cpp ****     printString("-------------------\n");*/
+  40:src/handleRoutine.cpp **** 
+  41:src/handleRoutine.cpp ****     uint64 scauseVar;
+  68              		sd a0, -112(s0)
+  69              	# 0 "" 2
+  70              		.loc 1 41 5 is_stmt 1
+  42:src/handleRoutine.cpp ****     uint64 sepcVar;
+  71              		.loc 1 42 5
+  43:src/handleRoutine.cpp ****     uint64 sscratchVar;
+  72              		.loc 1 43 5
+GAS LISTING /tmp/ccMzArNM.s 			page 3
+
+
+  44:src/handleRoutine.cpp **** 
+  45:src/handleRoutine.cpp ****     __asm__ volatile ("csrr %0, sscratch": "=r"(sscratchVar));
+  73              		.loc 1 45 5
+  74              		.loc 1 45 62 is_stmt 0
+  75              	# 45 "src/handleRoutine.cpp" 1
+  46              	    __asm__ volatile("csrr %0, scause":"=r"(scauseVar));
+  76              		csrr s2, sscratch
+  77              	# 0 "" 2
+  78              	.LVL0:
+  79              		.loc 1 46 5 is_stmt 1
+  80              		.loc 1 46 56 is_stmt 0
+  81              	# 46 "src/handleRoutine.cpp" 1
+  47              	    __asm__ volatile("csrr %0, sepc":"=r"(sepcVar));
+  82              		csrr a4, scause
+  83              	# 0 "" 2
+  84              	.LVL1:
+  85              		.loc 1 47 5 is_stmt 1
+  86              		.loc 1 47 52 is_stmt 0
+  87              	# 47 "src/handleRoutine.cpp" 1
+  48              	
+  88              		csrr s1, sepc
+  89              	# 0 "" 2
+  90              	.LVL2:
+  49:src/handleRoutine.cpp ****     if(scauseVar == 8UL || scauseVar == 9UL){//if else
+  91              		.loc 1 49 5 is_stmt 1
+  92              	#NO_APP
+  93              	.LBB2:
+  94              		.loc 1 49 25 is_stmt 0
+  95 0048 930687FF 		addi	a3,a4,-8
+  96              		.loc 1 49 5
+  97 004c 93071000 		li	a5,1
+  98 0050 63FAD706 		bleu	a3,a5,.L26
+  99              	.LBE2:
+  50:src/handleRoutine.cpp **** 
+  51:src/handleRoutine.cpp ****         if(a0 == 0x01){//mem alloc
+  52:src/handleRoutine.cpp ****             void*retValue=MemoryAllocator::malloc(a1);
+  53:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+  54:src/handleRoutine.cpp **** 
+  55:src/handleRoutine.cpp ****         }
+  56:src/handleRoutine.cpp ****         else if (a0 == 0x02){//mem free
+  57:src/handleRoutine.cpp ****             int retValue=MemoryAllocator::free((void*)a1);
+  58:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+  59:src/handleRoutine.cpp ****         }
+  60:src/handleRoutine.cpp ****         else if (a0 == 0x11){//thread create
+  61:src/handleRoutine.cpp ****             uint64* stack;
+  62:src/handleRoutine.cpp ****             stack = (uint64*)a4;
+  63:src/handleRoutine.cpp ****             void* arg;
+  64:src/handleRoutine.cpp ****             arg = (void*)a3;
+  65:src/handleRoutine.cpp ****             KernelThread::Body b;
+  66:src/handleRoutine.cpp ****             b = (KernelThread::Body)a2;
+  67:src/handleRoutine.cpp ****             KernelThread**handle;
+  68:src/handleRoutine.cpp ****             handle = (KernelThread**)a1;
+  69:src/handleRoutine.cpp ****             int retValue = KernelThread::createCoroutine(handle, b, stack, arg,a5);
+  70:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+  71:src/handleRoutine.cpp ****         }
+  72:src/handleRoutine.cpp ****         else if (a0 == 0x12){//thread exit
+  73:src/handleRoutine.cpp ****             if(KernelThread::running != nullptr) {
+GAS LISTING /tmp/ccMzArNM.s 			page 4
+
+
+  74:src/handleRoutine.cpp ****                 KernelThread::running->setFinished(true);
+  75:src/handleRoutine.cpp ****                 KernelThread::yield();
+  76:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (0));
+  77:src/handleRoutine.cpp ****             }
+  78:src/handleRoutine.cpp ****             else{
+  79:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (-1));
+  80:src/handleRoutine.cpp ****             }
+  81:src/handleRoutine.cpp ****         }
+  82:src/handleRoutine.cpp ****         else if (a0 == 0x13){//thread dispatch
+  83:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+  84:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+  85:src/handleRoutine.cpp ****            // KernelThread::timeSliceCounter=0;
+  86:src/handleRoutine.cpp ****             KernelThread::dispatch();
+  87:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+  88:src/handleRoutine.cpp ****         }
+  89:src/handleRoutine.cpp ****         else if(a0 == 0x14){
+  90:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+  91:src/handleRoutine.cpp ****             int ret = KernelThread::start((KernelThread*)a1);
+  92:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+  93:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (ret));
+  94:src/handleRoutine.cpp ****         }
+  95:src/handleRoutine.cpp ****         else if(a0 == 0x21){//sem open
+  96:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+  97:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::createSemaphore((KernelSemaphore**)(a1),(int)a2);
+  98:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+  99:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 100:src/handleRoutine.cpp ****         }
+ 101:src/handleRoutine.cpp ****         else if(a0 == 0x22){//sem close
+ 102:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 103:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::destroy((KernelSemaphore*)a1);
+ 104:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 105:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 106:src/handleRoutine.cpp **** 
+ 107:src/handleRoutine.cpp ****         }
+ 108:src/handleRoutine.cpp ****         else if(a0 == 0x23){//sem wait
+ 109:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 110:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 111:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->wait();
+ 112:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 113:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 114:src/handleRoutine.cpp **** 
+ 115:src/handleRoutine.cpp ****         }
+ 116:src/handleRoutine.cpp ****         else if(a0 == 0x24){//sem signal
+ 117:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 118:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->signal();
+ 119:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 120:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 121:src/handleRoutine.cpp ****         }
+ 122:src/handleRoutine.cpp ****         else if(a0 == 0x31){//sleep
+ 123:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter=0;
+ 124:src/handleRoutine.cpp ****             int retValue = Timer::addInList(KernelThread::running, a1);
+ 125:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 126:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 127:src/handleRoutine.cpp ****             if(retValue!=-1)KernelThread::dispatchNoScheduler();
+ 128:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 129:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 130:src/handleRoutine.cpp ****         }
+GAS LISTING /tmp/ccMzArNM.s 			page 5
+
+
+ 131:src/handleRoutine.cpp ****         else if(a0 == 0x41){//getc
+ 132:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 133:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 134:src/handleRoutine.cpp ****             char c = KernelBuffer::ulaz->get();
+ 135:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 136:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (c));
+ 137:src/handleRoutine.cpp ****         }
+ 138:src/handleRoutine.cpp ****         else if(a0 == 0x42){//putc
+ 139:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 140:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 141:src/handleRoutine.cpp ****             KernelBuffer::izlaz->put((char)a1);
+ 142:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 143:src/handleRoutine.cpp ****         }
+ 144:src/handleRoutine.cpp ****         else if(a0 == 0x51){//change to user
+ 145:src/handleRoutine.cpp ****             uint64 sstatusVar;
+ 146:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sstatus" : "=r" (sstatusVar));
+ 147:src/handleRoutine.cpp ****             sstatusVar &= ~0x100;
+ 148:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 149:src/handleRoutine.cpp ****         }
+ 150:src/handleRoutine.cpp ****         else if(a0 == 0x52){//change to privileged
+ 151:src/handleRoutine.cpp ****             uint64 sstatusVar;
+ 152:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sstatus" : "=r" (sstatusVar));
+ 153:src/handleRoutine.cpp ****             sstatusVar |= 0x100;
+ 154:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 155:src/handleRoutine.cpp ****         }
+ 156:src/handleRoutine.cpp **** 
+ 157:src/handleRoutine.cpp ****         sepcVar+=4;
+ 158:src/handleRoutine.cpp ****         __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 159:src/handleRoutine.cpp ****         __asm__ volatile("sd a0,0x50(%0)" : : "r"(sscratchVar));
+ 160:src/handleRoutine.cpp ****     }
+ 161:src/handleRoutine.cpp ****     else if (scauseVar == 0x8000000000000001UL){
+ 100              		.loc 1 161 10 is_stmt 1
+ 101              	.LBB177:
+ 102              	.LBB3:
+ 103 0054 9307F0FF 		li	a5,-1
+ 104 0058 9397F703 		slli	a5,a5,63
+ 105 005c 93871700 		addi	a5,a5,1
+ 106 0060 6300F734 		beq	a4,a5,.L27
+ 107              	.LBE3:
+ 108              	.LBE177:
+ 162:src/handleRoutine.cpp ****         Timer::updateAll();
+ 163:src/handleRoutine.cpp ****         KernelThread::timeSliceCounter++;
+ 164:src/handleRoutine.cpp ****         if(KernelThread::timeSliceCounter >= KernelThread::running->getTimeSlice()){
+ 165:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter = 0;
+ 166:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sepc":"=r"(sepcVar));
+ 167:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 168:src/handleRoutine.cpp **** 
+ 169:src/handleRoutine.cpp ****             KernelThread::dispatch();
+ 170:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 171:src/handleRoutine.cpp ****             __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 172:src/handleRoutine.cpp **** 
+ 173:src/handleRoutine.cpp ****         }
+ 174:src/handleRoutine.cpp ****         __asm__ volatile ("csrc sip, 0x02");
+ 175:src/handleRoutine.cpp ****     }
+ 176:src/handleRoutine.cpp ****     else if (scauseVar == 0x8000000000000009UL) {
+ 109              		.loc 1 176 10
+ 110              	.LBB178:
+GAS LISTING /tmp/ccMzArNM.s 			page 6
+
+
+ 111              	.LBB11:
+ 112              	.LBB4:
+ 113 0064 9307F0FF 		li	a5,-1
+ 114 0068 9397F703 		slli	a5,a5,63
+ 115 006c 93879700 		addi	a5,a5,9
+ 116 0070 631EF70E 		bne	a4,a5,.L1
+ 117              	.LBE4:
+ 118              	.LBE11:
+ 119              	.LBE178:
+ 177:src/handleRoutine.cpp ****         if(plic_claim()==CONSOLE_IRQ){
+ 120              		.loc 1 177 9
+ 121              	.LBB179:
+ 122              	.LBB12:
+ 123              	.LBB9:
+ 124              	.LBB5:
+ 125              		.loc 1 177 22 is_stmt 0
+ 126 0074 97000000 		call	plic_claim@plt
+ 126      E7800000 
+ 127              	.LVL3:
+ 128              		.loc 1 177 9
+ 129 007c 9307A000 		li	a5,10
+ 130 0080 6316F50E 		bne	a0,a5,.L1
+ 131              	.LBB6:
+ 178:src/handleRoutine.cpp ****             uint8 *rx = (uint8 *) CONSOLE_RX_DATA;
+ 132              		.loc 1 178 13 is_stmt 1
+ 133              		.loc 1 178 20 is_stmt 0
+ 134 0084 97070000 		la	a5,CONSOLE_RX_DATA
+ 134      83B70700 
+ 135 008c 03B90700 		ld	s2,0(a5)
+ 136              	.LVL4:
+ 179:src/handleRoutine.cpp ****             uint8 *st = (uint8 *) CONSOLE_STATUS;
+ 137              		.loc 1 179 13 is_stmt 1
+ 138              		.loc 1 179 20 is_stmt 0
+ 139 0090 97070000 		la	a5,CONSOLE_STATUS
+ 139      83B70700 
+ 140 0098 83B40700 		ld	s1,0(a5)
+ 141              	.LVL5:
+ 142              	.L24:
+ 180:src/handleRoutine.cpp **** 
+ 181:src/handleRoutine.cpp ****             while((*st & CONSOLE_RX_STATUS_BIT)){
+ 143              		.loc 1 181 13 is_stmt 1
+ 144              		.loc 1 181 47
+ 145              		.loc 1 181 20 is_stmt 0
+ 146 009c 83C70400 		lbu	a5,0(s1)
+ 147              		.loc 1 181 47
+ 148 00a0 93F71700 		andi	a5,a5,1
+ 149 00a4 63820736 		beqz	a5,.L23
+ 182:src/handleRoutine.cpp ****                     rx = (uint8 *) CONSOLE_RX_DATA;
+ 150              		.loc 1 182 21 is_stmt 1
+ 183:src/handleRoutine.cpp ****                     KernelBuffer::ulaz->put((char) (*rx));
+ 151              		.loc 1 183 21
+ 152              		.loc 1 183 44 is_stmt 0
+ 153 00a8 83450900 		lbu	a1,0(s2)
+ 154 00ac 97070000 		la	a5,_ZN12KernelBuffer4ulazE
+ 154      83B70700 
+ 155 00b4 03B50700 		ld	a0,0(a5)
+ 156 00b8 97000000 		call	_ZN12KernelBuffer3putEc@plt
+GAS LISTING /tmp/ccMzArNM.s 			page 7
+
+
+ 156      E7800000 
+ 157              	.LVL6:
+ 158 00c0 6FF0DFFD 		j	.L24
+ 159              	.LVL7:
+ 160              	.L26:
+ 161              	.LBE6:
+ 162              	.LBE5:
+ 163              	.LBE9:
+ 164              	.LBE12:
+ 165              	.LBB13:
+  51:src/handleRoutine.cpp ****             void*retValue=MemoryAllocator::malloc(a1);
+ 166              		.loc 1 51 9 is_stmt 1
+ 167              	.LBB14:
+  51:src/handleRoutine.cpp ****             void*retValue=MemoryAllocator::malloc(a1);
+ 168              		.loc 1 51 15 is_stmt 0
+ 169 00c4 833704F9 		ld	a5,-112(s0)
+  51:src/handleRoutine.cpp ****             void*retValue=MemoryAllocator::malloc(a1);
+ 170              		.loc 1 51 9
+ 171 00c8 13071000 		li	a4,1
+ 172              	.LVL8:
+ 173 00cc 6382E708 		beq	a5,a4,.L28
+ 174              	.LBE14:
+ 175              	.LBE13:
+ 176              	.LBE179:
+  56:src/handleRoutine.cpp ****             int retValue=MemoryAllocator::free((void*)a1);
+ 177              		.loc 1 56 14 is_stmt 1
+ 178              	.LBB180:
+ 179              	.LBB161:
+ 180              	.LBB146:
+ 181              	.LBB15:
+ 182 00d0 13072000 		li	a4,2
+ 183 00d4 638AE70A 		beq	a5,a4,.L29
+ 184              	.LBE15:
+ 185              	.LBE146:
+ 186              	.LBE161:
+ 187              	.LBE180:
+  60:src/handleRoutine.cpp ****             uint64* stack;
+ 188              		.loc 1 60 14
+ 189              	.LBB181:
+ 190              	.LBB162:
+ 191              	.LBB147:
+ 192              	.LBB131:
+ 193              	.LBB16:
+ 194 00d8 13071001 		li	a4,17
+ 195 00dc 6380E70C 		beq	a5,a4,.L30
+ 196              	.LBE16:
+ 197              	.LBE131:
+ 198              	.LBE147:
+ 199              	.LBE162:
+ 200              	.LBE181:
+  72:src/handleRoutine.cpp ****             if(KernelThread::running != nullptr) {
+ 201              		.loc 1 72 14
+ 202              	.LBB182:
+ 203              	.LBB163:
+ 204              	.LBB148:
+ 205              	.LBB132:
+ 206              	.LBB117:
+GAS LISTING /tmp/ccMzArNM.s 			page 8
+
+
+ 207              	.LBB17:
+ 208 00e0 13072001 		li	a4,18
+ 209 00e4 638EE70C 		beq	a5,a4,.L31
+ 210              	.LBE17:
+ 211              	.LBE117:
+ 212              	.LBE132:
+ 213              	.LBE148:
+ 214              	.LBE163:
+ 215              	.LBE182:
+  82:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 216              		.loc 1 82 14
+ 217              	.LBB183:
+ 218              	.LBB164:
+ 219              	.LBB149:
+ 220              	.LBB133:
+ 221              	.LBB118:
+ 222              	.LBB104:
+ 223              	.LBB18:
+ 224 00e8 13073001 		li	a4,19
+ 225 00ec 6388E710 		beq	a5,a4,.L32
+ 226              	.LBE18:
+ 227              	.LBE104:
+ 228              	.LBE118:
+ 229              	.LBE133:
+ 230              	.LBE149:
+ 231              	.LBE164:
+ 232              	.LBE183:
+  89:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 233              		.loc 1 89 14
+ 234              	.LBB184:
+ 235              	.LBB165:
+ 236              	.LBB150:
+ 237              	.LBB134:
+ 238              	.LBB119:
+ 239              	.LBB105:
+ 240              	.LBB93:
+ 241              	.LBB19:
+ 242 00f0 13074001 		li	a4,20
+ 243 00f4 6384E712 		beq	a5,a4,.L33
+ 244              	.LBE19:
+ 245              	.LBE93:
+ 246              	.LBE105:
+ 247              	.LBE119:
+ 248              	.LBE134:
+ 249              	.LBE150:
+ 250              	.LBE165:
+ 251              	.LBE184:
+  95:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 252              		.loc 1 95 14
+ 253              	.LBB185:
+ 254              	.LBB166:
+ 255              	.LBB151:
+ 256              	.LBB135:
+ 257              	.LBB120:
+ 258              	.LBB106:
+ 259              	.LBB94:
+ 260              	.LBB83:
+GAS LISTING /tmp/ccMzArNM.s 			page 9
+
+
+ 261              	.LBB20:
+ 262 00f8 13071002 		li	a4,33
+ 263 00fc 6382E714 		beq	a5,a4,.L34
+ 264              	.LBE20:
+ 265              	.LBE83:
+ 266              	.LBE94:
+ 267              	.LBE106:
+ 268              	.LBE120:
+ 269              	.LBE135:
+ 270              	.LBE151:
+ 271              	.LBE166:
+ 272              	.LBE185:
+ 101:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 273              		.loc 1 101 14
+ 274              	.LBB186:
+ 275              	.LBB167:
+ 276              	.LBB152:
+ 277              	.LBB136:
+ 278              	.LBB121:
+ 279              	.LBB107:
+ 280              	.LBB95:
+ 281              	.LBB84:
+ 282              	.LBB73:
+ 283              	.LBB21:
+ 284 0100 13072002 		li	a4,34
+ 285 0104 6382E716 		beq	a5,a4,.L35
+ 286              	.LBE21:
+ 287              	.LBE73:
+ 288              	.LBE84:
+ 289              	.LBE95:
+ 290              	.LBE107:
+ 291              	.LBE121:
+ 292              	.LBE136:
+ 293              	.LBE152:
+ 294              	.LBE167:
+ 295              	.LBE186:
+ 108:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 296              		.loc 1 108 14
+ 297              	.LBB187:
+ 298              	.LBB168:
+ 299              	.LBB153:
+ 300              	.LBB137:
+ 301              	.LBB122:
+ 302              	.LBB108:
+ 303              	.LBB96:
+ 304              	.LBB85:
+ 305              	.LBB74:
+ 306              	.LBB64:
+ 307              	.LBB22:
+ 308 0108 13073002 		li	a4,35
+ 309 010c 6380E718 		beq	a5,a4,.L36
+ 310              	.LBE22:
+ 311              	.LBE64:
+ 312              	.LBE74:
+ 313              	.LBE85:
+ 314              	.LBE96:
+ 315              	.LBE108:
+GAS LISTING /tmp/ccMzArNM.s 			page 10
+
+
+ 316              	.LBE122:
+ 317              	.LBE137:
+ 318              	.LBE153:
+ 319              	.LBE168:
+ 320              	.LBE187:
+ 116:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 321              		.loc 1 116 14
+ 322              	.LBB188:
+ 323              	.LBB169:
+ 324              	.LBB154:
+ 325              	.LBB138:
+ 326              	.LBB123:
+ 327              	.LBB109:
+ 328              	.LBB97:
+ 329              	.LBB86:
+ 330              	.LBB75:
+ 331              	.LBB65:
+ 332              	.LBB56:
+ 333              	.LBB23:
+ 334 0110 13074002 		li	a4,36
+ 335 0114 6380E71A 		beq	a5,a4,.L37
+ 336              	.LBE23:
+ 337              	.LBE56:
+ 338              	.LBE65:
+ 339              	.LBE75:
+ 340              	.LBE86:
+ 341              	.LBE97:
+ 342              	.LBE109:
+ 343              	.LBE123:
+ 344              	.LBE138:
+ 345              	.LBE154:
+ 346              	.LBE169:
+ 347              	.LBE188:
+ 122:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter=0;
+ 348              		.loc 1 122 14
+ 349              	.LBB189:
+ 350              	.LBB170:
+ 351              	.LBB155:
+ 352              	.LBB139:
+ 353              	.LBB124:
+ 354              	.LBB110:
+ 355              	.LBB98:
+ 356              	.LBB87:
+ 357              	.LBB76:
+ 358              	.LBB66:
+ 359              	.LBB57:
+ 360              	.LBB49:
+ 361              	.LBB24:
+ 362 0118 13071003 		li	a4,49
+ 363 011c 638EE71A 		beq	a5,a4,.L38
+ 364              	.LBE24:
+ 365              	.LBE49:
+ 366              	.LBE57:
+ 367              	.LBE66:
+ 368              	.LBE76:
+ 369              	.LBE87:
+ 370              	.LBE98:
+GAS LISTING /tmp/ccMzArNM.s 			page 11
+
+
+ 371              	.LBE110:
+ 372              	.LBE124:
+ 373              	.LBE139:
+ 374              	.LBE155:
+ 375              	.LBE170:
+ 376              	.LBE189:
+ 131:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 377              		.loc 1 131 14
+ 378              	.LBB190:
+ 379              	.LBB171:
+ 380              	.LBB156:
+ 381              	.LBB140:
+ 382              	.LBB125:
+ 383              	.LBB111:
+ 384              	.LBB99:
+ 385              	.LBB88:
+ 386              	.LBB77:
+ 387              	.LBB67:
+ 388              	.LBB58:
+ 389              	.LBB50:
+ 390              	.LBB43:
+ 391              	.LBB25:
+ 392 0120 13071004 		li	a4,65
+ 393 0124 6386E720 		beq	a5,a4,.L39
+ 394              	.LBE25:
+ 395              	.LBE43:
+ 396              	.LBE50:
+ 397              	.LBE58:
+ 398              	.LBE67:
+ 399              	.LBE77:
+ 400              	.LBE88:
+ 401              	.LBE99:
+ 402              	.LBE111:
+ 403              	.LBE125:
+ 404              	.LBE140:
+ 405              	.LBE156:
+ 406              	.LBE171:
+ 407              	.LBE190:
+ 138:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 408              		.loc 1 138 14
+ 409              	.LBB191:
+ 410              	.LBB172:
+ 411              	.LBB157:
+ 412              	.LBB141:
+ 413              	.LBB126:
+ 414              	.LBB112:
+ 415              	.LBB100:
+ 416              	.LBB89:
+ 417              	.LBB78:
+ 418              	.LBB68:
+ 419              	.LBB59:
+ 420              	.LBB51:
+ 421              	.LBB44:
+ 422              	.LBB37:
+ 423              	.LBB26:
+ 424 0128 13072004 		li	a4,66
+ 425 012c 638AE722 		beq	a5,a4,.L40
+GAS LISTING /tmp/ccMzArNM.s 			page 12
+
+
+ 426              	.LBE26:
+ 427              	.LBE37:
+ 428              	.LBE44:
+ 429              	.LBE51:
+ 430              	.LBE59:
+ 431              	.LBE68:
+ 432              	.LBE78:
+ 433              	.LBE89:
+ 434              	.LBE100:
+ 435              	.LBE112:
+ 436              	.LBE126:
+ 437              	.LBE141:
+ 438              	.LBE157:
+ 439              	.LBE172:
+ 440              	.LBE191:
+ 144:src/handleRoutine.cpp ****             uint64 sstatusVar;
+ 441              		.loc 1 144 14
+ 442              	.LBB192:
+ 443              	.LBB173:
+ 444              	.LBB158:
+ 445              	.LBB142:
+ 446              	.LBB127:
+ 447              	.LBB113:
+ 448              	.LBB101:
+ 449              	.LBB90:
+ 450              	.LBB79:
+ 451              	.LBB69:
+ 452              	.LBB60:
+ 453              	.LBB52:
+ 454              	.LBB45:
+ 455              	.LBB38:
+ 456              	.LBB33:
+ 457              	.LBB27:
+ 458 0130 13071005 		li	a4,81
+ 459 0134 638EE724 		beq	a5,a4,.L41
+ 460              	.LBE27:
+ 461              	.LBE33:
+ 462              	.LBE38:
+ 463              	.LBE45:
+ 464              	.LBE52:
+ 465              	.LBE60:
+ 466              	.LBE69:
+ 467              	.LBE79:
+ 468              	.LBE90:
+ 469              	.LBE101:
+ 470              	.LBE113:
+ 471              	.LBE127:
+ 472              	.LBE142:
+ 473              	.LBE158:
+ 474              	.LBE173:
+ 475              	.LBE192:
+ 150:src/handleRoutine.cpp ****             uint64 sstatusVar;
+ 476              		.loc 1 150 14
+ 477              	.LBB193:
+ 478              	.LBB174:
+ 479              	.LBB159:
+ 480              	.LBB143:
+GAS LISTING /tmp/ccMzArNM.s 			page 13
+
+
+ 481              	.LBB128:
+ 482              	.LBB114:
+ 483              	.LBB102:
+ 484              	.LBB91:
+ 485              	.LBB80:
+ 486              	.LBB70:
+ 487              	.LBB61:
+ 488              	.LBB53:
+ 489              	.LBB46:
+ 490              	.LBB39:
+ 491              	.LBB34:
+ 492              	.LBB31:
+ 493              	.LBB28:
+ 494 0138 13072005 		li	a4,82
+ 495 013c 6392E702 		bne	a5,a4,.L4
+ 496              	.LBB29:
+ 151:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sstatus" : "=r" (sstatusVar));
+ 497              		.loc 1 151 13
+ 152:src/handleRoutine.cpp ****             sstatusVar |= 0x100;
+ 498              		.loc 1 152 13
+ 152:src/handleRoutine.cpp ****             sstatusVar |= 0x100;
+ 499              		.loc 1 152 69 is_stmt 0
+ 500              	#APP
+ 501              	# 152 "src/handleRoutine.cpp" 1
+ 502              		csrr a5, sstatus
+ 503              	# 0 "" 2
+ 504              	.LVL9:
+ 153:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 505              		.loc 1 153 13 is_stmt 1
+ 153:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 506              		.loc 1 153 24 is_stmt 0
+ 507              	#NO_APP
+ 508 0144 93E70710 		ori	a5,a5,256
+ 509              	.LVL10:
+ 154:src/handleRoutine.cpp ****         }
+ 510              		.loc 1 154 13 is_stmt 1
+ 154:src/handleRoutine.cpp ****         }
+ 511              		.loc 1 154 70 is_stmt 0
+ 512              	#APP
+ 513              	# 154 "src/handleRoutine.cpp" 1
+ 514              		csrw sstatus, a5
+ 515              	# 0 "" 2
+ 516              	#NO_APP
+ 517              	.LBE29:
+ 518 014c 6F004001 		j	.L4
+ 519              	.LVL11:
+ 520              	.L28:
+ 521              	.LBE28:
+ 522              	.LBE31:
+ 523              	.LBE34:
+ 524              	.LBE39:
+ 525              	.LBE46:
+ 526              	.LBE53:
+ 527              	.LBE61:
+ 528              	.LBE70:
+ 529              	.LBE80:
+ 530              	.LBE91:
+GAS LISTING /tmp/ccMzArNM.s 			page 14
+
+
+ 531              	.LBE102:
+ 532              	.LBE114:
+ 533              	.LBE128:
+ 534              	.LBE143:
+ 535              	.LBB144:
+  52:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 536              		.loc 1 52 13 is_stmt 1
+  52:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 537              		.loc 1 52 50 is_stmt 0
+ 538 0150 033584F9 		ld	a0,-104(s0)
+ 539 0154 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+ 539      E7800000 
+ 540              	.LVL12:
+  53:src/handleRoutine.cpp **** 
+ 541              		.loc 1 53 13 is_stmt 1
+  53:src/handleRoutine.cpp **** 
+ 542              		.loc 1 53 61 is_stmt 0
+ 543              	#APP
+ 544              	# 53 "src/handleRoutine.cpp" 1
+ 545              		mv a0, a0
+ 546              	# 0 "" 2
+ 547              	.LVL13:
+ 548              	#NO_APP
+ 549              	.L4:
+ 550              	.LBE144:
+ 551              	.LBE159:
+ 157:src/handleRoutine.cpp ****         __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 552              		.loc 1 157 9 is_stmt 1
+ 157:src/handleRoutine.cpp ****         __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 553              		.loc 1 157 16 is_stmt 0
+ 554 0160 93844400 		addi	s1,s1,4
+ 555              	.LVL14:
+ 158:src/handleRoutine.cpp ****         __asm__ volatile("sd a0,0x50(%0)" : : "r"(sscratchVar));
+ 556              		.loc 1 158 9 is_stmt 1
+ 158:src/handleRoutine.cpp ****         __asm__ volatile("sd a0,0x50(%0)" : : "r"(sscratchVar));
+ 557              		.loc 1 158 57 is_stmt 0
+ 558              	#APP
+ 559              	# 158 "src/handleRoutine.cpp" 1
+ 159:src/handleRoutine.cpp ****     }
+ 560              		csrw sepc, s1
+ 561              	# 0 "" 2
+ 562              		.loc 1 159 9 is_stmt 1
+ 159:src/handleRoutine.cpp ****     }
+ 563              		.loc 1 159 64 is_stmt 0
+ 564              	# 159 "src/handleRoutine.cpp" 1
+ 565              		sd a0,0x50(s2)
+ 566              	# 0 "" 2
+ 567              	.LVL15:
+ 568              	#NO_APP
+ 569              	.L1:
+ 570              	.LBE174:
+ 571              	.LBE193:
+ 184:src/handleRoutine.cpp ****             }
+ 185:src/handleRoutine.cpp ****             plic_complete(CONSOLE_IRQ);
+ 186:src/handleRoutine.cpp ****         }
+ 187:src/handleRoutine.cpp ****     }
+ 188:src/handleRoutine.cpp ****    // console_handler();
+GAS LISTING /tmp/ccMzArNM.s 			page 15
+
+
+ 189:src/handleRoutine.cpp **** }...
+ 572              		.loc 1 189 1
+ 573 016c 83308106 		ld	ra,104(sp)
+ 574              		.cfi_remember_state
+ 575              		.cfi_restore 1
+ 576 0170 03340106 		ld	s0,96(sp)
+ 577              		.cfi_restore 8
+ 578              		.cfi_def_cfa 2, 112
+ 579 0174 83348105 		ld	s1,88(sp)
+ 580              		.cfi_restore 9
+ 581 0178 03390105 		ld	s2,80(sp)
+ 582              		.cfi_restore 18
+ 583 017c 83398104 		ld	s3,72(sp)
+ 584              		.cfi_restore 19
+ 585 0180 13010107 		addi	sp,sp,112
+ 586              		.cfi_def_cfa_offset 0
+ 587 0184 67800000 		jr	ra
+ 588              	.LVL16:
+ 589              	.L29:
+ 590              		.cfi_restore_state
+ 591              	.LBB194:
+ 592              	.LBB175:
+ 593              	.LBB160:
+ 594              	.LBB145:
+ 595              	.LBB129:
+  57:src/handleRoutine.cpp ****             int retValue=MemoryAllocator::free((void*)a1);
+ 596              		.loc 1 57 13 is_stmt 1
+  57:src/handleRoutine.cpp ****             int retValue=MemoryAllocator::free((void*)a1);
+ 597              		.loc 1 57 47 is_stmt 0
+ 598 0188 033584F9 		ld	a0,-104(s0)
+ 599 018c 97000000 		call	_ZN15MemoryAllocator4freeEPv@plt
+ 599      E7800000 
+ 600              	.LVL17:
+  58:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 601              		.loc 1 58 13 is_stmt 1
+  58:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 602              		.loc 1 58 61 is_stmt 0
+ 603              	#APP
+ 604              	# 58 "src/handleRoutine.cpp" 1
+ 605              		mv a0, a0
+ 606              	# 0 "" 2
+ 607              	#NO_APP
+ 608              	.LBE129:
+ 609 0198 6FF09FFC 		j	.L4
+ 610              	.LVL18:
+ 611              	.L30:
+ 612              	.LBB130:
+ 613              	.LBB115:
+  61:src/handleRoutine.cpp ****             uint64* stack;
+ 614              		.loc 1 61 13 is_stmt 1
+  62:src/handleRoutine.cpp ****             stack = (uint64*)a4;
+ 615              		.loc 1 62 13
+  63:src/handleRoutine.cpp ****             void* arg;
+ 616              		.loc 1 63 13
+  64:src/handleRoutine.cpp ****             arg = (void*)a3;
+ 617              		.loc 1 64 13
+  65:src/handleRoutine.cpp ****             KernelThread::Body b;
+GAS LISTING /tmp/ccMzArNM.s 			page 16
+
+
+ 618              		.loc 1 65 13
+  66:src/handleRoutine.cpp ****             b = (KernelThread::Body)a2;
+ 619              		.loc 1 66 13
+  67:src/handleRoutine.cpp ****             KernelThread**handle;
+ 620              		.loc 1 67 13
+  68:src/handleRoutine.cpp ****             handle = (KernelThread**)a1;
+ 621              		.loc 1 68 13
+  69:src/handleRoutine.cpp ****             int retValue = KernelThread::createCoroutine(handle, b, stack, arg,a5);
+ 622              		.loc 1 69 13
+  69:src/handleRoutine.cpp ****             int retValue = KernelThread::createCoroutine(handle, b, stack, arg,a5);
+ 623              		.loc 1 69 57 is_stmt 0
+ 624 019c 033784FB 		ld	a4,-72(s0)
+ 625 01a0 833684FA 		ld	a3,-88(s0)
+ 626              	.LVL19:
+ 627 01a4 033604FB 		ld	a2,-80(s0)
+ 628 01a8 833504FA 		ld	a1,-96(s0)
+ 629 01ac 033584F9 		ld	a0,-104(s0)
+ 630 01b0 97000000 		call	_ZN12KernelThread15createCoroutineEPPS_PFvPvEPmS2_m@plt
+ 630      E7800000 
+ 631              	.LVL20:
+  70:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 632              		.loc 1 70 13 is_stmt 1
+  70:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 633              		.loc 1 70 61 is_stmt 0
+ 634              	#APP
+ 635              	# 70 "src/handleRoutine.cpp" 1
+ 636              		mv a0, a0
+ 637              	# 0 "" 2
+ 638              	#NO_APP
+ 639              	.LBE115:
+ 640 01bc 6FF05FFA 		j	.L4
+ 641              	.LVL21:
+ 642              	.L31:
+ 643              	.LBB116:
+  73:src/handleRoutine.cpp ****             if(KernelThread::running != nullptr) {
+ 644              		.loc 1 73 13 is_stmt 1
+  73:src/handleRoutine.cpp ****             if(KernelThread::running != nullptr) {
+ 645              		.loc 1 73 38 is_stmt 0
+ 646 01c0 97070000 		la	a5,_ZN12KernelThread7runningE
+ 646      83B70700 
+ 647 01c8 03B50700 		ld	a0,0(a5)
+  73:src/handleRoutine.cpp ****             if(KernelThread::running != nullptr) {
+ 648              		.loc 1 73 13
+ 649 01cc 63020502 		beqz	a0,.L8
+  74:src/handleRoutine.cpp ****                 KernelThread::running->setFinished(true);
+ 650              		.loc 1 74 17 is_stmt 1
+  74:src/handleRoutine.cpp ****                 KernelThread::running->setFinished(true);
+ 651              		.loc 1 74 51 is_stmt 0
+ 652 01d0 93051000 		li	a1,1
+ 653 01d4 97000000 		call	_ZN12KernelThread11setFinishedEb@plt
+ 653      E7800000 
+ 654              	.LVL22:
+  75:src/handleRoutine.cpp ****                 KernelThread::yield();
+ 655              		.loc 1 75 17 is_stmt 1
+  75:src/handleRoutine.cpp ****                 KernelThread::yield();
+ 656              		.loc 1 75 36 is_stmt 0
+ 657 01dc 97000000 		call	_ZN12KernelThread5yieldEv@plt
+GAS LISTING /tmp/ccMzArNM.s 			page 17
+
+
+ 657      E7800000 
+ 658              	.LVL23:
+  76:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (0));
+ 659              		.loc 1 76 17 is_stmt 1
+  76:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (0));
+ 660              		.loc 1 76 58 is_stmt 0
+ 661 01e4 93070000 		li	a5,0
+ 662              	#APP
+ 663              	# 76 "src/handleRoutine.cpp" 1
+ 664              		mv a0, a5
+ 665              	# 0 "" 2
+ 666              	#NO_APP
+ 667 01ec 6FF05FF7 		j	.L4
+ 668              	.LVL24:
+ 669              	.L8:
+  79:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (-1));
+ 670              		.loc 1 79 17 is_stmt 1
+  79:src/handleRoutine.cpp ****                 __asm__ volatile("mv a0, %0" : : "r" (-1));
+ 671              		.loc 1 79 59 is_stmt 0
+ 672 01f0 9307F0FF 		li	a5,-1
+ 673              	#APP
+ 674              	# 79 "src/handleRoutine.cpp" 1
+ 675              		mv a0, a5
+ 676              	# 0 "" 2
+ 677              	#NO_APP
+ 678 01f8 6FF09FF6 		j	.L4
+ 679              	.L32:
+ 680              	.LBB103:
+  83:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 681              		.loc 1 83 13 is_stmt 1
+  83:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 682              		.loc 1 83 62 is_stmt 0
+ 683              	#APP
+ 684              	# 83 "src/handleRoutine.cpp" 1
+ 685              		csrr s1, sepc
+ 686              	# 0 "" 2
+ 687              	.LVL25:
+  84:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 688              		.loc 1 84 13 is_stmt 1
+  84:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 689              		.loc 1 84 60 is_stmt 0
+ 690              	# 84 "src/handleRoutine.cpp" 1
+ 691              		csrr a5, sstatus
+ 692              	# 0 "" 2
+ 693              	#NO_APP
+ 694 0204 2334F4FC 		sd	a5,-56(s0)
+  86:src/handleRoutine.cpp ****             KernelThread::dispatch();
+ 695              		.loc 1 86 13 is_stmt 1
+  86:src/handleRoutine.cpp ****             KernelThread::dispatch();
+ 696              		.loc 1 86 35 is_stmt 0
+ 697 0208 97000000 		call	_ZN12KernelThread8dispatchEv@plt
+ 697      E7800000 
+ 698              	.LVL26:
+  87:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 699              		.loc 1 87 13 is_stmt 1
+  87:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 700              		.loc 1 87 59 is_stmt 0
+GAS LISTING /tmp/ccMzArNM.s 			page 18
+
+
+ 701 0210 833784FC 		ld	a5,-56(s0)
+ 702              	#APP
+ 703              	# 87 "src/handleRoutine.cpp" 1
+ 704              		csrw sstatus, a5
+ 705              	# 0 "" 2
+ 706              	#NO_APP
+ 707 0218 6FF09FF4 		j	.L4
+ 708              	.LVL27:
+ 709              	.L33:
+ 710              	.LBB92:
+ 711              	.LBB81:
+  90:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 712              		.loc 1 90 13 is_stmt 1
+  90:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 713              		.loc 1 90 60 is_stmt 0
+ 714              	#APP
+ 715              	# 90 "src/handleRoutine.cpp" 1
+ 716              		csrr a5, sstatus
+ 717              	# 0 "" 2
+ 718              	#NO_APP
+ 719 0220 2334F4FC 		sd	a5,-56(s0)
+  91:src/handleRoutine.cpp ****             int ret = KernelThread::start((KernelThread*)a1);
+ 720              		.loc 1 91 13 is_stmt 1
+  91:src/handleRoutine.cpp ****             int ret = KernelThread::start((KernelThread*)a1);
+ 721              		.loc 1 91 42 is_stmt 0
+ 722 0224 033584F9 		ld	a0,-104(s0)
+ 723 0228 97000000 		call	_ZN12KernelThread5startEPS_@plt
+ 723      E7800000 
+ 724              	.LVL28:
+  92:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 725              		.loc 1 92 13 is_stmt 1
+  92:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 726              		.loc 1 92 59 is_stmt 0
+ 727 0230 833784FC 		ld	a5,-56(s0)
+ 728              	#APP
+ 729              	# 92 "src/handleRoutine.cpp" 1
+  93:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (ret));
+ 730              		csrw sstatus, a5
+ 731              	# 0 "" 2
+ 732              		.loc 1 93 13 is_stmt 1
+  93:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (ret));
+ 733              		.loc 1 93 56 is_stmt 0
+ 734              	# 93 "src/handleRoutine.cpp" 1
+ 735              		mv a0, a0
+ 736              	# 0 "" 2
+ 737              	#NO_APP
+ 738              	.LBE81:
+ 739 023c 6FF05FF2 		j	.L4
+ 740              	.LVL29:
+ 741              	.L34:
+ 742              	.LBB82:
+ 743              	.LBB71:
+  96:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 744              		.loc 1 96 13 is_stmt 1
+  96:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 745              		.loc 1 96 60 is_stmt 0
+ 746              	#APP
+GAS LISTING /tmp/ccMzArNM.s 			page 19
+
+
+ 747              	# 96 "src/handleRoutine.cpp" 1
+ 748              		csrr a5, sstatus
+ 749              	# 0 "" 2
+ 750              	#NO_APP
+ 751 0244 2334F4FC 		sd	a5,-56(s0)
+  97:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::createSemaphore((KernelSemaphore**)(a1),(int)a2);
+ 752              		.loc 1 97 13 is_stmt 1
+  97:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::createSemaphore((KernelSemaphore**)(a1),(int)a2);
+ 753              		.loc 1 97 60 is_stmt 0
+ 754 0248 832504FA 		lw	a1,-96(s0)
+ 755 024c 033584F9 		ld	a0,-104(s0)
+ 756 0250 97000000 		call	_ZN15KernelSemaphore15createSemaphoreEPPS_i@plt
+ 756      E7800000 
+ 757              	.LVL30:
+  98:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 758              		.loc 1 98 13 is_stmt 1
+  98:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 759              		.loc 1 98 59 is_stmt 0
+ 760 0258 833784FC 		ld	a5,-56(s0)
+ 761              	#APP
+ 762              	# 98 "src/handleRoutine.cpp" 1
+  99:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 763              		csrw sstatus, a5
+ 764              	# 0 "" 2
+ 765              		.loc 1 99 13 is_stmt 1
+  99:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 766              		.loc 1 99 61 is_stmt 0
+ 767              	# 99 "src/handleRoutine.cpp" 1
+ 768              		mv a0, a0
+ 769              	# 0 "" 2
+ 770              	#NO_APP
+ 771              	.LBE71:
+ 772 0264 6FF0DFEF 		j	.L4
+ 773              	.LVL31:
+ 774              	.L35:
+ 775              	.LBB72:
+ 776              	.LBB62:
+ 102:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 777              		.loc 1 102 13 is_stmt 1
+ 102:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 778              		.loc 1 102 60 is_stmt 0
+ 779              	#APP
+ 780              	# 102 "src/handleRoutine.cpp" 1
+ 781              		csrr a5, sstatus
+ 782              	# 0 "" 2
+ 783              	#NO_APP
+ 784 026c 2334F4FC 		sd	a5,-56(s0)
+ 103:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::destroy((KernelSemaphore*)a1);
+ 785              		.loc 1 103 13 is_stmt 1
+ 103:src/handleRoutine.cpp ****             int retValue = KernelSemaphore::destroy((KernelSemaphore*)a1);
+ 786              		.loc 1 103 52 is_stmt 0
+ 787 0270 033584F9 		ld	a0,-104(s0)
+ 788 0274 97000000 		call	_ZN15KernelSemaphore7destroyEPS_@plt
+ 788      E7800000 
+ 789              	.LVL32:
+ 104:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 790              		.loc 1 104 13 is_stmt 1
+GAS LISTING /tmp/ccMzArNM.s 			page 20
+
+
+ 104:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 791              		.loc 1 104 59 is_stmt 0
+ 792 027c 833784FC 		ld	a5,-56(s0)
+ 793              	#APP
+ 794              	# 104 "src/handleRoutine.cpp" 1
+ 105:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 795              		csrw sstatus, a5
+ 796              	# 0 "" 2
+ 797              		.loc 1 105 13 is_stmt 1
+ 105:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 798              		.loc 1 105 61 is_stmt 0
+ 799              	# 105 "src/handleRoutine.cpp" 1
+ 800              		mv a0, a0
+ 801              	# 0 "" 2
+ 802              	#NO_APP
+ 803              	.LBE62:
+ 804 0288 6FF09FED 		j	.L4
+ 805              	.LVL33:
+ 806              	.L36:
+ 807              	.LBB63:
+ 808              	.LBB54:
+ 109:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 809              		.loc 1 109 13 is_stmt 1
+ 109:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 810              		.loc 1 109 62 is_stmt 0
+ 811              	#APP
+ 812              	# 109 "src/handleRoutine.cpp" 1
+ 813              		csrr s1, sepc
+ 814              	# 0 "" 2
+ 815              	.LVL34:
+ 110:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 816              		.loc 1 110 13 is_stmt 1
+ 110:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 817              		.loc 1 110 60 is_stmt 0
+ 818              	# 110 "src/handleRoutine.cpp" 1
+ 819              		csrr a5, sstatus
+ 820              	# 0 "" 2
+ 821              	#NO_APP
+ 822 0294 2334F4FC 		sd	a5,-56(s0)
+ 111:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->wait();
+ 823              		.loc 1 111 13 is_stmt 1
+ 111:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->wait();
+ 824              		.loc 1 111 56 is_stmt 0
+ 825 0298 033584F9 		ld	a0,-104(s0)
+ 826 029c 97000000 		call	_ZN15KernelSemaphore4waitEv@plt
+ 826      E7800000 
+ 827              	.LVL35:
+ 112:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 828              		.loc 1 112 13 is_stmt 1
+ 112:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 829              		.loc 1 112 59 is_stmt 0
+ 830 02a4 833784FC 		ld	a5,-56(s0)
+ 831              	#APP
+ 832              	# 112 "src/handleRoutine.cpp" 1
+ 113:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 833              		csrw sstatus, a5
+ 834              	# 0 "" 2
+GAS LISTING /tmp/ccMzArNM.s 			page 21
+
+
+ 835              		.loc 1 113 13 is_stmt 1
+ 113:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 836              		.loc 1 113 61 is_stmt 0
+ 837              	# 113 "src/handleRoutine.cpp" 1
+ 838              		mv a0, a0
+ 839              	# 0 "" 2
+ 840              	#NO_APP
+ 841              	.LBE54:
+ 842 02b0 6FF01FEB 		j	.L4
+ 843              	.LVL36:
+ 844              	.L37:
+ 845              	.LBB55:
+ 846              	.LBB47:
+ 117:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 847              		.loc 1 117 13 is_stmt 1
+ 117:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 848              		.loc 1 117 60 is_stmt 0
+ 849              	#APP
+ 850              	# 117 "src/handleRoutine.cpp" 1
+ 851              		csrr a5, sstatus
+ 852              	# 0 "" 2
+ 853              	#NO_APP
+ 854 02b8 2334F4FC 		sd	a5,-56(s0)
+ 118:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->signal();
+ 855              		.loc 1 118 13 is_stmt 1
+ 118:src/handleRoutine.cpp ****             int retValue = ((KernelSemaphore*)a1)->signal();
+ 856              		.loc 1 118 58 is_stmt 0
+ 857 02bc 033584F9 		ld	a0,-104(s0)
+ 858 02c0 97000000 		call	_ZN15KernelSemaphore6signalEv@plt
+ 858      E7800000 
+ 859              	.LVL37:
+ 119:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 860              		.loc 1 119 13 is_stmt 1
+ 119:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 861              		.loc 1 119 59 is_stmt 0
+ 862 02c8 833784FC 		ld	a5,-56(s0)
+ 863              	#APP
+ 864              	# 119 "src/handleRoutine.cpp" 1
+ 120:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 865              		csrw sstatus, a5
+ 866              	# 0 "" 2
+ 867              		.loc 1 120 13 is_stmt 1
+ 120:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 868              		.loc 1 120 61 is_stmt 0
+ 869              	# 120 "src/handleRoutine.cpp" 1
+ 870              		mv a0, a0
+ 871              	# 0 "" 2
+ 872              	#NO_APP
+ 873              	.LBE47:
+ 874 02d4 6FF0DFE8 		j	.L4
+ 875              	.LVL38:
+ 876              	.L38:
+ 877              	.LBB48:
+ 878              	.LBB40:
+ 123:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter=0;
+ 879              		.loc 1 123 13 is_stmt 1
+ 123:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter=0;
+GAS LISTING /tmp/ccMzArNM.s 			page 22
+
+
+ 880              		.loc 1 123 43 is_stmt 0
+ 881 02d8 97070000 		la	a5,_ZN12KernelThread16timeSliceCounterE
+ 881      83B70700 
+ 882 02e0 23B00700 		sd	zero,0(a5)
+ 124:src/handleRoutine.cpp ****             int retValue = Timer::addInList(KernelThread::running, a1);
+ 883              		.loc 1 124 13 is_stmt 1
+ 124:src/handleRoutine.cpp ****             int retValue = Timer::addInList(KernelThread::running, a1);
+ 884              		.loc 1 124 44 is_stmt 0
+ 885 02e4 833584F9 		ld	a1,-104(s0)
+ 886 02e8 97070000 		la	a5,_ZN12KernelThread7runningE
+ 886      83B70700 
+ 887 02f0 03B50700 		ld	a0,0(a5)
+ 888 02f4 97000000 		call	_ZN5Timer9addInListEP12KernelThreadm@plt
+ 888      E7800000 
+ 889              	.LVL39:
+ 890 02fc 93090500 		mv	s3,a0
+ 891              	.LVL40:
+ 125:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 892              		.loc 1 125 13 is_stmt 1
+ 125:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 893              		.loc 1 125 62 is_stmt 0
+ 894              	#APP
+ 895              	# 125 "src/handleRoutine.cpp" 1
+ 896              		csrr s1, sepc
+ 897              	# 0 "" 2
+ 898              	.LVL41:
+ 126:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 899              		.loc 1 126 13 is_stmt 1
+ 126:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 900              		.loc 1 126 60 is_stmt 0
+ 901              	# 126 "src/handleRoutine.cpp" 1
+ 902              		csrr a5, sstatus
+ 903              	# 0 "" 2
+ 904              	#NO_APP
+ 905 0308 2334F4FC 		sd	a5,-56(s0)
+ 127:src/handleRoutine.cpp ****             if(retValue!=-1)KernelThread::dispatchNoScheduler();
+ 906              		.loc 1 127 13 is_stmt 1
+ 907 030c 9307F0FF 		li	a5,-1
+ 908 0310 631AF500 		bne	a0,a5,.L42
+ 909              	.LVL42:
+ 910              	.L16:
+ 128:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 911              		.loc 1 128 13
+ 128:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 912              		.loc 1 128 59 is_stmt 0
+ 913 0314 833784FC 		ld	a5,-56(s0)
+ 914              	#APP
+ 915              	# 128 "src/handleRoutine.cpp" 1
+ 129:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 916              		csrw sstatus, a5
+ 917              	# 0 "" 2
+ 918              		.loc 1 129 13 is_stmt 1
+ 129:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (retValue));
+ 919              		.loc 1 129 61 is_stmt 0
+ 920              	# 129 "src/handleRoutine.cpp" 1
+ 921              		mv a0, s3
+ 922              	# 0 "" 2
+GAS LISTING /tmp/ccMzArNM.s 			page 23
+
+
+ 923              	#NO_APP
+ 924              	.LBE40:
+ 925 0320 6FF01FE4 		j	.L4
+ 926              	.LVL43:
+ 927              	.L42:
+ 928              	.LBB41:
+ 127:src/handleRoutine.cpp ****             if(retValue!=-1)KernelThread::dispatchNoScheduler();
+ 929              		.loc 1 127 29 is_stmt 1 discriminator 1
+ 127:src/handleRoutine.cpp ****             if(retValue!=-1)KernelThread::dispatchNoScheduler();
+ 930              		.loc 1 127 62 is_stmt 0 discriminator 1
+ 931 0324 97000000 		call	_ZN12KernelThread19dispatchNoSchedulerEv@plt
+ 931      E7800000 
+ 932              	.LVL44:
+ 933 032c 6FF09FFE 		j	.L16
+ 934              	.LVL45:
+ 935              	.L39:
+ 936              	.LBE41:
+ 937              	.LBB42:
+ 938              	.LBB35:
+ 132:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 939              		.loc 1 132 13 is_stmt 1
+ 132:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 940              		.loc 1 132 62 is_stmt 0
+ 941              	#APP
+ 942              	# 132 "src/handleRoutine.cpp" 1
+ 943              		csrr s1, sepc
+ 944              	# 0 "" 2
+ 945              	.LVL46:
+ 133:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 946              		.loc 1 133 13 is_stmt 1
+ 133:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 947              		.loc 1 133 60 is_stmt 0
+ 948              	# 133 "src/handleRoutine.cpp" 1
+ 949              		csrr a5, sstatus
+ 950              	# 0 "" 2
+ 951              	#NO_APP
+ 952 0338 2334F4FC 		sd	a5,-56(s0)
+ 134:src/handleRoutine.cpp ****             char c = KernelBuffer::ulaz->get();
+ 953              		.loc 1 134 13 is_stmt 1
+ 134:src/handleRoutine.cpp ****             char c = KernelBuffer::ulaz->get();
+ 954              		.loc 1 134 45 is_stmt 0
+ 955 033c 97070000 		la	a5,_ZN12KernelBuffer4ulazE
+ 955      83B70700 
+ 956 0344 03B50700 		ld	a0,0(a5)
+ 957 0348 97000000 		call	_ZN12KernelBuffer3getEv@plt
+ 957      E7800000 
+ 958              	.LVL47:
+ 135:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 959              		.loc 1 135 13 is_stmt 1
+ 135:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 960              		.loc 1 135 59 is_stmt 0
+ 961 0350 833784FC 		ld	a5,-56(s0)
+ 962              	#APP
+ 963              	# 135 "src/handleRoutine.cpp" 1
+ 136:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (c));
+ 964              		csrw sstatus, a5
+ 965              	# 0 "" 2
+GAS LISTING /tmp/ccMzArNM.s 			page 24
+
+
+ 966              		.loc 1 136 13 is_stmt 1
+ 136:src/handleRoutine.cpp ****             __asm__ volatile("mv a0, %0" : : "r" (c));
+ 967              		.loc 1 136 54 is_stmt 0
+ 968              	# 136 "src/handleRoutine.cpp" 1
+ 969              		mv a0, a0
+ 970              	# 0 "" 2
+ 971              	#NO_APP
+ 972              	.LBE35:
+ 973 035c 6FF05FE0 		j	.L4
+ 974              	.LVL48:
+ 975              	.L40:
+ 976              	.LBB36:
+ 139:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 977              		.loc 1 139 13 is_stmt 1
+ 139:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sepc": "=r"(sepcVar));
+ 978              		.loc 1 139 62 is_stmt 0
+ 979              	#APP
+ 980              	# 139 "src/handleRoutine.cpp" 1
+ 981              		csrr s1, sepc
+ 982              	# 0 "" 2
+ 983              	.LVL49:
+ 140:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 984              		.loc 1 140 13 is_stmt 1
+ 140:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 985              		.loc 1 140 60 is_stmt 0
+ 986              	# 140 "src/handleRoutine.cpp" 1
+ 987              		csrr a5, sstatus
+ 988              	# 0 "" 2
+ 989              	#NO_APP
+ 990 0368 2334F4FC 		sd	a5,-56(s0)
+ 141:src/handleRoutine.cpp ****             KernelBuffer::izlaz->put((char)a1);
+ 991              		.loc 1 141 13 is_stmt 1
+ 141:src/handleRoutine.cpp ****             KernelBuffer::izlaz->put((char)a1);
+ 992              		.loc 1 141 37 is_stmt 0
+ 993 036c 834584F9 		lbu	a1,-104(s0)
+ 994 0370 97070000 		la	a5,_ZN12KernelBuffer5izlazE
+ 994      83B70700 
+ 995 0378 03B50700 		ld	a0,0(a5)
+ 996 037c 97000000 		call	_ZN12KernelBuffer3putEc@plt
+ 996      E7800000 
+ 997              	.LVL50:
+ 142:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 998              		.loc 1 142 13 is_stmt 1
+ 142:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 999              		.loc 1 142 59 is_stmt 0
+ 1000 0384 833784FC 		ld	a5,-56(s0)
+ 1001              	#APP
+ 1002              	# 142 "src/handleRoutine.cpp" 1
+ 1003              		csrw sstatus, a5
+ 1004              	# 0 "" 2
+ 1005              	#NO_APP
+ 1006 038c 6FF05FDD 		j	.L4
+ 1007              	.LVL51:
+ 1008              	.L41:
+ 1009              	.LBB32:
+ 1010              	.LBB30:
+ 145:src/handleRoutine.cpp ****             uint64 sstatusVar;
+GAS LISTING /tmp/ccMzArNM.s 			page 25
+
+
+ 1011              		.loc 1 145 13 is_stmt 1
+ 146:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sstatus" : "=r" (sstatusVar));
+ 1012              		.loc 1 146 13
+ 146:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sstatus" : "=r" (sstatusVar));
+ 1013              		.loc 1 146 69 is_stmt 0
+ 1014              	#APP
+ 1015              	# 146 "src/handleRoutine.cpp" 1
+ 1016              		csrr a5, sstatus
+ 1017              	# 0 "" 2
+ 1018              	.LVL52:
+ 147:src/handleRoutine.cpp ****             sstatusVar &= ~0x100;
+ 1019              		.loc 1 147 13 is_stmt 1
+ 147:src/handleRoutine.cpp ****             sstatusVar &= ~0x100;
+ 1020              		.loc 1 147 24 is_stmt 0
+ 1021              	#NO_APP
+ 1022 0394 93F7F7EF 		andi	a5,a5,-257
+ 1023              	.LVL53:
+ 148:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 1024              		.loc 1 148 13 is_stmt 1
+ 148:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0" : : "r" (sstatusVar));
+ 1025              		.loc 1 148 70 is_stmt 0
+ 1026              	#APP
+ 1027              	# 148 "src/handleRoutine.cpp" 1
+ 1028              		csrw sstatus, a5
+ 1029              	# 0 "" 2
+ 1030              	#NO_APP
+ 1031              	.LBE30:
+ 1032 039c 6FF05FDC 		j	.L4
+ 1033              	.LVL54:
+ 1034              	.L27:
+ 1035              	.LBE32:
+ 1036              	.LBE36:
+ 1037              	.LBE42:
+ 1038              	.LBE48:
+ 1039              	.LBE55:
+ 1040              	.LBE63:
+ 1041              	.LBE72:
+ 1042              	.LBE82:
+ 1043              	.LBE92:
+ 1044              	.LBE103:
+ 1045              	.LBE116:
+ 1046              	.LBE130:
+ 1047              	.LBE145:
+ 1048              	.LBE160:
+ 1049              	.LBE175:
+ 1050              	.LBB176:
+ 162:src/handleRoutine.cpp ****         Timer::updateAll();
+ 1051              		.loc 1 162 9 is_stmt 1
+ 162:src/handleRoutine.cpp ****         Timer::updateAll();
+ 1052              		.loc 1 162 25 is_stmt 0
+ 1053 03a0 97000000 		call	_ZN5Timer9updateAllEv@plt
+ 1053      E7800000 
+ 1054              	.LVL55:
+ 163:src/handleRoutine.cpp ****         KernelThread::timeSliceCounter++;
+ 1055              		.loc 1 163 9 is_stmt 1
+ 163:src/handleRoutine.cpp ****         KernelThread::timeSliceCounter++;
+ 1056              		.loc 1 163 39 is_stmt 0
+GAS LISTING /tmp/ccMzArNM.s 			page 26
+
+
+ 1057 03a8 97040000 		la	s1,_ZN12KernelThread16timeSliceCounterE
+ 1057      83B40400 
+ 1058              	.LVL56:
+ 1059 03b0 83B70400 		ld	a5,0(s1)
+ 1060 03b4 93871700 		addi	a5,a5,1
+ 1061 03b8 23B0F400 		sd	a5,0(s1)
+ 164:src/handleRoutine.cpp ****         if(KernelThread::timeSliceCounter >= KernelThread::running->getTimeSlice()){
+ 1062              		.loc 1 164 9 is_stmt 1
+ 164:src/handleRoutine.cpp ****         if(KernelThread::timeSliceCounter >= KernelThread::running->getTimeSlice()){
+ 1063              		.loc 1 164 81 is_stmt 0
+ 1064 03bc 97070000 		la	a5,_ZN12KernelThread7runningE
+ 1064      83B70700 
+ 1065 03c4 03B50700 		ld	a0,0(a5)
+ 1066 03c8 97000000 		call	_ZNK12KernelThread12getTimeSliceEv@plt
+ 1066      E7800000 
+ 1067              	.LVL57:
+ 164:src/handleRoutine.cpp ****         if(KernelThread::timeSliceCounter >= KernelThread::running->getTimeSlice()){
+ 1068              		.loc 1 164 43
+ 1069 03d0 83B70400 		ld	a5,0(s1)
+ 164:src/handleRoutine.cpp ****         if(KernelThread::timeSliceCounter >= KernelThread::running->getTimeSlice()){
+ 1070              		.loc 1 164 9
+ 1071 03d4 63F6A700 		bgeu	a5,a0,.L43
+ 1072              	.L22:
+ 174:src/handleRoutine.cpp ****         __asm__ volatile ("csrc sip, 0x02");
+ 1073              		.loc 1 174 9 is_stmt 1
+ 174:src/handleRoutine.cpp ****         __asm__ volatile ("csrc sip, 0x02");
+ 1074              		.loc 1 174 44 is_stmt 0
+ 1075              	#APP
+ 1076              	# 174 "src/handleRoutine.cpp" 1
+ 1077              		csrc sip, 0x02
+ 1078              	# 0 "" 2
+ 1079              	#NO_APP
+ 1080 03dc 6FF01FD9 		j	.L1
+ 1081              	.L43:
+ 165:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter = 0;
+ 1082              		.loc 1 165 13 is_stmt 1
+ 165:src/handleRoutine.cpp ****             KernelThread::timeSliceCounter = 0;
+ 1083              		.loc 1 165 44 is_stmt 0
+ 1084 03e0 23B00400 		sd	zero,0(s1)
+ 166:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sepc":"=r"(sepcVar));
+ 1085              		.loc 1 166 13 is_stmt 1
+ 166:src/handleRoutine.cpp ****             __asm__ volatile("csrr %0, sepc":"=r"(sepcVar));
+ 1086              		.loc 1 166 60 is_stmt 0
+ 1087              	#APP
+ 1088              	# 166 "src/handleRoutine.cpp" 1
+ 1089              		csrr s1, sepc
+ 1090              	# 0 "" 2
+ 1091              	.LVL58:
+ 167:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 1092              		.loc 1 167 13 is_stmt 1
+ 167:src/handleRoutine.cpp ****             __asm__ volatile ("csrr %0, sstatus": "=r"(a7));
+ 1093              		.loc 1 167 60 is_stmt 0
+ 1094              	# 167 "src/handleRoutine.cpp" 1
+ 1095              		csrr a5, sstatus
+ 1096              	# 0 "" 2
+ 1097              	#NO_APP
+ 1098 03ec 2334F4FC 		sd	a5,-56(s0)
+GAS LISTING /tmp/ccMzArNM.s 			page 27
+
+
+ 169:src/handleRoutine.cpp ****             KernelThread::dispatch();
+ 1099              		.loc 1 169 13 is_stmt 1
+ 169:src/handleRoutine.cpp ****             KernelThread::dispatch();
+ 1100              		.loc 1 169 35 is_stmt 0
+ 1101 03f0 97000000 		call	_ZN12KernelThread8dispatchEv@plt
+ 1101      E7800000 
+ 1102              	.LVL59:
+ 170:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 1103              		.loc 1 170 13 is_stmt 1
+ 170:src/handleRoutine.cpp ****             __asm__ volatile("csrw sstatus, %0": :"r"(a7));
+ 1104              		.loc 1 170 59 is_stmt 0
+ 1105 03f8 833784FC 		ld	a5,-56(s0)
+ 1106              	#APP
+ 1107              	# 170 "src/handleRoutine.cpp" 1
+ 171:src/handleRoutine.cpp ****             __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 1108              		csrw sstatus, a5
+ 1109              	# 0 "" 2
+ 1110              		.loc 1 171 13 is_stmt 1
+ 171:src/handleRoutine.cpp ****             __asm__ volatile("csrw sepc, %0": :"r"(sepcVar));
+ 1111              		.loc 1 171 61 is_stmt 0
+ 1112              	# 171 "src/handleRoutine.cpp" 1
+ 1113              		csrw sepc, s1
+ 1114              	# 0 "" 2
+ 1115              	#NO_APP
+ 1116 0404 6FF05FFD 		j	.L22
+ 1117              	.LVL60:
+ 1118              	.L23:
+ 1119              	.LBB10:
+ 1120              	.LBB8:
+ 1121              	.LBB7:
+ 185:src/handleRoutine.cpp ****             plic_complete(CONSOLE_IRQ);
+ 1122              		.loc 1 185 13 is_stmt 1
+ 185:src/handleRoutine.cpp ****             plic_complete(CONSOLE_IRQ);
+ 1123              		.loc 1 185 26 is_stmt 0
+ 1124 0408 1305A000 		li	a0,10
+ 1125 040c 97000000 		call	plic_complete@plt
+ 1125      E7800000 
+ 1126              	.LVL61:
+ 1127              	.LBE7:
+ 1128              	.LBE8:
+ 1129              	.LBE10:
+ 1130              	.LBE176:
+ 1131              	.LBE194:
+ 1132              		.loc 1 189 1
+ 1133 0414 6FF09FD5 		j	.L1
+ 1134              		.cfi_endproc
+ 1135              	.LFE2:
+ 1137              	.Letext0:
+ 1138              		.file 2 "src/../h/../lib/hw.h"
+ 1139              		.file 3 "src/../h/MemoryAllocator.hpp"
+ 1140              		.file 4 "src/../h/KernelThread.hpp"
+ 1141              		.file 5 "src/../h/KernelSemaphore.hpp"
+ 1142              		.file 6 "src/../h/KernelBuffer.hpp"
+ 1143              		.file 7 "src/../h/Timer.hpp"
+ 1144              		.file 8 "src/../h/../h/syscall_c.hpp"
+GAS LISTING /tmp/ccMzArNM.s 			page 28
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 handleRoutine.cpp
+     /tmp/ccMzArNM.s:9      .text:0000000000000000 handleRoutine
+     /tmp/ccMzArNM.s:13     .text:0000000000000000 .L0 
+     /tmp/ccMzArNM.s:14     .text:0000000000000000 .L0 
+     /tmp/ccMzArNM.s:15     .text:0000000000000004 .L0 
+     /tmp/ccMzArNM.s:21     .text:0000000000000018 .L0 
+     /tmp/ccMzArNM.s:22     .text:0000000000000018 .L0 
+     /tmp/ccMzArNM.s:23     .text:0000000000000018 .L0 
+     /tmp/ccMzArNM.s:24     .text:0000000000000018 .L0 
+     /tmp/ccMzArNM.s:25     .text:0000000000000018 .L0 
+     /tmp/ccMzArNM.s:27     .text:000000000000001c .L0 
+     /tmp/ccMzArNM.s:29     .text:000000000000001c .L0 
+     /tmp/ccMzArNM.s:30     .text:000000000000001c .L0 
+src/handleRoutine.cpp:13     .text:000000000000001c .L0 
+     /tmp/ccMzArNM.s:36     .text:0000000000000020 .L0 
+src/handleRoutine.cpp:14     .text:0000000000000020 .L0 
+     /tmp/ccMzArNM.s:41     .text:0000000000000024 .L0 
+src/handleRoutine.cpp:15     .text:0000000000000024 .L0 
+     /tmp/ccMzArNM.s:46     .text:0000000000000028 .L0 
+src/handleRoutine.cpp:16     .text:0000000000000028 .L0 
+     /tmp/ccMzArNM.s:51     .text:000000000000002c .L0 
+src/handleRoutine.cpp:17     .text:000000000000002c .L0 
+     /tmp/ccMzArNM.s:56     .text:0000000000000030 .L0 
+src/handleRoutine.cpp:18     .text:0000000000000030 .L0 
+     /tmp/ccMzArNM.s:61     .text:0000000000000034 .L0 
+src/handleRoutine.cpp:19     .text:0000000000000034 .L0 
+     /tmp/ccMzArNM.s:66     .text:0000000000000038 .L0 
+src/handleRoutine.cpp:20     .text:0000000000000038 .L0 
+     /tmp/ccMzArNM.s:71     .text:000000000000003c .L0 
+     /tmp/ccMzArNM.s:72     .text:000000000000003c .L0 
+     /tmp/ccMzArNM.s:73     .text:000000000000003c .L0 
+     /tmp/ccMzArNM.s:74     .text:000000000000003c .L0 
+src/handleRoutine.cpp:45     .text:000000000000003c .L0 
+     /tmp/ccMzArNM.s:80     .text:0000000000000040 .L0 
+src/handleRoutine.cpp:46     .text:0000000000000040 .L0 
+     /tmp/ccMzArNM.s:86     .text:0000000000000044 .L0 
+src/handleRoutine.cpp:47     .text:0000000000000044 .L0 
+     /tmp/ccMzArNM.s:94     .text:0000000000000048 .L0 
+     /tmp/ccMzArNM.s:95     .text:0000000000000048 .L0 
+     /tmp/ccMzArNM.s:97     .text:000000000000004c .L0 
+     /tmp/ccMzArNM.s:103    .text:0000000000000054 .L0 
+     /tmp/ccMzArNM.s:113    .text:0000000000000064 .L0 
+     /tmp/ccMzArNM.s:125    .text:0000000000000074 .L0 
+     /tmp/ccMzArNM.s:126    .text:0000000000000074 .L0 
+     /tmp/ccMzArNM.s:129    .text:000000000000007c .L0 
+     /tmp/ccMzArNM.s:133    .text:0000000000000084 .L0 
+     /tmp/ccMzArNM.s:134    .text:0000000000000084 .L0 
+     /tmp/ccMzArNM.s:138    .text:0000000000000090 .L0 
+     /tmp/ccMzArNM.s:139    .text:0000000000000090 .L0 
+     /tmp/ccMzArNM.s:144    .text:000000000000009c .L0 
+     /tmp/ccMzArNM.s:145    .text:000000000000009c .L0 
+     /tmp/ccMzArNM.s:146    .text:000000000000009c .L0 
+     /tmp/ccMzArNM.s:148    .text:00000000000000a0 .L0 
+     /tmp/ccMzArNM.s:151    .text:00000000000000a8 .L0 
+     /tmp/ccMzArNM.s:152    .text:00000000000000a8 .L0 
+     /tmp/ccMzArNM.s:153    .text:00000000000000a8 .L0 
+GAS LISTING /tmp/ccMzArNM.s 			page 29
+
+
+     /tmp/ccMzArNM.s:168    .text:00000000000000c4 .L0 
+     /tmp/ccMzArNM.s:169    .text:00000000000000c4 .L0 
+     /tmp/ccMzArNM.s:171    .text:00000000000000c8 .L0 
+     /tmp/ccMzArNM.s:182    .text:00000000000000d0 .L0 
+     /tmp/ccMzArNM.s:194    .text:00000000000000d8 .L0 
+     /tmp/ccMzArNM.s:208    .text:00000000000000e0 .L0 
+     /tmp/ccMzArNM.s:224    .text:00000000000000e8 .L0 
+     /tmp/ccMzArNM.s:242    .text:00000000000000f0 .L0 
+     /tmp/ccMzArNM.s:262    .text:00000000000000f8 .L0 
+     /tmp/ccMzArNM.s:284    .text:0000000000000100 .L0 
+     /tmp/ccMzArNM.s:308    .text:0000000000000108 .L0 
+     /tmp/ccMzArNM.s:334    .text:0000000000000110 .L0 
+     /tmp/ccMzArNM.s:362    .text:0000000000000118 .L0 
+     /tmp/ccMzArNM.s:392    .text:0000000000000120 .L0 
+     /tmp/ccMzArNM.s:424    .text:0000000000000128 .L0 
+     /tmp/ccMzArNM.s:458    .text:0000000000000130 .L0 
+     /tmp/ccMzArNM.s:494    .text:0000000000000138 .L0 
+     /tmp/ccMzArNM.s:498    .text:0000000000000140 .L0 
+     /tmp/ccMzArNM.s:499    .text:0000000000000140 .L0 
+src/handleRoutine.cpp:152    .text:0000000000000140 .L0 
+     /tmp/ccMzArNM.s:506    .text:0000000000000144 .L0 
+     /tmp/ccMzArNM.s:508    .text:0000000000000144 .L0 
+     /tmp/ccMzArNM.s:511    .text:0000000000000148 .L0 
+src/handleRoutine.cpp:154    .text:0000000000000148 .L0 
+     /tmp/ccMzArNM.s:537    .text:0000000000000150 .L0 
+     /tmp/ccMzArNM.s:538    .text:0000000000000150 .L0 
+     /tmp/ccMzArNM.s:542    .text:000000000000015c .L0 
+src/handleRoutine.cpp:53     .text:000000000000015c .L0 
+     /tmp/ccMzArNM.s:553    .text:0000000000000160 .L0 
+     /tmp/ccMzArNM.s:554    .text:0000000000000160 .L0 
+     /tmp/ccMzArNM.s:557    .text:0000000000000164 .L0 
+src/handleRoutine.cpp:158    .text:0000000000000164 .L0 
+     /tmp/ccMzArNM.s:563    .text:0000000000000168 .L0 
+src/handleRoutine.cpp:159    .text:0000000000000168 .L0 
+     /tmp/ccMzArNM.s:573    .text:000000000000016c .L0 
+     /tmp/ccMzArNM.s:574    .text:0000000000000170 .L0 
+     /tmp/ccMzArNM.s:575    .text:0000000000000170 .L0 
+     /tmp/ccMzArNM.s:577    .text:0000000000000174 .L0 
+     /tmp/ccMzArNM.s:578    .text:0000000000000174 .L0 
+     /tmp/ccMzArNM.s:580    .text:0000000000000178 .L0 
+     /tmp/ccMzArNM.s:582    .text:000000000000017c .L0 
+     /tmp/ccMzArNM.s:584    .text:0000000000000180 .L0 
+     /tmp/ccMzArNM.s:586    .text:0000000000000184 .L0 
+     /tmp/ccMzArNM.s:590    .text:0000000000000188 .L0 
+     /tmp/ccMzArNM.s:597    .text:0000000000000188 .L0 
+     /tmp/ccMzArNM.s:598    .text:0000000000000188 .L0 
+     /tmp/ccMzArNM.s:602    .text:0000000000000194 .L0 
+src/handleRoutine.cpp:58     .text:0000000000000194 .L0 
+     /tmp/ccMzArNM.s:615    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:616    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:617    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:618    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:619    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:620    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:621    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:622    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:623    .text:000000000000019c .L0 
+GAS LISTING /tmp/ccMzArNM.s 			page 30
+
+
+     /tmp/ccMzArNM.s:624    .text:000000000000019c .L0 
+     /tmp/ccMzArNM.s:633    .text:00000000000001b8 .L0 
+src/handleRoutine.cpp:70     .text:00000000000001b8 .L0 
+     /tmp/ccMzArNM.s:645    .text:00000000000001c0 .L0 
+     /tmp/ccMzArNM.s:646    .text:00000000000001c0 .L0 
+     /tmp/ccMzArNM.s:649    .text:00000000000001cc .L0 
+     /tmp/ccMzArNM.s:651    .text:00000000000001d0 .L0 
+     /tmp/ccMzArNM.s:652    .text:00000000000001d0 .L0 
+     /tmp/ccMzArNM.s:656    .text:00000000000001dc .L0 
+     /tmp/ccMzArNM.s:657    .text:00000000000001dc .L0 
+     /tmp/ccMzArNM.s:660    .text:00000000000001e4 .L0 
+     /tmp/ccMzArNM.s:661    .text:00000000000001e4 .L0 
+     /tmp/ccMzArNM.s:671    .text:00000000000001f0 .L0 
+     /tmp/ccMzArNM.s:672    .text:00000000000001f0 .L0 
+     /tmp/ccMzArNM.s:682    .text:00000000000001fc .L0 
+src/handleRoutine.cpp:83     .text:00000000000001fc .L0 
+     /tmp/ccMzArNM.s:689    .text:0000000000000200 .L0 
+src/handleRoutine.cpp:84     .text:0000000000000200 .L0 
+     /tmp/ccMzArNM.s:696    .text:0000000000000208 .L0 
+     /tmp/ccMzArNM.s:697    .text:0000000000000208 .L0 
+     /tmp/ccMzArNM.s:700    .text:0000000000000210 .L0 
+     /tmp/ccMzArNM.s:701    .text:0000000000000210 .L0 
+     /tmp/ccMzArNM.s:713    .text:000000000000021c .L0 
+src/handleRoutine.cpp:90     .text:000000000000021c .L0 
+     /tmp/ccMzArNM.s:721    .text:0000000000000224 .L0 
+     /tmp/ccMzArNM.s:722    .text:0000000000000224 .L0 
+     /tmp/ccMzArNM.s:726    .text:0000000000000230 .L0 
+     /tmp/ccMzArNM.s:727    .text:0000000000000230 .L0 
+     /tmp/ccMzArNM.s:733    .text:0000000000000238 .L0 
+src/handleRoutine.cpp:93     .text:0000000000000238 .L0 
+     /tmp/ccMzArNM.s:745    .text:0000000000000240 .L0 
+src/handleRoutine.cpp:96     .text:0000000000000240 .L0 
+     /tmp/ccMzArNM.s:753    .text:0000000000000248 .L0 
+     /tmp/ccMzArNM.s:754    .text:0000000000000248 .L0 
+     /tmp/ccMzArNM.s:759    .text:0000000000000258 .L0 
+     /tmp/ccMzArNM.s:760    .text:0000000000000258 .L0 
+     /tmp/ccMzArNM.s:766    .text:0000000000000260 .L0 
+src/handleRoutine.cpp:99     .text:0000000000000260 .L0 
+     /tmp/ccMzArNM.s:778    .text:0000000000000268 .L0 
+src/handleRoutine.cpp:102    .text:0000000000000268 .L0 
+     /tmp/ccMzArNM.s:786    .text:0000000000000270 .L0 
+     /tmp/ccMzArNM.s:787    .text:0000000000000270 .L0 
+     /tmp/ccMzArNM.s:791    .text:000000000000027c .L0 
+     /tmp/ccMzArNM.s:792    .text:000000000000027c .L0 
+     /tmp/ccMzArNM.s:798    .text:0000000000000284 .L0 
+src/handleRoutine.cpp:105    .text:0000000000000284 .L0 
+     /tmp/ccMzArNM.s:810    .text:000000000000028c .L0 
+src/handleRoutine.cpp:109    .text:000000000000028c .L0 
+     /tmp/ccMzArNM.s:817    .text:0000000000000290 .L0 
+src/handleRoutine.cpp:110    .text:0000000000000290 .L0 
+     /tmp/ccMzArNM.s:824    .text:0000000000000298 .L0 
+     /tmp/ccMzArNM.s:825    .text:0000000000000298 .L0 
+     /tmp/ccMzArNM.s:829    .text:00000000000002a4 .L0 
+     /tmp/ccMzArNM.s:830    .text:00000000000002a4 .L0 
+     /tmp/ccMzArNM.s:836    .text:00000000000002ac .L0 
+src/handleRoutine.cpp:113    .text:00000000000002ac .L0 
+     /tmp/ccMzArNM.s:848    .text:00000000000002b4 .L0 
+GAS LISTING /tmp/ccMzArNM.s 			page 31
+
+
+src/handleRoutine.cpp:117    .text:00000000000002b4 .L0 
+     /tmp/ccMzArNM.s:856    .text:00000000000002bc .L0 
+     /tmp/ccMzArNM.s:857    .text:00000000000002bc .L0 
+     /tmp/ccMzArNM.s:861    .text:00000000000002c8 .L0 
+     /tmp/ccMzArNM.s:862    .text:00000000000002c8 .L0 
+     /tmp/ccMzArNM.s:868    .text:00000000000002d0 .L0 
+src/handleRoutine.cpp:120    .text:00000000000002d0 .L0 
+     /tmp/ccMzArNM.s:880    .text:00000000000002d8 .L0 
+     /tmp/ccMzArNM.s:881    .text:00000000000002d8 .L0 
+     /tmp/ccMzArNM.s:884    .text:00000000000002e4 .L0 
+     /tmp/ccMzArNM.s:885    .text:00000000000002e4 .L0 
+     /tmp/ccMzArNM.s:893    .text:0000000000000300 .L0 
+src/handleRoutine.cpp:125    .text:0000000000000300 .L0 
+     /tmp/ccMzArNM.s:900    .text:0000000000000304 .L0 
+src/handleRoutine.cpp:126    .text:0000000000000304 .L0 
+     /tmp/ccMzArNM.s:907    .text:000000000000030c .L0 
+     /tmp/ccMzArNM.s:912    .text:0000000000000314 .L0 
+     /tmp/ccMzArNM.s:913    .text:0000000000000314 .L0 
+     /tmp/ccMzArNM.s:919    .text:000000000000031c .L0 
+src/handleRoutine.cpp:129    .text:000000000000031c .L0 
+     /tmp/ccMzArNM.s:930    .text:0000000000000324 .L0 
+     /tmp/ccMzArNM.s:931    .text:0000000000000324 .L0 
+     /tmp/ccMzArNM.s:940    .text:0000000000000330 .L0 
+src/handleRoutine.cpp:132    .text:0000000000000330 .L0 
+     /tmp/ccMzArNM.s:947    .text:0000000000000334 .L0 
+src/handleRoutine.cpp:133    .text:0000000000000334 .L0 
+     /tmp/ccMzArNM.s:954    .text:000000000000033c .L0 
+     /tmp/ccMzArNM.s:955    .text:000000000000033c .L0 
+     /tmp/ccMzArNM.s:960    .text:0000000000000350 .L0 
+     /tmp/ccMzArNM.s:961    .text:0000000000000350 .L0 
+     /tmp/ccMzArNM.s:967    .text:0000000000000358 .L0 
+src/handleRoutine.cpp:136    .text:0000000000000358 .L0 
+     /tmp/ccMzArNM.s:978    .text:0000000000000360 .L0 
+src/handleRoutine.cpp:139    .text:0000000000000360 .L0 
+     /tmp/ccMzArNM.s:985    .text:0000000000000364 .L0 
+src/handleRoutine.cpp:140    .text:0000000000000364 .L0 
+     /tmp/ccMzArNM.s:992    .text:000000000000036c .L0 
+     /tmp/ccMzArNM.s:993    .text:000000000000036c .L0 
+     /tmp/ccMzArNM.s:999    .text:0000000000000384 .L0 
+     /tmp/ccMzArNM.s:1000   .text:0000000000000384 .L0 
+     /tmp/ccMzArNM.s:1012   .text:0000000000000390 .L0 
+     /tmp/ccMzArNM.s:1013   .text:0000000000000390 .L0 
+src/handleRoutine.cpp:146    .text:0000000000000390 .L0 
+     /tmp/ccMzArNM.s:1020   .text:0000000000000394 .L0 
+     /tmp/ccMzArNM.s:1022   .text:0000000000000394 .L0 
+     /tmp/ccMzArNM.s:1025   .text:0000000000000398 .L0 
+src/handleRoutine.cpp:148    .text:0000000000000398 .L0 
+     /tmp/ccMzArNM.s:1052   .text:00000000000003a0 .L0 
+     /tmp/ccMzArNM.s:1053   .text:00000000000003a0 .L0 
+     /tmp/ccMzArNM.s:1056   .text:00000000000003a8 .L0 
+     /tmp/ccMzArNM.s:1057   .text:00000000000003a8 .L0 
+     /tmp/ccMzArNM.s:1063   .text:00000000000003bc .L0 
+     /tmp/ccMzArNM.s:1064   .text:00000000000003bc .L0 
+     /tmp/ccMzArNM.s:1069   .text:00000000000003d0 .L0 
+     /tmp/ccMzArNM.s:1071   .text:00000000000003d4 .L0 
+     /tmp/ccMzArNM.s:1074   .text:00000000000003d8 .L0 
+src/handleRoutine.cpp:174    .text:00000000000003d8 .L0 
+GAS LISTING /tmp/ccMzArNM.s 			page 32
+
+
+     /tmp/ccMzArNM.s:1083   .text:00000000000003e0 .L0 
+     /tmp/ccMzArNM.s:1084   .text:00000000000003e0 .L0 
+     /tmp/ccMzArNM.s:1086   .text:00000000000003e4 .L0 
+src/handleRoutine.cpp:166    .text:00000000000003e4 .L0 
+     /tmp/ccMzArNM.s:1093   .text:00000000000003e8 .L0 
+src/handleRoutine.cpp:167    .text:00000000000003e8 .L0 
+     /tmp/ccMzArNM.s:1100   .text:00000000000003f0 .L0 
+     /tmp/ccMzArNM.s:1101   .text:00000000000003f0 .L0 
+     /tmp/ccMzArNM.s:1104   .text:00000000000003f8 .L0 
+     /tmp/ccMzArNM.s:1105   .text:00000000000003f8 .L0 
+     /tmp/ccMzArNM.s:1111   .text:0000000000000400 .L0 
+src/handleRoutine.cpp:171    .text:0000000000000400 .L0 
+     /tmp/ccMzArNM.s:1123   .text:0000000000000408 .L0 
+     /tmp/ccMzArNM.s:1124   .text:0000000000000408 .L0 
+     /tmp/ccMzArNM.s:1133   .text:0000000000000414 .L0 
+     /tmp/ccMzArNM.s:1134   .text:0000000000000418 .L0 
+     /tmp/ccMzArNM.s:1145   .text:0000000000000418 .L0 
+     /tmp/ccMzArNM.s:134    .text:0000000000000084 .L0 
+     /tmp/ccMzArNM.s:139    .text:0000000000000090 .L0 
+     /tmp/ccMzArNM.s:154    .text:00000000000000ac .L0 
+     /tmp/ccMzArNM.s:646    .text:00000000000001c0 .L0 
+     /tmp/ccMzArNM.s:881    .text:00000000000002d8 .L0 
+     /tmp/ccMzArNM.s:886    .text:00000000000002e8 .L0 
+     /tmp/ccMzArNM.s:955    .text:000000000000033c .L0 
+     /tmp/ccMzArNM.s:994    .text:0000000000000370 .L0 
+     /tmp/ccMzArNM.s:1057   .text:00000000000003a8 .L0 
+     /tmp/ccMzArNM.s:1064   .text:00000000000003bc .L0 
+     /tmp/ccMzArNM.s:160    .text:00000000000000c4 .L26
+     /tmp/ccMzArNM.s:1034   .text:00000000000003a0 .L27
+     /tmp/ccMzArNM.s:569    .text:000000000000016c .L1
+     /tmp/ccMzArNM.s:1118   .text:0000000000000408 .L23
+     /tmp/ccMzArNM.s:142    .text:000000000000009c .L24
+     /tmp/ccMzArNM.s:520    .text:0000000000000150 .L28
+     /tmp/ccMzArNM.s:589    .text:0000000000000188 .L29
+     /tmp/ccMzArNM.s:611    .text:000000000000019c .L30
+     /tmp/ccMzArNM.s:642    .text:00000000000001c0 .L31
+     /tmp/ccMzArNM.s:679    .text:00000000000001fc .L32
+     /tmp/ccMzArNM.s:709    .text:000000000000021c .L33
+     /tmp/ccMzArNM.s:741    .text:0000000000000240 .L34
+     /tmp/ccMzArNM.s:774    .text:0000000000000268 .L35
+     /tmp/ccMzArNM.s:806    .text:000000000000028c .L36
+     /tmp/ccMzArNM.s:844    .text:00000000000002b4 .L37
+     /tmp/ccMzArNM.s:876    .text:00000000000002d8 .L38
+     /tmp/ccMzArNM.s:935    .text:0000000000000330 .L39
+     /tmp/ccMzArNM.s:975    .text:0000000000000360 .L40
+     /tmp/ccMzArNM.s:1008   .text:0000000000000390 .L41
+     /tmp/ccMzArNM.s:549    .text:0000000000000160 .L4
+     /tmp/ccMzArNM.s:669    .text:00000000000001f0 .L8
+     /tmp/ccMzArNM.s:927    .text:0000000000000324 .L42
+     /tmp/ccMzArNM.s:910    .text:0000000000000314 .L16
+     /tmp/ccMzArNM.s:1081   .text:00000000000003e0 .L43
+     /tmp/ccMzArNM.s:1072   .text:00000000000003d8 .L22
+     /tmp/ccMzArNM.s:2489   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccMzArNM.s:3837   .debug_str:00000000000007cc .LASF129
+     /tmp/ccMzArNM.s:3873   .debug_str:00000000000009d6 .LASF130
+     /tmp/ccMzArNM.s:3675   .debug_str:000000000000025d .LASF131
+     /tmp/ccMzArNM.s:5      .text:0000000000000000 .Ltext0
+GAS LISTING /tmp/ccMzArNM.s 			page 33
+
+
+     /tmp/ccMzArNM.s:1137   .text:0000000000000418 .Letext0
+     /tmp/ccMzArNM.s:3601   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccMzArNM.s:3757   .debug_str:000000000000053e .LASF0
+     /tmp/ccMzArNM.s:3773   .debug_str:000000000000059e .LASF1
+     /tmp/ccMzArNM.s:3739   .debug_str:00000000000004b7 .LASF2
+     /tmp/ccMzArNM.s:3657   .debug_str:00000000000001e0 .LASF3
+     /tmp/ccMzArNM.s:3703   .debug_str:00000000000003b6 .LASF4
+     /tmp/ccMzArNM.s:3815   .debug_str:0000000000000720 .LASF5
+     /tmp/ccMzArNM.s:3621   .debug_str:000000000000007b .LASF6
+     /tmp/ccMzArNM.s:3775   .debug_str:00000000000005b1 .LASF7
+     /tmp/ccMzArNM.s:3755   .debug_str:000000000000052b .LASF8
+     /tmp/ccMzArNM.s:3861   .debug_str:0000000000000960 .LASF9
+     /tmp/ccMzArNM.s:3845   .debug_str:00000000000008d8 .LASF10
+     /tmp/ccMzArNM.s:3689   .debug_str:000000000000035d .LASF11
+     /tmp/ccMzArNM.s:3791   .debug_str:000000000000063f .LASF12
+     /tmp/ccMzArNM.s:3839   .debug_str:0000000000000890 .LASF13
+     /tmp/ccMzArNM.s:3625   .debug_str:0000000000000089 .LASF14
+     /tmp/ccMzArNM.s:3605   .debug_str:000000000000000c .LASF15
+     /tmp/ccMzArNM.s:3631   .debug_str:00000000000000e1 .LASF16
+     /tmp/ccMzArNM.s:3811   .debug_str:0000000000000704 .LASF17
+     /tmp/ccMzArNM.s:3643   .debug_str:0000000000000139 .LASF18
+     /tmp/ccMzArNM.s:3733   .debug_str:000000000000048d .LASF22
+     /tmp/ccMzArNM.s:3639   .debug_str:000000000000012a .LASF21
+     /tmp/ccMzArNM.s:3869   .debug_str:00000000000009c7 .LASF19
+     /tmp/ccMzArNM.s:3829   .debug_str:000000000000078e .LASF20
+     /tmp/ccMzArNM.s:3603   .debug_str:0000000000000000 .LASF67
+     /tmp/ccMzArNM.s:3655   .debug_str:00000000000001c7 .LASF24
+     /tmp/ccMzArNM.s:3665   .debug_str:0000000000000237 .LASF23
+     /tmp/ccMzArNM.s:3865   .debug_str:000000000000097f .LASF25
+     /tmp/ccMzArNM.s:3781   .debug_str:00000000000005d4 .LASF38
+     /tmp/ccMzArNM.s:3835   .debug_str:00000000000007b0 .LASF40
+     /tmp/ccMzArNM.s:3623   .debug_str:0000000000000082 .LASF26
+     /tmp/ccMzArNM.s:3793   .debug_str:000000000000064e .LASF28
+     /tmp/ccMzArNM.s:3669   .debug_str:000000000000024e .LASF27
+     /tmp/ccMzArNM.s:3805   .debug_str:00000000000006d5 .LASF29
+     /tmp/ccMzArNM.s:3831   .debug_str:0000000000000793 .LASF30
+     /tmp/ccMzArNM.s:3677   .debug_str:00000000000002ae .LASF31
+     /tmp/ccMzArNM.s:3799   .debug_str:00000000000006ab .LASF32
+     /tmp/ccMzArNM.s:3611   .debug_str:000000000000003f .LASF33
+     /tmp/ccMzArNM.s:3777   .debug_str:00000000000005c4 .LASF47
+     /tmp/ccMzArNM.s:3721   .debug_str:000000000000040c .LASF49
+     /tmp/ccMzArNM.s:3741   .debug_str:00000000000004c5 .LASF34
+     /tmp/ccMzArNM.s:3745   .debug_str:00000000000004d6 .LASF35
+     /tmp/ccMzArNM.s:3855   .debug_str:0000000000000938 .LASF36
+     /tmp/ccMzArNM.s:3685   .debug_str:000000000000031f .LASF37
+     /tmp/ccMzArNM.s:3803   .debug_str:00000000000006d0 .LASF132
+     /tmp/ccMzArNM.s:3813   .debug_str:000000000000071a .LASF39
+     /tmp/ccMzArNM.s:3717   .debug_str:00000000000003ed .LASF41
+     /tmp/ccMzArNM.s:3857   .debug_str:0000000000000948 .LASF44
+     /tmp/ccMzArNM.s:3713   .debug_str:00000000000003dc .LASF42
+     /tmp/ccMzArNM.s:3645   .debug_str:000000000000014f .LASF43
+     /tmp/ccMzArNM.s:3863   .debug_str:0000000000000974 .LASF45
+     /tmp/ccMzArNM.s:3817   .debug_str:0000000000000732 .LASF46
+     /tmp/ccMzArNM.s:3729   .debug_str:000000000000045f .LASF48
+     /tmp/ccMzArNM.s:3759   .debug_str:000000000000054b .LASF50
+     /tmp/ccMzArNM.s:3783   .debug_str:00000000000005d9 .LASF51
+     /tmp/ccMzArNM.s:3659   .debug_str:00000000000001e6 .LASF52
+GAS LISTING /tmp/ccMzArNM.s 			page 34
+
+
+     /tmp/ccMzArNM.s:3609   .debug_str:0000000000000037 .LASF53
+     /tmp/ccMzArNM.s:3843   .debug_str:00000000000008bc .LASF54
+     /tmp/ccMzArNM.s:3687   .debug_str:0000000000000353 .LASF55
+     /tmp/ccMzArNM.s:3679   .debug_str:00000000000002d9 .LASF56
+     /tmp/ccMzArNM.s:3771   .debug_str:0000000000000598 .LASF57
+     /tmp/ccMzArNM.s:3629   .debug_str:00000000000000c5 .LASF58
+     /tmp/ccMzArNM.s:3767   .debug_str:0000000000000586 .LASF59
+     /tmp/ccMzArNM.s:3723   .debug_str:000000000000042d .LASF112
+     /tmp/ccMzArNM.s:3853   .debug_str:0000000000000915 .LASF114
+     /tmp/ccMzArNM.s:3711   .debug_str:00000000000003d7 .LASF60
+     /tmp/ccMzArNM.s:3763   .debug_str:0000000000000577 .LASF61
+     /tmp/ccMzArNM.s:3709   .debug_str:00000000000003ce .LASF62
+     /tmp/ccMzArNM.s:3765   .debug_str:000000000000057d .LASF63
+     /tmp/ccMzArNM.s:3769   .debug_str:0000000000000590 .LASF64
+     /tmp/ccMzArNM.s:3807   .debug_str:00000000000006f2 .LASF65
+     /tmp/ccMzArNM.s:3821   .debug_str:000000000000074e .LASF66
+     /tmp/ccMzArNM.s:3847   .debug_str:00000000000008e8 .LASF68
+     /tmp/ccMzArNM.s:3715   .debug_str:00000000000003e5 .LASF69
+     /tmp/ccMzArNM.s:3727   .debug_str:0000000000000451 .LASF70
+     /tmp/ccMzArNM.s:3681   .debug_str:00000000000002e4 .LASF71
+     /tmp/ccMzArNM.s:3619   .debug_str:000000000000006d .LASF72
+     /tmp/ccMzArNM.s:3797   .debug_str:0000000000000688 .LASF73
+     /tmp/ccMzArNM.s:3825   .debug_str:000000000000077a .LASF74
+     /tmp/ccMzArNM.s:3633   .debug_str:00000000000000ed .LASF75
+     /tmp/ccMzArNM.s:3761   .debug_str:000000000000056e .LASF76
+     /tmp/ccMzArNM.s:3841   .debug_str:000000000000089f .LASF77
+     /tmp/ccMzArNM.s:3673   .debug_str:0000000000000258 .LASF78
+     /tmp/ccMzArNM.s:3699   .debug_str:00000000000003a1 .LASF79
+     /tmp/ccMzArNM.s:3719   .debug_str:0000000000000407 .LASF80
+     /tmp/ccMzArNM.s:3693   .debug_str:0000000000000388 .LASF81
+     /tmp/ccMzArNM.s:3649   .debug_str:0000000000000195 .LASF82
+     /tmp/ccMzArNM.s:3743   .debug_str:00000000000004d1 .LASF83
+     /tmp/ccMzArNM.s:3867   .debug_str:00000000000009ac .LASF106
+     /tmp/ccMzArNM.s:3647   .debug_str:000000000000016c .LASF133
+     /tmp/ccMzArNM.s:3661   .debug_str:000000000000020f .LASF84
+     /tmp/ccMzArNM.s:3691   .debug_str:000000000000036b .LASF85
+     /tmp/ccMzArNM.s:3747   .debug_str:00000000000004f7 .LASF86
+     /tmp/ccMzArNM.s:3789   .debug_str:0000000000000620 .LASF87
+     /tmp/ccMzArNM.s:3859   .debug_str:0000000000000950 .LASF88
+     /tmp/ccMzArNM.s:3627   .debug_str:0000000000000099 .LASF89
+     /tmp/ccMzArNM.s:3671   .debug_str:0000000000000253 .LASF90
+     /tmp/ccMzArNM.s:3795   .debug_str:000000000000066c .LASF91
+     /tmp/ccMzArNM.s:3641   .debug_str:0000000000000132 .LASF92
+     /tmp/ccMzArNM.s:3751   .debug_str:0000000000000505 .LASF93
+     /tmp/ccMzArNM.s:3705   .debug_str:00000000000003bd .LASF94
+     /tmp/ccMzArNM.s:3731   .debug_str:000000000000046c .LASF95
+     /tmp/ccMzArNM.s:3667   .debug_str:0000000000000241 .LASF96
+     /tmp/ccMzArNM.s:3809   .debug_str:00000000000006fd .LASF97
+     /tmp/ccMzArNM.s:3735   .debug_str:000000000000049d .LASF98
+     /tmp/ccMzArNM.s:3695   .debug_str:000000000000038d .LASF99
+     /tmp/ccMzArNM.s:3617   .debug_str:0000000000000066 .LASF100
+     /tmp/ccMzArNM.s:3607   .debug_str:000000000000001c .LASF101
+     /tmp/ccMzArNM.s:3701   .debug_str:00000000000003b1 .LASF102
+     /tmp/ccMzArNM.s:3697   .debug_str:000000000000039b .LASF103
+     /tmp/ccMzArNM.s:3819   .debug_str:0000000000000743 .LASF104
+     /tmp/ccMzArNM.s:3651   .debug_str:000000000000019a .LASF105
+     /tmp/ccMzArNM.s:3801   .debug_str:00000000000006b8 .LASF107
+GAS LISTING /tmp/ccMzArNM.s 			page 35
+
+
+     /tmp/ccMzArNM.s:3849   .debug_str:00000000000008ef .LASF134
+     /tmp/ccMzArNM.s:3653   .debug_str:00000000000001ba .LASF108
+     /tmp/ccMzArNM.s:3663   .debug_str:0000000000000215 .LASF109
+     /tmp/ccMzArNM.s:3779   .debug_str:00000000000005cf .LASF110
+     /tmp/ccMzArNM.s:3749   .debug_str:00000000000004ff .LASF111
+     /tmp/ccMzArNM.s:3707   .debug_str:00000000000003c5 .LASF113
+     /tmp/ccMzArNM.s:3615   .debug_str:0000000000000051 .LASF115
+     /tmp/ccMzArNM.s:3833   .debug_str:00000000000007a6 .LASF116
+     /tmp/ccMzArNM.s:3787   .debug_str:00000000000005fb .LASF117
+     /tmp/ccMzArNM.s:3871   .debug_str:00000000000009cc .LASF118
+     /tmp/ccMzArNM.s:3725   .debug_str:000000000000043b .LASF119
+     /tmp/ccMzArNM.s:3635   .debug_str:000000000000010f .LASF135
+     /tmp/ccMzArNM.s:3785   .debug_str:00000000000005ed .LASF120
+     /tmp/ccMzArNM.s:10     .text:0000000000000000 .LFB2
+     /tmp/ccMzArNM.s:1135   .text:0000000000000418 .LFE2
+     /tmp/ccMzArNM.s:3613   .debug_str:0000000000000047 .LASF121
+     /tmp/ccMzArNM.s:3299   .debug_loc:0000000000000000 .LLST0
+     /tmp/ccMzArNM.s:3753   .debug_str:0000000000000523 .LASF122
+     /tmp/ccMzArNM.s:3398   .debug_loc:000000000000016f .LLST1
+     /tmp/ccMzArNM.s:3823   .debug_str:000000000000076e .LASF123
+     /tmp/ccMzArNM.s:3417   .debug_loc:00000000000001cb .LLST2
+     /tmp/ccMzArNM.s:535    .text:0000000000000150 .LBB144
+     /tmp/ccMzArNM.s:550    .text:0000000000000160 .LBE144
+     /tmp/ccMzArNM.s:3683   .debug_str:0000000000000316 .LASF124
+     /tmp/ccMzArNM.s:3432   .debug_loc:0000000000000214 .LLST20
+     /tmp/ccMzArNM.s:540    .text:000000000000015c .LVL12
+     /tmp/ccMzArNM.s:595    .text:0000000000000188 .LBB129
+     /tmp/ccMzArNM.s:608    .text:0000000000000198 .LBE129
+     /tmp/ccMzArNM.s:3439   .debug_loc:0000000000000237 .LLST19
+     /tmp/ccMzArNM.s:600    .text:0000000000000194 .LVL17
+     /tmp/ccMzArNM.s:613    .text:000000000000019c .LBB115
+     /tmp/ccMzArNM.s:639    .text:00000000000001bc .LBE115
+     /tmp/ccMzArNM.s:3446   .debug_loc:000000000000025a .LLST14
+     /tmp/ccMzArNM.s:3454   .debug_loc:000000000000027f .LLST15
+     /tmp/ccMzArNM.s:3462   .debug_loc:00000000000002a4 .LLST16
+     /tmp/ccMzArNM.s:3827   .debug_str:0000000000000787 .LASF125
+     /tmp/ccMzArNM.s:3470   .debug_loc:00000000000002c9 .LLST17
+     /tmp/ccMzArNM.s:3478   .debug_loc:00000000000002ee .LLST18
+     /tmp/ccMzArNM.s:631    .text:00000000000001b8 .LVL20
+     /tmp/ccMzArNM.s:711    .text:000000000000021c .LBB81
+     /tmp/ccMzArNM.s:738    .text:000000000000023c .LBE81
+     /tmp/ccMzArNM.s:3485   .debug_loc:0000000000000311 .LLST13
+     /tmp/ccMzArNM.s:724    .text:0000000000000230 .LVL28
+     /tmp/ccMzArNM.s:743    .text:0000000000000240 .LBB71
+     /tmp/ccMzArNM.s:771    .text:0000000000000264 .LBE71
+     /tmp/ccMzArNM.s:3492   .debug_loc:0000000000000334 .LLST12
+     /tmp/ccMzArNM.s:757    .text:0000000000000258 .LVL30
+     /tmp/ccMzArNM.s:776    .text:0000000000000268 .LBB62
+     /tmp/ccMzArNM.s:803    .text:0000000000000288 .LBE62
+     /tmp/ccMzArNM.s:3499   .debug_loc:0000000000000357 .LLST11
+     /tmp/ccMzArNM.s:789    .text:000000000000027c .LVL32
+     /tmp/ccMzArNM.s:808    .text:000000000000028c .LBB54
+     /tmp/ccMzArNM.s:841    .text:00000000000002b0 .LBE54
+     /tmp/ccMzArNM.s:3506   .debug_loc:000000000000037a .LLST10
+     /tmp/ccMzArNM.s:827    .text:00000000000002a4 .LVL35
+     /tmp/ccMzArNM.s:846    .text:00000000000002b4 .LBB47
+     /tmp/ccMzArNM.s:873    .text:00000000000002d4 .LBE47
+GAS LISTING /tmp/ccMzArNM.s 			page 36
+
+
+     /tmp/ccMzArNM.s:3513   .debug_loc:000000000000039d .LLST9
+     /tmp/ccMzArNM.s:859    .text:00000000000002c8 .LVL37
+     /tmp/ccMzArNM.s:3587   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccMzArNM.s:3520   .debug_loc:00000000000003c0 .LLST8
+     /tmp/ccMzArNM.s:889    .text:00000000000002fc .LVL39
+     /tmp/ccMzArNM.s:932    .text:000000000000032c .LVL44
+     /tmp/ccMzArNM.s:938    .text:0000000000000330 .LBB35
+     /tmp/ccMzArNM.s:972    .text:000000000000035c .LBE35
+     /tmp/ccMzArNM.s:3531   .debug_loc:00000000000003f6 .LLST7
+     /tmp/ccMzArNM.s:958    .text:0000000000000350 .LVL47
+     /tmp/ccMzArNM.s:1010   .text:0000000000000390 .LBB30
+     /tmp/ccMzArNM.s:1031   .text:000000000000039c .LBE30
+     /tmp/ccMzArNM.s:3737   .debug_str:00000000000004ac .LASF126
+     /tmp/ccMzArNM.s:3538   .debug_loc:0000000000000419 .LLST6
+     /tmp/ccMzArNM.s:496    .text:0000000000000140 .LBB29
+     /tmp/ccMzArNM.s:517    .text:000000000000014c .LBE29
+     /tmp/ccMzArNM.s:3545   .debug_loc:000000000000043c .LLST5
+     /tmp/ccMzArNM.s:3552   .debug_loc:000000000000045f .LLST3
+     /tmp/ccMzArNM.s:3563   .debug_loc:0000000000000495 .LLST4
+     /tmp/ccMzArNM.s:157    .text:00000000000000c0 .LVL6
+     /tmp/ccMzArNM.s:1126   .text:0000000000000414 .LVL61
+     /tmp/ccMzArNM.s:127    .text:000000000000007c .LVL3
+     /tmp/ccMzArNM.s:654    .text:00000000000001dc .LVL22
+     /tmp/ccMzArNM.s:658    .text:00000000000001e4 .LVL23
+     /tmp/ccMzArNM.s:698    .text:0000000000000210 .LVL26
+     /tmp/ccMzArNM.s:997    .text:0000000000000384 .LVL50
+     /tmp/ccMzArNM.s:1054   .text:00000000000003a8 .LVL55
+     /tmp/ccMzArNM.s:1067   .text:00000000000003d0 .LVL57
+     /tmp/ccMzArNM.s:1102   .text:00000000000003f8 .LVL59
+     /tmp/ccMzArNM.s:3851   .debug_str:0000000000000907 .LASF127
+     /tmp/ccMzArNM.s:3637   .debug_str:000000000000011f .LASF128
+     /tmp/ccMzArNM.s:84     .text:0000000000000044 .LVL1
+     /tmp/ccMzArNM.s:159    .text:00000000000000c4 .LVL7
+     /tmp/ccMzArNM.s:172    .text:00000000000000cc .LVL8
+     /tmp/ccMzArNM.s:588    .text:0000000000000188 .LVL16
+     /tmp/ccMzArNM.s:610    .text:000000000000019c .LVL18
+     /tmp/ccMzArNM.s:626    .text:00000000000001a4 .LVL19
+     /tmp/ccMzArNM.s:641    .text:00000000000001c0 .LVL21
+     /tmp/ccMzArNM.s:668    .text:00000000000001f0 .LVL24
+     /tmp/ccMzArNM.s:708    .text:000000000000021c .LVL27
+     /tmp/ccMzArNM.s:740    .text:0000000000000240 .LVL29
+     /tmp/ccMzArNM.s:773    .text:0000000000000268 .LVL31
+     /tmp/ccMzArNM.s:805    .text:000000000000028c .LVL33
+     /tmp/ccMzArNM.s:843    .text:00000000000002b4 .LVL36
+     /tmp/ccMzArNM.s:875    .text:00000000000002d8 .LVL38
+     /tmp/ccMzArNM.s:934    .text:0000000000000330 .LVL45
+     /tmp/ccMzArNM.s:974    .text:0000000000000360 .LVL48
+     /tmp/ccMzArNM.s:1007   .text:0000000000000390 .LVL51
+     /tmp/ccMzArNM.s:1033   .text:00000000000003a0 .LVL54
+     /tmp/ccMzArNM.s:90     .text:0000000000000048 .LVL2
+     /tmp/ccMzArNM.s:141    .text:000000000000009c .LVL5
+     /tmp/ccMzArNM.s:567    .text:000000000000016c .LVL15
+     /tmp/ccMzArNM.s:1058   .text:00000000000003b0 .LVL56
+     /tmp/ccMzArNM.s:1091   .text:00000000000003e8 .LVL58
+     /tmp/ccMzArNM.s:1117   .text:0000000000000408 .LVL60
+     /tmp/ccMzArNM.s:78     .text:0000000000000040 .LVL0
+     /tmp/ccMzArNM.s:136    .text:0000000000000090 .LVL4
+GAS LISTING /tmp/ccMzArNM.s 			page 37
+
+
+     /tmp/ccMzArNM.s:547    .text:0000000000000160 .LVL13
+     /tmp/ccMzArNM.s:891    .text:0000000000000300 .LVL40
+     /tmp/ccMzArNM.s:909    .text:0000000000000314 .LVL42
+     /tmp/ccMzArNM.s:926    .text:0000000000000324 .LVL43
+     /tmp/ccMzArNM.s:1018   .text:0000000000000394 .LVL52
+     /tmp/ccMzArNM.s:504    .text:0000000000000144 .LVL9
+     /tmp/ccMzArNM.s:519    .text:0000000000000150 .LVL11
+     /tmp/ccMzArNM.s:1146   .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccMzArNM.s:131    .text:0000000000000084 .LBB6
+     /tmp/ccMzArNM.s:161    .text:00000000000000c4 .LBE6
+     /tmp/ccMzArNM.s:1121   .text:0000000000000408 .LBB7
+     /tmp/ccMzArNM.s:1127   .text:0000000000000414 .LBE7
+     /tmp/ccMzArNM.s:878    .text:00000000000002d8 .LBB40
+     /tmp/ccMzArNM.s:924    .text:0000000000000320 .LBE40
+     /tmp/ccMzArNM.s:928    .text:0000000000000324 .LBB41
+     /tmp/ccMzArNM.s:936    .text:0000000000000330 .LBE41
+
+UNDEFINED SYMBOLS
+plic_claim
+CONSOLE_RX_DATA
+CONSOLE_STATUS
+_ZN12KernelBuffer4ulazE
+_ZN12KernelBuffer3putEc
+_ZN15MemoryAllocator6mallocEm
+_ZN15MemoryAllocator4freeEPv
+_ZN12KernelThread15createCoroutineEPPS_PFvPvEPmS2_m
+_ZN12KernelThread7runningE
+_ZN12KernelThread11setFinishedEb
+_ZN12KernelThread5yieldEv
+_ZN12KernelThread8dispatchEv
+_ZN12KernelThread5startEPS_
+_ZN15KernelSemaphore15createSemaphoreEPPS_i
+_ZN15KernelSemaphore7destroyEPS_
+_ZN15KernelSemaphore4waitEv
+_ZN15KernelSemaphore6signalEv
+_ZN12KernelThread16timeSliceCounterE
+_ZN5Timer9addInListEP12KernelThreadm
+_ZN12KernelThread19dispatchNoSchedulerEv
+_ZN12KernelBuffer3getEv
+_ZN12KernelBuffer5izlazE
+_ZN5Timer9updateAllEv
+_ZNK12KernelThread12getTimeSliceEv
+plic_complete

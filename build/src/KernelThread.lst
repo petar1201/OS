@@ -1,0 +1,1819 @@
+GAS LISTING /tmp/ccBViA17.s 			page 1
+
+
+   1              		.file	"KernelThread.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZN12KernelThread15createCoroutineEPPS_PFvPvEPmS2_m
+   9              	_ZN12KernelThread15createCoroutineEPPS_PFvPvEPmS2_m:
+  10              	.LFB1:
+  11              		.file 1 "src/KernelThread.cpp"
+   1:src/KernelThread.cpp **** //
+   2:src/KernelThread.cpp **** // Created by os on 6/19/22.
+   3:src/KernelThread.cpp **** //
+   4:src/KernelThread.cpp **** 
+   5:src/KernelThread.cpp **** #include "../h/KernelThread.hpp"
+   6:src/KernelThread.cpp **** #include "../test/printing.hpp"
+   7:src/KernelThread.cpp **** #include "../h/idle.hpp"
+   8:src/KernelThread.cpp **** 
+   9:src/KernelThread.cpp **** 
+  10:src/KernelThread.cpp **** KernelThread *KernelThread::running = nullptr;
+  11:src/KernelThread.cpp **** KernelThread *KernelThread::idleThread = nullptr;
+  12:src/KernelThread.cpp **** uint64 KernelThread::timeSliceCounter=0;
+  13:src/KernelThread.cpp **** KernelThread *KernelThread::putThread = nullptr;
+  14:src/KernelThread.cpp **** 
+  15:src/KernelThread.cpp **** KernelThread *KernelThread::mainThread = nullptr;
+  16:src/KernelThread.cpp **** int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*s, void* args
+  12              		.loc 1 16 114
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FC 		addi	sp,sp,-64
+  16              		.cfi_def_cfa_offset 64
+  17 0004 233C1102 		sd	ra,56(sp)
+  18 0008 23388102 		sd	s0,48(sp)
+  19 000c 23349102 		sd	s1,40(sp)
+  20 0010 23302103 		sd	s2,32(sp)
+  21 0014 233C3101 		sd	s3,24(sp)
+  22 0018 23384101 		sd	s4,16(sp)
+  23 001c 23345101 		sd	s5,8(sp)
+  24 0020 23306101 		sd	s6,0(sp)
+  25              		.cfi_offset 1, -8
+  26              		.cfi_offset 8, -16
+  27              		.cfi_offset 9, -24
+  28              		.cfi_offset 18, -32
+  29              		.cfi_offset 19, -40
+  30              		.cfi_offset 20, -48
+  31              		.cfi_offset 21, -56
+  32              		.cfi_offset 22, -64
+  33 0024 13040104 		addi	s0,sp,64
+  34              		.cfi_def_cfa 8, 0
+  35 0028 930A0500 		mv	s5,a0
+  36 002c 138A0500 		mv	s4,a1
+  37 0030 93090600 		mv	s3,a2
+  38 0034 13890600 		mv	s2,a3
+  17:src/KernelThread.cpp ****     bool f;
+  39              		.loc 1 17 5
+  18:src/KernelThread.cpp ****     if(flag==0)f=false;
+  40              		.loc 1 18 5
+GAS LISTING /tmp/ccBViA17.s 			page 2
+
+
+  41 0038 6314070A 		bnez	a4,.L12
+  42              		.loc 1 18 17 is_stmt 0
+  43 003c 130B0000 		li	s6,0
+  44              	.L2:
+  45              	.LVL1:
+  19:src/KernelThread.cpp ****     else f = true;
+  20:src/KernelThread.cpp ****     size_t size = sizeof(KernelThread);
+  46              		.loc 1 20 5 is_stmt 1
+  21:src/KernelThread.cpp ****     size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+  47              		.loc 1 21 5
+  48              		.loc 1 21 52 is_stmt 0
+  49 0040 13050004 		li	a0,64
+  50              	.LVL2:
+  51 0044 97000000 		call	_ZN15MemoryAllocator18roundToNumOfBlocksEm@plt
+  51      E7800000 
+  52              	.LVL3:
+  22:src/KernelThread.cpp **** 
+  23:src/KernelThread.cpp ****     KernelThread* tr;
+  53              		.loc 1 23 5 is_stmt 1
+  24:src/KernelThread.cpp **** 
+  25:src/KernelThread.cpp ****     tr = (KernelThread*)MemoryAllocator::malloc(sz);
+  54              		.loc 1 25 5
+  55              		.loc 1 25 48 is_stmt 0
+  56 004c 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+  56      E7800000 
+  57              	.LVL4:
+  58 0054 93040500 		mv	s1,a0
+  59              	.LVL5:
+  26:src/KernelThread.cpp ****     if(!tr){
+  60              		.loc 1 26 5 is_stmt 1
+  61 0058 63080508 		beqz	a0,.L14
+  27:src/KernelThread.cpp ****         if(s)MemoryAllocator::free(s);
+  28:src/KernelThread.cpp ****         return -1;
+  29:src/KernelThread.cpp ****     }
+  30:src/KernelThread.cpp **** 
+  31:src/KernelThread.cpp ****     tr->body = bod;
+  62              		.loc 1 31 5
+  63              		.loc 1 31 14 is_stmt 0
+  64 005c 23344501 		sd	s4,8(a0)
+  32:src/KernelThread.cpp ****     tr->argument = args;
+  65              		.loc 1 32 5 is_stmt 1
+  66              		.loc 1 32 18 is_stmt 0
+  67 0060 23302503 		sd	s2,32(a0)
+  33:src/KernelThread.cpp ****     tr->timeSlice = DEFAULT_TIME_SLICE;
+  68              		.loc 1 33 5 is_stmt 1
+  69              		.loc 1 33 19 is_stmt 0
+  70 0064 93072000 		li	a5,2
+  71 0068 2330F500 		sd	a5,0(a0)
+  34:src/KernelThread.cpp ****     tr->finished = false;
+  72              		.loc 1 34 5 is_stmt 1
+  73              		.loc 1 34 18 is_stmt 0
+  74 006c 230C0500 		sb	zero,24(a0)
+  35:src/KernelThread.cpp ****     tr->retVal=0;
+  75              		.loc 1 35 5 is_stmt 1
+  76              		.loc 1 35 15 is_stmt 0
+  77 0070 23260502 		sw	zero,44(a0)
+  36:src/KernelThread.cpp ****     if(tr->body != nullptr){
+GAS LISTING /tmp/ccBViA17.s 			page 3
+
+
+  78              		.loc 1 36 5 is_stmt 1
+  79 0074 630A0A08 		beqz	s4,.L6
+  37:src/KernelThread.cpp ****         tr->context.ra=(uint64)&threadWrapper;
+  80              		.loc 1 37 9
+  81              		.loc 1 37 23 is_stmt 0
+  82 0078 97070000 		lla	a5,_ZN12KernelThread13threadWrapperEv
+  82      93870700 
+  83 0080 2338F502 		sd	a5,48(a0)
+  38:src/KernelThread.cpp ****         tr->stack = s;
+  84              		.loc 1 38 9 is_stmt 1
+  85              		.loc 1 38 19 is_stmt 0
+  86 0084 23383501 		sd	s3,16(a0)
+  39:src/KernelThread.cpp ****         if(f)tr->started=true;
+  87              		.loc 1 39 9 is_stmt 1
+  88 0088 630C0B06 		beqz	s6,.L7
+  89              		.loc 1 39 14 discriminator 1
+  90              		.loc 1 39 25 is_stmt 0 discriminator 1
+  91 008c 93071000 		li	a5,1
+  92 0090 2304F502 		sb	a5,40(a0)
+  93              	.L8:
+  40:src/KernelThread.cpp ****         else tr->started=false;
+  41:src/KernelThread.cpp ****     }
+  42:src/KernelThread.cpp ****     else{
+  43:src/KernelThread.cpp ****         mainThread = tr;
+  44:src/KernelThread.cpp ****         tr->context.ra = 0;
+  45:src/KernelThread.cpp ****         tr->stack = nullptr;
+  46:src/KernelThread.cpp ****         tr->started=true;
+  47:src/KernelThread.cpp ****     }
+  48:src/KernelThread.cpp ****     if (tr->stack != nullptr){
+  94              		.loc 1 48 5 is_stmt 1
+  95              		.loc 1 48 13 is_stmt 0
+  96 0094 83B70401 		ld	a5,16(s1)
+  97              		.loc 1 48 5
+  98 0098 63860708 		beqz	a5,.L9
+  49:src/KernelThread.cpp ****         tr->context.sp=(uint64)&tr->stack[DEFAULT_STACK_SIZE];
+  99              		.loc 1 49 9 is_stmt 1
+ 100              		.loc 1 49 32 is_stmt 0
+ 101 009c 37870000 		li	a4,32768
+ 102 00a0 B387E700 		add	a5,a5,a4
+ 103              		.loc 1 49 23
+ 104 00a4 23BCF402 		sd	a5,56(s1)
+ 105              	.L10:
+  50:src/KernelThread.cpp ****     }
+  51:src/KernelThread.cpp ****     else{
+  52:src/KernelThread.cpp ****         tr->context.sp=0;
+  53:src/KernelThread.cpp ****     }
+  54:src/KernelThread.cpp ****     if (tr->body != nullptr && f) { Scheduler::put(tr); }
+ 106              		.loc 1 54 5 is_stmt 1
+ 107 00a8 63040A00 		beqz	s4,.L11
+ 108              		.loc 1 54 29 is_stmt 0 discriminator 1
+ 109 00ac 63100B08 		bnez	s6,.L15
+ 110              	.L11:
+  55:src/KernelThread.cpp ****     *handle = tr;
+ 111              		.loc 1 55 5 is_stmt 1
+ 112              		.loc 1 55 13 is_stmt 0
+ 113 00b0 23B09A00 		sd	s1,0(s5)
+  56:src/KernelThread.cpp ****     return 0;
+GAS LISTING /tmp/ccBViA17.s 			page 4
+
+
+ 114              		.loc 1 56 5 is_stmt 1
+ 115              		.loc 1 56 12 is_stmt 0
+ 116 00b4 13050000 		li	a0,0
+ 117              	.L5:
+  57:src/KernelThread.cpp **** }
+ 118              		.loc 1 57 1
+ 119 00b8 83308103 		ld	ra,56(sp)
+ 120              		.cfi_remember_state
+ 121              		.cfi_restore 1
+ 122 00bc 03340103 		ld	s0,48(sp)
+ 123              		.cfi_restore 8
+ 124              		.cfi_def_cfa 2, 64
+ 125 00c0 83348102 		ld	s1,40(sp)
+ 126              		.cfi_restore 9
+ 127              	.LVL6:
+ 128 00c4 03390102 		ld	s2,32(sp)
+ 129              		.cfi_restore 18
+ 130              	.LVL7:
+ 131 00c8 83398101 		ld	s3,24(sp)
+ 132              		.cfi_restore 19
+ 133              	.LVL8:
+ 134 00cc 033A0101 		ld	s4,16(sp)
+ 135              		.cfi_restore 20
+ 136              	.LVL9:
+ 137 00d0 833A8100 		ld	s5,8(sp)
+ 138              		.cfi_restore 21
+ 139              	.LVL10:
+ 140 00d4 033B0100 		ld	s6,0(sp)
+ 141              		.cfi_restore 22
+ 142              	.LVL11:
+ 143 00d8 13010104 		addi	sp,sp,64
+ 144              		.cfi_def_cfa_offset 0
+ 145 00dc 67800000 		jr	ra
+ 146              	.LVL12:
+ 147              	.L12:
+ 148              		.cfi_restore_state
+  19:src/KernelThread.cpp ****     size_t size = sizeof(KernelThread);
+ 149              		.loc 1 19 12
+ 150 00e0 130B1000 		li	s6,1
+ 151 00e4 6FF0DFF5 		j	.L2
+ 152              	.LVL13:
+ 153              	.L14:
+  27:src/KernelThread.cpp ****         return -1;
+ 154              		.loc 1 27 9 is_stmt 1
+ 155 00e8 63880900 		beqz	s3,.L4
+  27:src/KernelThread.cpp ****         return -1;
+ 156              		.loc 1 27 14 discriminator 1
+  27:src/KernelThread.cpp ****         return -1;
+ 157              		.loc 1 27 35 is_stmt 0 discriminator 1
+ 158 00ec 13850900 		mv	a0,s3
+ 159 00f0 97000000 		call	_ZN15MemoryAllocator4freeEPv@plt
+ 159      E7800000 
+ 160              	.LVL14:
+ 161              	.L4:
+  28:src/KernelThread.cpp ****     }
+ 162              		.loc 1 28 9 is_stmt 1
+  28:src/KernelThread.cpp ****     }
+GAS LISTING /tmp/ccBViA17.s 			page 5
+
+
+ 163              		.loc 1 28 17 is_stmt 0
+ 164 00f8 1305F0FF 		li	a0,-1
+ 165 00fc 6FF0DFFB 		j	.L5
+ 166              	.L7:
+  40:src/KernelThread.cpp ****     }
+ 167              		.loc 1 40 14 is_stmt 1
+  40:src/KernelThread.cpp ****     }
+ 168              		.loc 1 40 25 is_stmt 0
+ 169 0100 23040502 		sb	zero,40(a0)
+ 170 0104 6FF01FF9 		j	.L8
+ 171              	.L6:
+  43:src/KernelThread.cpp ****         tr->context.ra = 0;
+ 172              		.loc 1 43 9 is_stmt 1
+  43:src/KernelThread.cpp ****         tr->context.ra = 0;
+ 173              		.loc 1 43 20 is_stmt 0
+ 174 0108 97070000 		sd	a0,.LANCHOR0,a5
+ 174      23B0A700 
+  44:src/KernelThread.cpp ****         tr->stack = nullptr;
+ 175              		.loc 1 44 9 is_stmt 1
+  44:src/KernelThread.cpp ****         tr->stack = nullptr;
+ 176              		.loc 1 44 24 is_stmt 0
+ 177 0110 23380502 		sd	zero,48(a0)
+  45:src/KernelThread.cpp ****         tr->started=true;
+ 178              		.loc 1 45 9 is_stmt 1
+  45:src/KernelThread.cpp ****         tr->started=true;
+ 179              		.loc 1 45 19 is_stmt 0
+ 180 0114 23380500 		sd	zero,16(a0)
+  46:src/KernelThread.cpp ****     }
+ 181              		.loc 1 46 9 is_stmt 1
+  46:src/KernelThread.cpp ****     }
+ 182              		.loc 1 46 20 is_stmt 0
+ 183 0118 93071000 		li	a5,1
+ 184 011c 2304F502 		sb	a5,40(a0)
+ 185 0120 6FF05FF7 		j	.L8
+ 186              	.L9:
+  52:src/KernelThread.cpp ****     }
+ 187              		.loc 1 52 9 is_stmt 1
+  52:src/KernelThread.cpp ****     }
+ 188              		.loc 1 52 23 is_stmt 0
+ 189 0124 23BC0402 		sd	zero,56(s1)
+ 190 0128 6FF01FF8 		j	.L10
+ 191              	.L15:
+  54:src/KernelThread.cpp ****     *handle = tr;
+ 192              		.loc 1 54 37 is_stmt 1 discriminator 2
+  54:src/KernelThread.cpp ****     *handle = tr;
+ 193              		.loc 1 54 51 is_stmt 0 discriminator 2
+ 194 012c 13850400 		mv	a0,s1
+ 195 0130 97000000 		call	_ZN9Scheduler3putEP12KernelThread@plt
+ 195      E7800000 
+ 196              	.LVL15:
+ 197 0138 6FF09FF7 		j	.L11
+ 198              		.cfi_endproc
+ 199              	.LFE1:
+ 201              		.align	2
+ 202              		.globl	_ZNK12KernelThread10isFinishedEv
+ 204              	_ZNK12KernelThread10isFinishedEv:
+ 205              	.LFB2:
+GAS LISTING /tmp/ccBViA17.s 			page 6
+
+
+  58:src/KernelThread.cpp **** 
+  59:src/KernelThread.cpp **** 
+  60:src/KernelThread.cpp **** bool KernelThread::isFinished() const {
+ 206              		.loc 1 60 39 is_stmt 1
+ 207              		.cfi_startproc
+ 208              	.LVL16:
+ 209 013c 130101FF 		addi	sp,sp,-16
+ 210              		.cfi_def_cfa_offset 16
+ 211 0140 23348100 		sd	s0,8(sp)
+ 212              		.cfi_offset 8, -8
+ 213 0144 13040101 		addi	s0,sp,16
+ 214              		.cfi_def_cfa 8, 0
+  61:src/KernelThread.cpp ****     return finished;
+ 215              		.loc 1 61 5
+  62:src/KernelThread.cpp **** }
+ 216              		.loc 1 62 1 is_stmt 0
+ 217 0148 03458501 		lbu	a0,24(a0)
+ 218              	.LVL17:
+ 219 014c 03348100 		ld	s0,8(sp)
+ 220              		.cfi_restore 8
+ 221              		.cfi_def_cfa 2, 16
+ 222 0150 13010101 		addi	sp,sp,16
+ 223              		.cfi_def_cfa_offset 0
+ 224 0154 67800000 		jr	ra
+ 225              		.cfi_endproc
+ 226              	.LFE2:
+ 228              		.align	2
+ 229              		.globl	_ZN12KernelThread11setFinishedEb
+ 231              	_ZN12KernelThread11setFinishedEb:
+ 232              	.LFB3:
+  63:src/KernelThread.cpp **** 
+  64:src/KernelThread.cpp **** void KernelThread::setFinished(bool value) {
+ 233              		.loc 1 64 44 is_stmt 1
+ 234              		.cfi_startproc
+ 235              	.LVL18:
+ 236 0158 130101FF 		addi	sp,sp,-16
+ 237              		.cfi_def_cfa_offset 16
+ 238 015c 23348100 		sd	s0,8(sp)
+ 239              		.cfi_offset 8, -8
+ 240 0160 13040101 		addi	s0,sp,16
+ 241              		.cfi_def_cfa 8, 0
+  65:src/KernelThread.cpp ****     finished = value;
+ 242              		.loc 1 65 5
+ 243              		.loc 1 65 14 is_stmt 0
+ 244 0164 230CB500 		sb	a1,24(a0)
+  66:src/KernelThread.cpp **** }
+ 245              		.loc 1 66 1
+ 246 0168 03348100 		ld	s0,8(sp)
+ 247              		.cfi_restore 8
+ 248              		.cfi_def_cfa 2, 16
+ 249 016c 13010101 		addi	sp,sp,16
+ 250              		.cfi_def_cfa_offset 0
+ 251 0170 67800000 		jr	ra
+ 252              		.cfi_endproc
+ 253              	.LFE3:
+ 255              		.align	2
+ 256              		.globl	_ZN12KernelThread5yieldEv
+GAS LISTING /tmp/ccBViA17.s 			page 7
+
+
+ 258              	_ZN12KernelThread5yieldEv:
+ 259              	.LFB4:
+  67:src/KernelThread.cpp **** 
+  68:src/KernelThread.cpp **** void KernelThread::yield() {
+ 260              		.loc 1 68 28 is_stmt 1
+ 261              		.cfi_startproc
+ 262 0174 130101FF 		addi	sp,sp,-16
+ 263              		.cfi_def_cfa_offset 16
+ 264 0178 23348100 		sd	s0,8(sp)
+ 265              		.cfi_offset 8, -8
+ 266 017c 13040101 		addi	s0,sp,16
+ 267              		.cfi_def_cfa 8, 0
+  69:src/KernelThread.cpp **** 
+  70:src/KernelThread.cpp **** 
+  71:src/KernelThread.cpp ****     __asm__ volatile("li a0, 0x13");
+ 268              		.loc 1 71 5
+ 269              		.loc 1 71 36 is_stmt 0
+ 270              	#APP
+ 271              	# 71 "src/KernelThread.cpp" 1
+  72              	    __asm__ volatile("ecall");
+ 272              		li a0, 0x13
+ 273              	# 0 "" 2
+ 274              		.loc 1 72 5 is_stmt 1
+ 275              		.loc 1 72 30 is_stmt 0
+ 276              	# 72 "src/KernelThread.cpp" 1
+  73              	
+  74:src/KernelThread.cpp ****  //   KernelThread::pushRegisters();
+  75:src/KernelThread.cpp **** 
+  76:src/KernelThread.cpp ****    // KernelThread::dispatch();
+  77:src/KernelThread.cpp **** 
+  78:src/KernelThread.cpp ****     //KernelThread::popRegisters();
+  79:src/KernelThread.cpp **** }
+ 277              		ecall
+ 278              	# 0 "" 2
+ 279              		.loc 1 79 1
+ 280              	#NO_APP
+ 281 0188 03348100 		ld	s0,8(sp)
+ 282              		.cfi_restore 8
+ 283              		.cfi_def_cfa 2, 16
+ 284 018c 13010101 		addi	sp,sp,16
+ 285              		.cfi_def_cfa_offset 0
+ 286 0190 67800000 		jr	ra
+ 287              		.cfi_endproc
+ 288              	.LFE4:
+ 290              		.align	2
+ 291              		.globl	_ZN12KernelThread8dispatchEv
+ 293              	_ZN12KernelThread8dispatchEv:
+ 294              	.LFB5:
+  80:src/KernelThread.cpp **** 
+  81:src/KernelThread.cpp **** void KernelThread::dispatch(){
+ 295              		.loc 1 81 30 is_stmt 1
+ 296              		.cfi_startproc
+ 297 0194 130101FE 		addi	sp,sp,-32
+ 298              		.cfi_def_cfa_offset 32
+ 299 0198 233C1100 		sd	ra,24(sp)
+ 300 019c 23388100 		sd	s0,16(sp)
+ 301 01a0 23349100 		sd	s1,8(sp)
+GAS LISTING /tmp/ccBViA17.s 			page 8
+
+
+ 302 01a4 23302101 		sd	s2,0(sp)
+ 303              		.cfi_offset 1, -8
+ 304              		.cfi_offset 8, -16
+ 305              		.cfi_offset 9, -24
+ 306              		.cfi_offset 18, -32
+ 307 01a8 13040102 		addi	s0,sp,32
+ 308              		.cfi_def_cfa 8, 0
+  82:src/KernelThread.cpp ****     KernelThread *old = running;
+ 309              		.loc 1 82 5
+ 310              		.loc 1 82 19 is_stmt 0
+ 311 01ac 17090000 		lla	s2,.LANCHOR0
+ 311      13090900 
+ 312 01b4 83348900 		ld	s1,8(s2)
+ 313              	.LVL19:
+  83:src/KernelThread.cpp **** 
+  84:src/KernelThread.cpp ****     running = Scheduler::get();
+ 314              		.loc 1 84 5 is_stmt 1
+ 315              		.loc 1 84 29 is_stmt 0
+ 316 01b8 97000000 		call	_ZN9Scheduler3getEv@plt
+ 316      E7800000 
+ 317              	.LVL20:
+ 318              		.loc 1 84 13
+ 319 01c0 2334A900 		sd	a0,8(s2)
+  85:src/KernelThread.cpp ****     if (old!=idleThread && !old->isFinished()) { Scheduler::put(old); }
+ 320              		.loc 1 85 5 is_stmt 1
+ 321              		.loc 1 85 12 is_stmt 0
+ 322 01c4 83370901 		ld	a5,16(s2)
+ 323              		.loc 1 85 25
+ 324 01c8 638A9700 		beq	a5,s1,.L23
+ 325              		.loc 1 85 44 discriminator 1
+ 326 01cc 13850400 		mv	a0,s1
+ 327 01d0 97000000 		call	_ZNK12KernelThread10isFinishedEv
+ 327      E7800000 
+ 328              	.LVL21:
+ 329              		.loc 1 85 25 discriminator 1
+ 330 01d8 63000506 		beqz	a0,.L27
+ 331              	.L23:
+  86:src/KernelThread.cpp **** 
+  87:src/KernelThread.cpp **** 
+  88:src/KernelThread.cpp ****     if(old->isFinished()){
+ 332              		.loc 1 88 5 is_stmt 1
+ 333              		.loc 1 88 23 is_stmt 0
+ 334 01dc 13850400 		mv	a0,s1
+ 335 01e0 97000000 		call	_ZNK12KernelThread10isFinishedEv
+ 335      E7800000 
+ 336              	.LVL22:
+ 337              		.loc 1 88 5
+ 338 01e8 63000502 		beqz	a0,.L24
+  89:src/KernelThread.cpp ****         if(old->stack)MemoryAllocator::free(old->stack);
+ 339              		.loc 1 89 9 is_stmt 1
+ 340              		.loc 1 89 17 is_stmt 0
+ 341 01ec 03B50401 		ld	a0,16(s1)
+ 342              		.loc 1 89 9
+ 343 01f0 63060500 		beqz	a0,.L25
+ 344              		.loc 1 89 23 is_stmt 1 discriminator 1
+ 345              		.loc 1 89 44 is_stmt 0 discriminator 1
+ 346 01f4 97000000 		call	_ZN15MemoryAllocator4freeEPv@plt
+GAS LISTING /tmp/ccBViA17.s 			page 9
+
+
+ 346      E7800000 
+ 347              	.LVL23:
+ 348              	.L25:
+  90:src/KernelThread.cpp ****         MemoryAllocator::free(old);
+ 349              		.loc 1 90 9 is_stmt 1
+ 350              		.loc 1 90 30 is_stmt 0
+ 351 01fc 13850400 		mv	a0,s1
+ 352 0200 97000000 		call	_ZN15MemoryAllocator4freeEPv@plt
+ 352      E7800000 
+ 353              	.LVL24:
+ 354              	.L24:
+  91:src/KernelThread.cpp ****     }
+  92:src/KernelThread.cpp **** 
+  93:src/KernelThread.cpp ****     KernelThread::contextSwitch(&old->context, &running->context);
+ 355              		.loc 1 93 5 is_stmt 1
+ 356              		.loc 1 93 32 is_stmt 0
+ 357 0208 97050000 		ld	a1,.LANCHOR0+8
+ 357      83B50500 
+ 358 0210 93850503 		addi	a1,a1,48
+ 359 0214 13850403 		addi	a0,s1,48
+ 360 0218 97000000 		call	_ZN12KernelThread13contextSwitchEPNS_7ContextES1_@plt
+ 360      E7800000 
+ 361              	.LVL25:
+  94:src/KernelThread.cpp **** 
+  95:src/KernelThread.cpp ****     //old->finished=false;
+  96:src/KernelThread.cpp **** 
+  97:src/KernelThread.cpp **** }
+ 362              		.loc 1 97 1
+ 363 0220 83308101 		ld	ra,24(sp)
+ 364              		.cfi_remember_state
+ 365              		.cfi_restore 1
+ 366 0224 03340101 		ld	s0,16(sp)
+ 367              		.cfi_restore 8
+ 368              		.cfi_def_cfa 2, 32
+ 369 0228 83348100 		ld	s1,8(sp)
+ 370              		.cfi_restore 9
+ 371              	.LVL26:
+ 372 022c 03390100 		ld	s2,0(sp)
+ 373              		.cfi_restore 18
+ 374 0230 13010102 		addi	sp,sp,32
+ 375              		.cfi_def_cfa_offset 0
+ 376 0234 67800000 		jr	ra
+ 377              	.LVL27:
+ 378              	.L27:
+ 379              		.cfi_restore_state
+  85:src/KernelThread.cpp **** 
+ 380              		.loc 1 85 50 is_stmt 1
+  85:src/KernelThread.cpp **** 
+ 381              		.loc 1 85 64 is_stmt 0
+ 382 0238 13850400 		mv	a0,s1
+ 383 023c 97000000 		call	_ZN9Scheduler3putEP12KernelThread@plt
+ 383      E7800000 
+ 384              	.LVL28:
+ 385 0244 6FF09FF9 		j	.L23
+ 386              		.cfi_endproc
+ 387              	.LFE5:
+ 389              		.align	2
+GAS LISTING /tmp/ccBViA17.s 			page 10
+
+
+ 390              		.globl	_ZN12KernelThread19dispatchNoSchedulerEv
+ 392              	_ZN12KernelThread19dispatchNoSchedulerEv:
+ 393              	.LFB6:
+  98:src/KernelThread.cpp **** 
+  99:src/KernelThread.cpp **** void KernelThread::dispatchNoScheduler(){
+ 394              		.loc 1 99 41 is_stmt 1
+ 395              		.cfi_startproc
+ 396 0248 130101FE 		addi	sp,sp,-32
+ 397              		.cfi_def_cfa_offset 32
+ 398 024c 233C1100 		sd	ra,24(sp)
+ 399 0250 23388100 		sd	s0,16(sp)
+ 400 0254 23349100 		sd	s1,8(sp)
+ 401 0258 23302101 		sd	s2,0(sp)
+ 402              		.cfi_offset 1, -8
+ 403              		.cfi_offset 8, -16
+ 404              		.cfi_offset 9, -24
+ 405              		.cfi_offset 18, -32
+ 406 025c 13040102 		addi	s0,sp,32
+ 407              		.cfi_def_cfa 8, 0
+ 100:src/KernelThread.cpp ****     KernelThread::pushRegisters();
+ 408              		.loc 1 100 5
+ 409              		.loc 1 100 32 is_stmt 0
+ 410 0260 97000000 		call	_ZN12KernelThread13pushRegistersEv@plt
+ 410      E7800000 
+ 411              	.LVL29:
+ 101:src/KernelThread.cpp ****     KernelThread *old = running;
+ 412              		.loc 1 101 5 is_stmt 1
+ 413              		.loc 1 101 19 is_stmt 0
+ 414 0268 97040000 		lla	s1,.LANCHOR0
+ 414      93840400 
+ 415 0270 03B98400 		ld	s2,8(s1)
+ 416              	.LVL30:
+ 102:src/KernelThread.cpp ****     running = Scheduler::get();
+ 417              		.loc 1 102 5 is_stmt 1
+ 418              		.loc 1 102 29 is_stmt 0
+ 419 0274 97000000 		call	_ZN9Scheduler3getEv@plt
+ 419      E7800000 
+ 420              	.LVL31:
+ 421              		.loc 1 102 13
+ 422 027c 23B4A400 		sd	a0,8(s1)
+ 103:src/KernelThread.cpp ****     KernelThread::contextSwitch(&old->context, &running->context);
+ 423              		.loc 1 103 5 is_stmt 1
+ 424              		.loc 1 103 32 is_stmt 0
+ 425 0280 93050503 		addi	a1,a0,48
+ 426 0284 13050903 		addi	a0,s2,48
+ 427 0288 97000000 		call	_ZN12KernelThread13contextSwitchEPNS_7ContextES1_@plt
+ 427      E7800000 
+ 428              	.LVL32:
+ 104:src/KernelThread.cpp **** 
+ 105:src/KernelThread.cpp **** /*
+ 106:src/KernelThread.cpp ****     if(old->isFinished()){
+ 107:src/KernelThread.cpp ****         if(old->stack)MemoryAllocator::free(old->stack);
+ 108:src/KernelThread.cpp ****         MemoryAllocator::free(old);
+ 109:src/KernelThread.cpp ****     }
+ 110:src/KernelThread.cpp **** */
+ 111:src/KernelThread.cpp ****     KernelThread::popRegisters();
+ 429              		.loc 1 111 5 is_stmt 1
+GAS LISTING /tmp/ccBViA17.s 			page 11
+
+
+ 430              		.loc 1 111 31 is_stmt 0
+ 431 0290 97000000 		call	_ZN12KernelThread12popRegistersEv@plt
+ 431      E7800000 
+ 432              	.LVL33:
+ 112:src/KernelThread.cpp **** }
+ 433              		.loc 1 112 1
+ 434 0298 83308101 		ld	ra,24(sp)
+ 435              		.cfi_restore 1
+ 436 029c 03340101 		ld	s0,16(sp)
+ 437              		.cfi_restore 8
+ 438              		.cfi_def_cfa 2, 32
+ 439 02a0 83348100 		ld	s1,8(sp)
+ 440              		.cfi_restore 9
+ 441 02a4 03390100 		ld	s2,0(sp)
+ 442              		.cfi_restore 18
+ 443              	.LVL34:
+ 444 02a8 13010102 		addi	sp,sp,32
+ 445              		.cfi_def_cfa_offset 0
+ 446 02ac 67800000 		jr	ra
+ 447              		.cfi_endproc
+ 448              	.LFE6:
+ 450              		.align	2
+ 451              		.globl	_ZN12KernelThread8initIdleEv
+ 453              	_ZN12KernelThread8initIdleEv:
+ 454              	.LFB8:
+ 113:src/KernelThread.cpp **** 
+ 114:src/KernelThread.cpp **** void KernelThread::threadWrapper() {
+ 115:src/KernelThread.cpp ****     popSppSpie();
+ 116:src/KernelThread.cpp ****     KernelThread::running->body(KernelThread::running->argument);
+ 117:src/KernelThread.cpp ****     KernelThread::running->setFinished(true);
+ 118:src/KernelThread.cpp ****     KernelThread::yield();
+ 119:src/KernelThread.cpp ****     //__asm__ volatile("li a0, 0x13");
+ 120:src/KernelThread.cpp ****     //__asm__ volatile("ecall");
+ 121:src/KernelThread.cpp ****     //ovo umesto yield
+ 122:src/KernelThread.cpp **** }
+ 123:src/KernelThread.cpp **** 
+ 124:src/KernelThread.cpp **** void KernelThread::initIdle() {
+ 455              		.loc 1 124 31 is_stmt 1
+ 456              		.cfi_startproc
+ 457 02b0 130101FE 		addi	sp,sp,-32
+ 458              		.cfi_def_cfa_offset 32
+ 459 02b4 233C1100 		sd	ra,24(sp)
+ 460 02b8 23388100 		sd	s0,16(sp)
+ 461 02bc 23349100 		sd	s1,8(sp)
+ 462 02c0 23302101 		sd	s2,0(sp)
+ 463              		.cfi_offset 1, -8
+ 464              		.cfi_offset 8, -16
+ 465              		.cfi_offset 9, -24
+ 466              		.cfi_offset 18, -32
+ 467 02c4 13040102 		addi	s0,sp,32
+ 468              		.cfi_def_cfa 8, 0
+ 125:src/KernelThread.cpp ****     size_t size = sizeof(KernelThread);
+ 469              		.loc 1 125 5
+ 470              	.LVL35:
+ 126:src/KernelThread.cpp ****     size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+ 471              		.loc 1 126 5
+ 472              		.loc 1 126 52 is_stmt 0
+GAS LISTING /tmp/ccBViA17.s 			page 12
+
+
+ 473 02c8 13050004 		li	a0,64
+ 474 02cc 97000000 		call	_ZN15MemoryAllocator18roundToNumOfBlocksEm@plt
+ 474      E7800000 
+ 475              	.LVL36:
+ 127:src/KernelThread.cpp **** 
+ 128:src/KernelThread.cpp ****     idleThread = (KernelThread*)MemoryAllocator::malloc(sz);
+ 476              		.loc 1 128 5 is_stmt 1
+ 477              		.loc 1 128 56 is_stmt 0
+ 478 02d4 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+ 478      E7800000 
+ 479              	.LVL37:
+ 480              		.loc 1 128 16
+ 481 02dc 97040000 		lla	s1,.LANCHOR0
+ 481      93840400 
+ 482 02e4 23B8A400 		sd	a0,16(s1)
+ 129:src/KernelThread.cpp ****     size = DEFAULT_STACK_SIZE;
+ 483              		.loc 1 129 5 is_stmt 1
+ 484              	.LVL38:
+ 130:src/KernelThread.cpp ****     sz = MemoryAllocator::roundToNumOfBlocks(size);
+ 485              		.loc 1 130 5
+ 486              		.loc 1 130 45 is_stmt 0
+ 487 02e8 37150000 		li	a0,4096
+ 488 02ec 97000000 		call	_ZN15MemoryAllocator18roundToNumOfBlocksEm@plt
+ 488      E7800000 
+ 489              	.LVL39:
+ 131:src/KernelThread.cpp **** 
+ 132:src/KernelThread.cpp ****     idleThread->stack = (uint64*)MemoryAllocator::malloc(sz);
+ 490              		.loc 1 132 5 is_stmt 1
+ 491              		.loc 1 132 17 is_stmt 0
+ 492 02f4 03B90401 		ld	s2,16(s1)
+ 493              		.loc 1 132 57
+ 494 02f8 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+ 494      E7800000 
+ 495              	.LVL40:
+ 496              		.loc 1 132 23
+ 497 0300 2338A900 		sd	a0,16(s2)
+ 133:src/KernelThread.cpp ****     idleThread->body = nullptr;
+ 498              		.loc 1 133 5 is_stmt 1
+ 499              		.loc 1 133 17 is_stmt 0
+ 500 0304 83B70401 		ld	a5,16(s1)
+ 501              		.loc 1 133 22
+ 502 0308 23B40700 		sd	zero,8(a5)
+ 134:src/KernelThread.cpp ****     idleThread->argument= nullptr;
+ 503              		.loc 1 134 5 is_stmt 1
+ 504              		.loc 1 134 25 is_stmt 0
+ 505 030c 23B00702 		sd	zero,32(a5)
+ 135:src/KernelThread.cpp ****     idleThread->context.sp = (uint64)&idleThread->stack[DEFAULT_STACK_SIZE];
+ 506              		.loc 1 135 5 is_stmt 1
+ 507              		.loc 1 135 51 is_stmt 0
+ 508 0310 03B70701 		ld	a4,16(a5)
+ 509              		.loc 1 135 38
+ 510 0314 B7860000 		li	a3,32768
+ 511 0318 3307D700 		add	a4,a4,a3
+ 512              		.loc 1 135 28
+ 513 031c 23BCE702 		sd	a4,56(a5)
+ 136:src/KernelThread.cpp ****     idleThread->context.ra = (uint64)&idleFunction;
+ 514              		.loc 1 136 5 is_stmt 1
+GAS LISTING /tmp/ccBViA17.s 			page 13
+
+
+ 515              		.loc 1 136 28 is_stmt 0
+ 516 0320 17070000 		la	a4,_Z12idleFunctionv
+ 516      03370700 
+ 517 0328 23B8E702 		sd	a4,48(a5)
+ 137:src/KernelThread.cpp ****     idleThread->retVal=0;
+ 518              		.loc 1 137 5 is_stmt 1
+ 519              		.loc 1 137 23 is_stmt 0
+ 520 032c 23A60702 		sw	zero,44(a5)
+ 138:src/KernelThread.cpp ****     idleThread->finished=false;
+ 521              		.loc 1 138 5 is_stmt 1
+ 522              		.loc 1 138 25 is_stmt 0
+ 523 0330 238C0700 		sb	zero,24(a5)
+ 139:src/KernelThread.cpp ****     idleThread->timeSlice=2;
+ 524              		.loc 1 139 5 is_stmt 1
+ 525              		.loc 1 139 26 is_stmt 0
+ 526 0334 13072000 		li	a4,2
+ 527 0338 23B0E700 		sd	a4,0(a5)
+ 140:src/KernelThread.cpp ****     idleThread->started=true;
+ 528              		.loc 1 140 5 is_stmt 1
+ 529              		.loc 1 140 17 is_stmt 0
+ 530 033c 83B70401 		ld	a5,16(s1)
+ 531              		.loc 1 140 24
+ 532 0340 13071000 		li	a4,1
+ 533 0344 2384E702 		sb	a4,40(a5)
+ 141:src/KernelThread.cpp **** }
+ 534              		.loc 1 141 1
+ 535 0348 83308101 		ld	ra,24(sp)
+ 536              		.cfi_restore 1
+ 537 034c 03340101 		ld	s0,16(sp)
+ 538              		.cfi_restore 8
+ 539              		.cfi_def_cfa 2, 32
+ 540 0350 83348100 		ld	s1,8(sp)
+ 541              		.cfi_restore 9
+ 542 0354 03390100 		ld	s2,0(sp)
+ 543              		.cfi_restore 18
+ 544 0358 13010102 		addi	sp,sp,32
+ 545              		.cfi_def_cfa_offset 0
+ 546 035c 67800000 		jr	ra
+ 547              		.cfi_endproc
+ 548              	.LFE8:
+ 550              		.align	2
+ 551              		.globl	_ZN12KernelThread10popSppSpieEv
+ 553              	_ZN12KernelThread10popSppSpieEv:
+ 554              	.LFB9:
+ 142:src/KernelThread.cpp **** 
+ 143:src/KernelThread.cpp **** 
+ 144:src/KernelThread.cpp **** 
+ 145:src/KernelThread.cpp **** void KernelThread::popSppSpie()
+ 146:src/KernelThread.cpp **** {
+ 555              		.loc 1 146 1 is_stmt 1
+ 556              		.cfi_startproc
+ 557 0360 130101FF 		addi	sp,sp,-16
+ 558              		.cfi_def_cfa_offset 16
+ 559 0364 23348100 		sd	s0,8(sp)
+ 560              		.cfi_offset 8, -8
+ 561 0368 13040101 		addi	s0,sp,16
+ 562              		.cfi_def_cfa 8, 0
+GAS LISTING /tmp/ccBViA17.s 			page 14
+
+
+ 147:src/KernelThread.cpp ****     __asm__ volatile ("csrw sepc, ra");
+ 563              		.loc 1 147 5
+ 564              		.loc 1 147 39 is_stmt 0
+ 565              	#APP
+ 566              	# 147 "src/KernelThread.cpp" 1
+ 148              	    __asm__ volatile ("csrc sip, 0x02");
+ 567              		csrw sepc, ra
+ 568              	# 0 "" 2
+ 569              		.loc 1 148 5 is_stmt 1
+ 570              		.loc 1 148 40 is_stmt 0
+ 571              	# 148 "src/KernelThread.cpp" 1
+ 149              	    __asm__ volatile ("sret");
+ 572              		csrc sip, 0x02
+ 573              	# 0 "" 2
+ 574              		.loc 1 149 5 is_stmt 1
+ 575              		.loc 1 149 30 is_stmt 0
+ 576              	# 149 "src/KernelThread.cpp" 1
+ 150              	}
+ 577              		sret
+ 578              	# 0 "" 2
+ 579              		.loc 1 150 1
+ 580              	#NO_APP
+ 581 0378 03348100 		ld	s0,8(sp)
+ 582              		.cfi_restore 8
+ 583              		.cfi_def_cfa 2, 16
+ 584 037c 13010101 		addi	sp,sp,16
+ 585              		.cfi_def_cfa_offset 0
+ 586 0380 67800000 		jr	ra
+ 587              		.cfi_endproc
+ 588              	.LFE9:
+ 590              		.align	2
+ 591              		.globl	_ZN12KernelThread13threadWrapperEv
+ 593              	_ZN12KernelThread13threadWrapperEv:
+ 594              	.LFB7:
+ 114:src/KernelThread.cpp ****     popSppSpie();
+ 595              		.loc 1 114 36 is_stmt 1
+ 596              		.cfi_startproc
+ 597 0384 130101FE 		addi	sp,sp,-32
+ 598              		.cfi_def_cfa_offset 32
+ 599 0388 233C1100 		sd	ra,24(sp)
+ 600 038c 23388100 		sd	s0,16(sp)
+ 601 0390 23349100 		sd	s1,8(sp)
+ 602              		.cfi_offset 1, -8
+ 603              		.cfi_offset 8, -16
+ 604              		.cfi_offset 9, -24
+ 605 0394 13040102 		addi	s0,sp,32
+ 606              		.cfi_def_cfa 8, 0
+ 115:src/KernelThread.cpp ****     KernelThread::running->body(KernelThread::running->argument);
+ 607              		.loc 1 115 5
+ 115:src/KernelThread.cpp ****     KernelThread::running->body(KernelThread::running->argument);
+ 608              		.loc 1 115 15 is_stmt 0
+ 609 0398 97000000 		call	_ZN12KernelThread10popSppSpieEv
+ 609      E7800000 
+ 610              	.LVL41:
+ 116:src/KernelThread.cpp ****     KernelThread::running->setFinished(true);
+ 611              		.loc 1 116 5 is_stmt 1
+ 116:src/KernelThread.cpp ****     KernelThread::running->setFinished(true);
+GAS LISTING /tmp/ccBViA17.s 			page 15
+
+
+ 612              		.loc 1 116 28 is_stmt 0
+ 613 03a0 97040000 		lla	s1,.LANCHOR0
+ 613      93840400 
+ 614 03a8 83B78400 		ld	a5,8(s1)
+ 615 03ac 03B78700 		ld	a4,8(a5)
+ 116:src/KernelThread.cpp ****     KernelThread::running->setFinished(true);
+ 616              		.loc 1 116 32
+ 617 03b0 03B50702 		ld	a0,32(a5)
+ 618 03b4 E7000700 		jalr	a4
+ 619              	.LVL42:
+ 117:src/KernelThread.cpp ****     KernelThread::yield();
+ 620              		.loc 1 117 5 is_stmt 1
+ 117:src/KernelThread.cpp ****     KernelThread::yield();
+ 621              		.loc 1 117 39 is_stmt 0
+ 622 03b8 93051000 		li	a1,1
+ 623 03bc 03B58400 		ld	a0,8(s1)
+ 624 03c0 97000000 		call	_ZN12KernelThread11setFinishedEb
+ 624      E7800000 
+ 625              	.LVL43:
+ 118:src/KernelThread.cpp ****     //__asm__ volatile("li a0, 0x13");
+ 626              		.loc 1 118 5 is_stmt 1
+ 118:src/KernelThread.cpp ****     //__asm__ volatile("li a0, 0x13");
+ 627              		.loc 1 118 24 is_stmt 0
+ 628 03c8 97000000 		call	_ZN12KernelThread5yieldEv
+ 628      E7800000 
+ 629              	.LVL44:
+ 122:src/KernelThread.cpp **** 
+ 630              		.loc 1 122 1
+ 631 03d0 83308101 		ld	ra,24(sp)
+ 632              		.cfi_restore 1
+ 633 03d4 03340101 		ld	s0,16(sp)
+ 634              		.cfi_restore 8
+ 635              		.cfi_def_cfa 2, 32
+ 636 03d8 83348100 		ld	s1,8(sp)
+ 637              		.cfi_restore 9
+ 638 03dc 13010102 		addi	sp,sp,32
+ 639              		.cfi_def_cfa_offset 0
+ 640 03e0 67800000 		jr	ra
+ 641              		.cfi_endproc
+ 642              	.LFE7:
+ 644              		.align	2
+ 645              		.globl	_ZNK12KernelThread12getTimeSliceEv
+ 647              	_ZNK12KernelThread12getTimeSliceEv:
+ 648              	.LFB10:
+ 151:src/KernelThread.cpp **** 
+ 152:src/KernelThread.cpp **** uint64 KernelThread::getTimeSlice() const {
+ 649              		.loc 1 152 43 is_stmt 1
+ 650              		.cfi_startproc
+ 651              	.LVL45:
+ 652 03e4 130101FF 		addi	sp,sp,-16
+ 653              		.cfi_def_cfa_offset 16
+ 654 03e8 23348100 		sd	s0,8(sp)
+ 655              		.cfi_offset 8, -8
+ 656 03ec 13040101 		addi	s0,sp,16
+ 657              		.cfi_def_cfa 8, 0
+ 153:src/KernelThread.cpp ****     return timeSlice;
+ 658              		.loc 1 153 5
+GAS LISTING /tmp/ccBViA17.s 			page 16
+
+
+ 154:src/KernelThread.cpp **** }
+ 659              		.loc 1 154 1 is_stmt 0
+ 660 03f0 03350500 		ld	a0,0(a0)
+ 661              	.LVL46:
+ 662 03f4 03348100 		ld	s0,8(sp)
+ 663              		.cfi_restore 8
+ 664              		.cfi_def_cfa 2, 16
+ 665 03f8 13010101 		addi	sp,sp,16
+ 666              		.cfi_def_cfa_offset 0
+ 667 03fc 67800000 		jr	ra
+ 668              		.cfi_endproc
+ 669              	.LFE10:
+ 671              		.align	2
+ 672              		.globl	_ZN12KernelThread7initPutEv
+ 674              	_ZN12KernelThread7initPutEv:
+ 675              	.LFB11:
+ 155:src/KernelThread.cpp **** 
+ 156:src/KernelThread.cpp **** 
+ 157:src/KernelThread.cpp **** void KernelThread::initPut() {
+ 676              		.loc 1 157 30 is_stmt 1
+ 677              		.cfi_startproc
+ 678 0400 130101FE 		addi	sp,sp,-32
+ 679              		.cfi_def_cfa_offset 32
+ 680 0404 233C1100 		sd	ra,24(sp)
+ 681 0408 23388100 		sd	s0,16(sp)
+ 682 040c 23349100 		sd	s1,8(sp)
+ 683 0410 23302101 		sd	s2,0(sp)
+ 684              		.cfi_offset 1, -8
+ 685              		.cfi_offset 8, -16
+ 686              		.cfi_offset 9, -24
+ 687              		.cfi_offset 18, -32
+ 688 0414 13040102 		addi	s0,sp,32
+ 689              		.cfi_def_cfa 8, 0
+ 158:src/KernelThread.cpp ****     size_t size = sizeof(KernelThread);
+ 690              		.loc 1 158 5
+ 691              	.LVL47:
+ 159:src/KernelThread.cpp ****     size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+ 692              		.loc 1 159 5
+ 693              		.loc 1 159 52 is_stmt 0
+ 694 0418 13050004 		li	a0,64
+ 695 041c 97000000 		call	_ZN15MemoryAllocator18roundToNumOfBlocksEm@plt
+ 695      E7800000 
+ 696              	.LVL48:
+ 160:src/KernelThread.cpp **** 
+ 161:src/KernelThread.cpp ****     putThread = (KernelThread*)MemoryAllocator::malloc(sz);
+ 697              		.loc 1 161 5 is_stmt 1
+ 698              		.loc 1 161 55 is_stmt 0
+ 699 0424 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+ 699      E7800000 
+ 700              	.LVL49:
+ 701              		.loc 1 161 15
+ 702 042c 97040000 		lla	s1,.LANCHOR0
+ 702      93840400 
+ 703 0434 23BCA400 		sd	a0,24(s1)
+ 162:src/KernelThread.cpp ****     size = DEFAULT_STACK_SIZE;
+ 704              		.loc 1 162 5 is_stmt 1
+ 705              	.LVL50:
+GAS LISTING /tmp/ccBViA17.s 			page 17
+
+
+ 163:src/KernelThread.cpp ****     sz = MemoryAllocator::roundToNumOfBlocks(size);
+ 706              		.loc 1 163 5
+ 707              		.loc 1 163 45 is_stmt 0
+ 708 0438 37150000 		li	a0,4096
+ 709 043c 97000000 		call	_ZN15MemoryAllocator18roundToNumOfBlocksEm@plt
+ 709      E7800000 
+ 710              	.LVL51:
+ 164:src/KernelThread.cpp **** 
+ 165:src/KernelThread.cpp ****     putThread->stack = (uint64*)MemoryAllocator::malloc(sz);
+ 711              		.loc 1 165 5 is_stmt 1
+ 712              		.loc 1 165 16 is_stmt 0
+ 713 0444 03B98401 		ld	s2,24(s1)
+ 714              		.loc 1 165 56
+ 715 0448 97000000 		call	_ZN15MemoryAllocator6mallocEm@plt
+ 715      E7800000 
+ 716              	.LVL52:
+ 717              		.loc 1 165 22
+ 718 0450 2338A900 		sd	a0,16(s2)
+ 166:src/KernelThread.cpp ****     putThread->body = nullptr;
+ 719              		.loc 1 166 5 is_stmt 1
+ 720              		.loc 1 166 16 is_stmt 0
+ 721 0454 83B78401 		ld	a5,24(s1)
+ 722              		.loc 1 166 21
+ 723 0458 23B40700 		sd	zero,8(a5)
+ 167:src/KernelThread.cpp ****     putThread->argument= nullptr;
+ 724              		.loc 1 167 5 is_stmt 1
+ 725              		.loc 1 167 24 is_stmt 0
+ 726 045c 23B00702 		sd	zero,32(a5)
+ 168:src/KernelThread.cpp ****     putThread->context.sp = (uint64)&putThread->stack[DEFAULT_STACK_SIZE];
+ 727              		.loc 1 168 5 is_stmt 1
+ 728              		.loc 1 168 49 is_stmt 0
+ 729 0460 03B70701 		ld	a4,16(a5)
+ 730              		.loc 1 168 37
+ 731 0464 B7860000 		li	a3,32768
+ 732 0468 3307D700 		add	a4,a4,a3
+ 733              		.loc 1 168 27
+ 734 046c 23BCE702 		sd	a4,56(a5)
+ 169:src/KernelThread.cpp ****     putThread->context.ra = (uint64)&putFunction;
+ 735              		.loc 1 169 5 is_stmt 1
+ 736              		.loc 1 169 27 is_stmt 0
+ 737 0470 17070000 		la	a4,_Z11putFunctionv
+ 737      03370700 
+ 738 0478 23B8E702 		sd	a4,48(a5)
+ 170:src/KernelThread.cpp ****     putThread->timeSlice=2;
+ 739              		.loc 1 170 5 is_stmt 1
+ 740              		.loc 1 170 25 is_stmt 0
+ 741 047c 13072000 		li	a4,2
+ 742 0480 23B0E700 		sd	a4,0(a5)
+ 171:src/KernelThread.cpp ****     putThread->retVal=0;
+ 743              		.loc 1 171 5 is_stmt 1
+ 744              		.loc 1 171 16 is_stmt 0
+ 745 0484 03B58401 		ld	a0,24(s1)
+ 746              		.loc 1 171 22
+ 747 0488 23260502 		sw	zero,44(a0)
+ 172:src/KernelThread.cpp ****     putThread->finished=false;
+ 748              		.loc 1 172 5 is_stmt 1
+ 749              		.loc 1 172 24 is_stmt 0
+GAS LISTING /tmp/ccBViA17.s 			page 18
+
+
+ 750 048c 230C0500 		sb	zero,24(a0)
+ 173:src/KernelThread.cpp ****     putThread->started = true;
+ 751              		.loc 1 173 5 is_stmt 1
+ 752              		.loc 1 173 24 is_stmt 0
+ 753 0490 93071000 		li	a5,1
+ 754 0494 2304F502 		sb	a5,40(a0)
+ 174:src/KernelThread.cpp ****     Scheduler::put(putThread);
+ 755              		.loc 1 174 5 is_stmt 1
+ 756              		.loc 1 174 19 is_stmt 0
+ 757 0498 97000000 		call	_ZN9Scheduler3putEP12KernelThread@plt
+ 757      E7800000 
+ 758              	.LVL53:
+ 175:src/KernelThread.cpp **** }
+ 759              		.loc 1 175 1
+ 760 04a0 83308101 		ld	ra,24(sp)
+ 761              		.cfi_restore 1
+ 762 04a4 03340101 		ld	s0,16(sp)
+ 763              		.cfi_restore 8
+ 764              		.cfi_def_cfa 2, 32
+ 765 04a8 83348100 		ld	s1,8(sp)
+ 766              		.cfi_restore 9
+ 767 04ac 03390100 		ld	s2,0(sp)
+ 768              		.cfi_restore 18
+ 769 04b0 13010102 		addi	sp,sp,32
+ 770              		.cfi_def_cfa_offset 0
+ 771 04b4 67800000 		jr	ra
+ 772              		.cfi_endproc
+ 773              	.LFE11:
+ 775              		.align	2
+ 776              		.globl	_ZN12KernelThread5startEPS_
+ 778              	_ZN12KernelThread5startEPS_:
+ 779              	.LFB12:
+ 176:src/KernelThread.cpp **** 
+ 177:src/KernelThread.cpp **** int KernelThread::start(KernelThread*k) {
+ 780              		.loc 1 177 41 is_stmt 1
+ 781              		.cfi_startproc
+ 782              	.LVL54:
+ 178:src/KernelThread.cpp ****     if(k->started)return -1;
+ 783              		.loc 1 178 5
+ 784              		.loc 1 178 11 is_stmt 0
+ 785 04b8 83478502 		lbu	a5,40(a0)
+ 786              		.loc 1 178 5
+ 787 04bc 639C0702 		bnez	a5,.L42
+ 177:src/KernelThread.cpp ****     if(k->started)return -1;
+ 788              		.loc 1 177 41
+ 789 04c0 130101FF 		addi	sp,sp,-16
+ 790              		.cfi_def_cfa_offset 16
+ 791 04c4 23341100 		sd	ra,8(sp)
+ 792 04c8 23308100 		sd	s0,0(sp)
+ 793              		.cfi_offset 1, -8
+ 794              		.cfi_offset 8, -16
+ 795 04cc 13040101 		addi	s0,sp,16
+ 796              		.cfi_def_cfa 8, 0
+ 179:src/KernelThread.cpp ****     else{
+ 180:src/KernelThread.cpp ****         k->started=true;
+ 797              		.loc 1 180 9 is_stmt 1
+ 798              		.loc 1 180 19 is_stmt 0
+GAS LISTING /tmp/ccBViA17.s 			page 19
+
+
+ 799 04d0 93071000 		li	a5,1
+ 800 04d4 2304F502 		sb	a5,40(a0)
+ 181:src/KernelThread.cpp ****         Scheduler::put(k);
+ 801              		.loc 1 181 9 is_stmt 1
+ 802              		.loc 1 181 23 is_stmt 0
+ 803 04d8 97000000 		call	_ZN9Scheduler3putEP12KernelThread@plt
+ 803      E7800000 
+ 804              	.LVL55:
+ 182:src/KernelThread.cpp ****         return 0;
+ 805              		.loc 1 182 9 is_stmt 1
+ 806              		.loc 1 182 16 is_stmt 0
+ 807 04e0 13050000 		li	a0,0
+ 183:src/KernelThread.cpp ****     }
+ 184:src/KernelThread.cpp **** }
+ 808              		.loc 1 184 1
+ 809 04e4 83308100 		ld	ra,8(sp)
+ 810              		.cfi_restore 1
+ 811 04e8 03340100 		ld	s0,0(sp)
+ 812              		.cfi_restore 8
+ 813              		.cfi_def_cfa 2, 16
+ 814 04ec 13010101 		addi	sp,sp,16
+ 815              		.cfi_def_cfa_offset 0
+ 816 04f0 67800000 		jr	ra
+ 817              	.LVL56:
+ 818              	.L42:
+ 178:src/KernelThread.cpp ****     else{
+ 819              		.loc 1 178 27
+ 820 04f4 1305F0FF 		li	a0,-1
+ 821              	.LVL57:
+ 822              		.loc 1 184 1
+ 823 04f8 67800000 		ret
+ 824              		.cfi_endproc
+ 825              	.LFE12:
+ 827              		.globl	_ZN12KernelThread10mainThreadE
+ 828              		.globl	_ZN12KernelThread9putThreadE
+ 829              		.globl	_ZN12KernelThread16timeSliceCounterE
+ 830              		.globl	_ZN12KernelThread10idleThreadE
+ 831              		.globl	_ZN12KernelThread7runningE
+ 832              		.bss
+ 833              		.align	3
+ 834              		.set	.LANCHOR0,. + 0
+ 837              	_ZN12KernelThread10mainThreadE:
+ 838 0000 00000000 		.zero	8
+ 838      00000000 
+ 841              	_ZN12KernelThread7runningE:
+ 842 0008 00000000 		.zero	8
+ 842      00000000 
+ 845              	_ZN12KernelThread10idleThreadE:
+ 846 0010 00000000 		.zero	8
+ 846      00000000 
+ 849              	_ZN12KernelThread9putThreadE:
+ 850 0018 00000000 		.zero	8
+ 850      00000000 
+ 853              	_ZN12KernelThread16timeSliceCounterE:
+ 854 0020 00000000 		.zero	8
+ 854      00000000 
+ 855              		.text
+GAS LISTING /tmp/ccBViA17.s 			page 20
+
+
+ 856              	.Letext0:
+ 857              		.file 2 "src/../h/../lib/hw.h"
+ 858              		.file 3 "src/../h/../h/../h/MemoryAllocator.hpp"
+ 859              		.file 4 "src/../h/../h/Scheduler.hpp"
+ 860              		.file 5 "src/../h/KernelThread.hpp"
+ 861              		.file 6 "src/../test/../h/syscall_c.hpp"
+GAS LISTING /tmp/ccBViA17.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 KernelThread.cpp
+     /tmp/ccBViA17.s:9      .text:0000000000000000 _ZN12KernelThread15createCoroutineEPPS_PFvPvEPmS2_m
+     /tmp/ccBViA17.s:13     .text:0000000000000000 .L0 
+     /tmp/ccBViA17.s:15     .text:0000000000000000 .L0 
+     /tmp/ccBViA17.s:16     .text:0000000000000004 .L0 
+     /tmp/ccBViA17.s:25     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:26     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:27     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:28     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:29     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:30     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:31     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:32     .text:0000000000000024 .L0 
+     /tmp/ccBViA17.s:34     .text:0000000000000028 .L0 
+     /tmp/ccBViA17.s:40     .text:0000000000000038 .L0 
+     /tmp/ccBViA17.s:41     .text:0000000000000038 .L0 
+     /tmp/ccBViA17.s:43     .text:000000000000003c .L0 
+     /tmp/ccBViA17.s:47     .text:0000000000000040 .L0 
+     /tmp/ccBViA17.s:48     .text:0000000000000040 .L0 
+     /tmp/ccBViA17.s:49     .text:0000000000000040 .L0 
+     /tmp/ccBViA17.s:54     .text:000000000000004c .L0 
+     /tmp/ccBViA17.s:55     .text:000000000000004c .L0 
+     /tmp/ccBViA17.s:56     .text:000000000000004c .L0 
+     /tmp/ccBViA17.s:61     .text:0000000000000058 .L0 
+     /tmp/ccBViA17.s:63     .text:000000000000005c .L0 
+     /tmp/ccBViA17.s:64     .text:000000000000005c .L0 
+     /tmp/ccBViA17.s:66     .text:0000000000000060 .L0 
+     /tmp/ccBViA17.s:67     .text:0000000000000060 .L0 
+     /tmp/ccBViA17.s:69     .text:0000000000000064 .L0 
+     /tmp/ccBViA17.s:70     .text:0000000000000064 .L0 
+     /tmp/ccBViA17.s:73     .text:000000000000006c .L0 
+     /tmp/ccBViA17.s:74     .text:000000000000006c .L0 
+     /tmp/ccBViA17.s:76     .text:0000000000000070 .L0 
+     /tmp/ccBViA17.s:77     .text:0000000000000070 .L0 
+     /tmp/ccBViA17.s:79     .text:0000000000000074 .L0 
+     /tmp/ccBViA17.s:81     .text:0000000000000078 .L0 
+     /tmp/ccBViA17.s:593    .text:0000000000000384 _ZN12KernelThread13threadWrapperEv
+     /tmp/ccBViA17.s:82     .text:0000000000000078 .L0 
+     /tmp/ccBViA17.s:85     .text:0000000000000084 .L0 
+     /tmp/ccBViA17.s:86     .text:0000000000000084 .L0 
+     /tmp/ccBViA17.s:88     .text:0000000000000088 .L0 
+     /tmp/ccBViA17.s:90     .text:000000000000008c .L0 
+     /tmp/ccBViA17.s:91     .text:000000000000008c .L0 
+     /tmp/ccBViA17.s:95     .text:0000000000000094 .L0 
+     /tmp/ccBViA17.s:96     .text:0000000000000094 .L0 
+     /tmp/ccBViA17.s:98     .text:0000000000000098 .L0 
+     /tmp/ccBViA17.s:100    .text:000000000000009c .L0 
+     /tmp/ccBViA17.s:101    .text:000000000000009c .L0 
+     /tmp/ccBViA17.s:104    .text:00000000000000a4 .L0 
+     /tmp/ccBViA17.s:107    .text:00000000000000a8 .L0 
+     /tmp/ccBViA17.s:109    .text:00000000000000ac .L0 
+     /tmp/ccBViA17.s:112    .text:00000000000000b0 .L0 
+     /tmp/ccBViA17.s:113    .text:00000000000000b0 .L0 
+     /tmp/ccBViA17.s:115    .text:00000000000000b4 .L0 
+     /tmp/ccBViA17.s:116    .text:00000000000000b4 .L0 
+     /tmp/ccBViA17.s:119    .text:00000000000000b8 .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 22
+
+
+     /tmp/ccBViA17.s:120    .text:00000000000000bc .L0 
+     /tmp/ccBViA17.s:121    .text:00000000000000bc .L0 
+     /tmp/ccBViA17.s:123    .text:00000000000000c0 .L0 
+     /tmp/ccBViA17.s:124    .text:00000000000000c0 .L0 
+     /tmp/ccBViA17.s:126    .text:00000000000000c4 .L0 
+     /tmp/ccBViA17.s:129    .text:00000000000000c8 .L0 
+     /tmp/ccBViA17.s:132    .text:00000000000000cc .L0 
+     /tmp/ccBViA17.s:135    .text:00000000000000d0 .L0 
+     /tmp/ccBViA17.s:138    .text:00000000000000d4 .L0 
+     /tmp/ccBViA17.s:141    .text:00000000000000d8 .L0 
+     /tmp/ccBViA17.s:144    .text:00000000000000dc .L0 
+     /tmp/ccBViA17.s:148    .text:00000000000000e0 .L0 
+     /tmp/ccBViA17.s:150    .text:00000000000000e0 .L0 
+     /tmp/ccBViA17.s:155    .text:00000000000000e8 .L0 
+     /tmp/ccBViA17.s:157    .text:00000000000000ec .L0 
+     /tmp/ccBViA17.s:158    .text:00000000000000ec .L0 
+     /tmp/ccBViA17.s:163    .text:00000000000000f8 .L0 
+     /tmp/ccBViA17.s:164    .text:00000000000000f8 .L0 
+     /tmp/ccBViA17.s:168    .text:0000000000000100 .L0 
+     /tmp/ccBViA17.s:169    .text:0000000000000100 .L0 
+     /tmp/ccBViA17.s:173    .text:0000000000000108 .L0 
+     /tmp/ccBViA17.s:174    .text:0000000000000108 .L0 
+     /tmp/ccBViA17.s:176    .text:0000000000000110 .L0 
+     /tmp/ccBViA17.s:177    .text:0000000000000110 .L0 
+     /tmp/ccBViA17.s:179    .text:0000000000000114 .L0 
+     /tmp/ccBViA17.s:180    .text:0000000000000114 .L0 
+     /tmp/ccBViA17.s:182    .text:0000000000000118 .L0 
+     /tmp/ccBViA17.s:183    .text:0000000000000118 .L0 
+     /tmp/ccBViA17.s:188    .text:0000000000000124 .L0 
+     /tmp/ccBViA17.s:189    .text:0000000000000124 .L0 
+     /tmp/ccBViA17.s:193    .text:000000000000012c .L0 
+     /tmp/ccBViA17.s:194    .text:000000000000012c .L0 
+     /tmp/ccBViA17.s:198    .text:000000000000013c .L0 
+     /tmp/ccBViA17.s:204    .text:000000000000013c _ZNK12KernelThread10isFinishedEv
+     /tmp/ccBViA17.s:207    .text:000000000000013c .L0 
+     /tmp/ccBViA17.s:209    .text:000000000000013c .L0 
+     /tmp/ccBViA17.s:210    .text:0000000000000140 .L0 
+     /tmp/ccBViA17.s:212    .text:0000000000000144 .L0 
+     /tmp/ccBViA17.s:214    .text:0000000000000148 .L0 
+     /tmp/ccBViA17.s:216    .text:0000000000000148 .L0 
+     /tmp/ccBViA17.s:217    .text:0000000000000148 .L0 
+     /tmp/ccBViA17.s:220    .text:0000000000000150 .L0 
+     /tmp/ccBViA17.s:221    .text:0000000000000150 .L0 
+     /tmp/ccBViA17.s:223    .text:0000000000000154 .L0 
+     /tmp/ccBViA17.s:225    .text:0000000000000158 .L0 
+     /tmp/ccBViA17.s:231    .text:0000000000000158 _ZN12KernelThread11setFinishedEb
+     /tmp/ccBViA17.s:234    .text:0000000000000158 .L0 
+     /tmp/ccBViA17.s:236    .text:0000000000000158 .L0 
+     /tmp/ccBViA17.s:237    .text:000000000000015c .L0 
+     /tmp/ccBViA17.s:239    .text:0000000000000160 .L0 
+     /tmp/ccBViA17.s:241    .text:0000000000000164 .L0 
+     /tmp/ccBViA17.s:243    .text:0000000000000164 .L0 
+     /tmp/ccBViA17.s:244    .text:0000000000000164 .L0 
+     /tmp/ccBViA17.s:246    .text:0000000000000168 .L0 
+     /tmp/ccBViA17.s:247    .text:000000000000016c .L0 
+     /tmp/ccBViA17.s:248    .text:000000000000016c .L0 
+     /tmp/ccBViA17.s:250    .text:0000000000000170 .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 23
+
+
+     /tmp/ccBViA17.s:252    .text:0000000000000174 .L0 
+     /tmp/ccBViA17.s:258    .text:0000000000000174 _ZN12KernelThread5yieldEv
+     /tmp/ccBViA17.s:261    .text:0000000000000174 .L0 
+     /tmp/ccBViA17.s:262    .text:0000000000000174 .L0 
+     /tmp/ccBViA17.s:263    .text:0000000000000178 .L0 
+     /tmp/ccBViA17.s:265    .text:000000000000017c .L0 
+     /tmp/ccBViA17.s:267    .text:0000000000000180 .L0 
+     /tmp/ccBViA17.s:269    .text:0000000000000180 .L0 
+src/KernelThread.cpp:71     .text:0000000000000180 .L0 
+     /tmp/ccBViA17.s:275    .text:0000000000000184 .L0 
+src/KernelThread.cpp:72     .text:0000000000000184 .L0 
+     /tmp/ccBViA17.s:281    .text:0000000000000188 .L0 
+     /tmp/ccBViA17.s:282    .text:000000000000018c .L0 
+     /tmp/ccBViA17.s:283    .text:000000000000018c .L0 
+     /tmp/ccBViA17.s:285    .text:0000000000000190 .L0 
+     /tmp/ccBViA17.s:287    .text:0000000000000194 .L0 
+     /tmp/ccBViA17.s:293    .text:0000000000000194 _ZN12KernelThread8dispatchEv
+     /tmp/ccBViA17.s:296    .text:0000000000000194 .L0 
+     /tmp/ccBViA17.s:297    .text:0000000000000194 .L0 
+     /tmp/ccBViA17.s:298    .text:0000000000000198 .L0 
+     /tmp/ccBViA17.s:303    .text:00000000000001a8 .L0 
+     /tmp/ccBViA17.s:304    .text:00000000000001a8 .L0 
+     /tmp/ccBViA17.s:305    .text:00000000000001a8 .L0 
+     /tmp/ccBViA17.s:306    .text:00000000000001a8 .L0 
+     /tmp/ccBViA17.s:308    .text:00000000000001ac .L0 
+     /tmp/ccBViA17.s:310    .text:00000000000001ac .L0 
+     /tmp/ccBViA17.s:311    .text:00000000000001ac .L0 
+     /tmp/ccBViA17.s:315    .text:00000000000001b8 .L0 
+     /tmp/ccBViA17.s:316    .text:00000000000001b8 .L0 
+     /tmp/ccBViA17.s:319    .text:00000000000001c0 .L0 
+     /tmp/ccBViA17.s:321    .text:00000000000001c4 .L0 
+     /tmp/ccBViA17.s:322    .text:00000000000001c4 .L0 
+     /tmp/ccBViA17.s:324    .text:00000000000001c8 .L0 
+     /tmp/ccBViA17.s:326    .text:00000000000001cc .L0 
+     /tmp/ccBViA17.s:330    .text:00000000000001d8 .L0 
+     /tmp/ccBViA17.s:333    .text:00000000000001dc .L0 
+     /tmp/ccBViA17.s:334    .text:00000000000001dc .L0 
+     /tmp/ccBViA17.s:338    .text:00000000000001e8 .L0 
+     /tmp/ccBViA17.s:340    .text:00000000000001ec .L0 
+     /tmp/ccBViA17.s:341    .text:00000000000001ec .L0 
+     /tmp/ccBViA17.s:343    .text:00000000000001f0 .L0 
+     /tmp/ccBViA17.s:345    .text:00000000000001f4 .L0 
+     /tmp/ccBViA17.s:346    .text:00000000000001f4 .L0 
+     /tmp/ccBViA17.s:350    .text:00000000000001fc .L0 
+     /tmp/ccBViA17.s:351    .text:00000000000001fc .L0 
+     /tmp/ccBViA17.s:356    .text:0000000000000208 .L0 
+     /tmp/ccBViA17.s:357    .text:0000000000000208 .L0 
+     /tmp/ccBViA17.s:363    .text:0000000000000220 .L0 
+     /tmp/ccBViA17.s:364    .text:0000000000000224 .L0 
+     /tmp/ccBViA17.s:365    .text:0000000000000224 .L0 
+     /tmp/ccBViA17.s:367    .text:0000000000000228 .L0 
+     /tmp/ccBViA17.s:368    .text:0000000000000228 .L0 
+     /tmp/ccBViA17.s:370    .text:000000000000022c .L0 
+     /tmp/ccBViA17.s:373    .text:0000000000000230 .L0 
+     /tmp/ccBViA17.s:375    .text:0000000000000234 .L0 
+     /tmp/ccBViA17.s:379    .text:0000000000000238 .L0 
+     /tmp/ccBViA17.s:381    .text:0000000000000238 .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 24
+
+
+     /tmp/ccBViA17.s:382    .text:0000000000000238 .L0 
+     /tmp/ccBViA17.s:386    .text:0000000000000248 .L0 
+     /tmp/ccBViA17.s:392    .text:0000000000000248 _ZN12KernelThread19dispatchNoSchedulerEv
+     /tmp/ccBViA17.s:395    .text:0000000000000248 .L0 
+     /tmp/ccBViA17.s:396    .text:0000000000000248 .L0 
+     /tmp/ccBViA17.s:397    .text:000000000000024c .L0 
+     /tmp/ccBViA17.s:402    .text:000000000000025c .L0 
+     /tmp/ccBViA17.s:403    .text:000000000000025c .L0 
+     /tmp/ccBViA17.s:404    .text:000000000000025c .L0 
+     /tmp/ccBViA17.s:405    .text:000000000000025c .L0 
+     /tmp/ccBViA17.s:407    .text:0000000000000260 .L0 
+     /tmp/ccBViA17.s:409    .text:0000000000000260 .L0 
+     /tmp/ccBViA17.s:410    .text:0000000000000260 .L0 
+     /tmp/ccBViA17.s:413    .text:0000000000000268 .L0 
+     /tmp/ccBViA17.s:414    .text:0000000000000268 .L0 
+     /tmp/ccBViA17.s:418    .text:0000000000000274 .L0 
+     /tmp/ccBViA17.s:419    .text:0000000000000274 .L0 
+     /tmp/ccBViA17.s:422    .text:000000000000027c .L0 
+     /tmp/ccBViA17.s:424    .text:0000000000000280 .L0 
+     /tmp/ccBViA17.s:425    .text:0000000000000280 .L0 
+     /tmp/ccBViA17.s:430    .text:0000000000000290 .L0 
+     /tmp/ccBViA17.s:431    .text:0000000000000290 .L0 
+     /tmp/ccBViA17.s:434    .text:0000000000000298 .L0 
+     /tmp/ccBViA17.s:435    .text:000000000000029c .L0 
+     /tmp/ccBViA17.s:437    .text:00000000000002a0 .L0 
+     /tmp/ccBViA17.s:438    .text:00000000000002a0 .L0 
+     /tmp/ccBViA17.s:440    .text:00000000000002a4 .L0 
+     /tmp/ccBViA17.s:442    .text:00000000000002a8 .L0 
+     /tmp/ccBViA17.s:445    .text:00000000000002ac .L0 
+     /tmp/ccBViA17.s:447    .text:00000000000002b0 .L0 
+     /tmp/ccBViA17.s:453    .text:00000000000002b0 _ZN12KernelThread8initIdleEv
+     /tmp/ccBViA17.s:456    .text:00000000000002b0 .L0 
+     /tmp/ccBViA17.s:457    .text:00000000000002b0 .L0 
+     /tmp/ccBViA17.s:458    .text:00000000000002b4 .L0 
+     /tmp/ccBViA17.s:463    .text:00000000000002c4 .L0 
+     /tmp/ccBViA17.s:464    .text:00000000000002c4 .L0 
+     /tmp/ccBViA17.s:465    .text:00000000000002c4 .L0 
+     /tmp/ccBViA17.s:466    .text:00000000000002c4 .L0 
+     /tmp/ccBViA17.s:468    .text:00000000000002c8 .L0 
+     /tmp/ccBViA17.s:471    .text:00000000000002c8 .L0 
+     /tmp/ccBViA17.s:472    .text:00000000000002c8 .L0 
+     /tmp/ccBViA17.s:473    .text:00000000000002c8 .L0 
+     /tmp/ccBViA17.s:477    .text:00000000000002d4 .L0 
+     /tmp/ccBViA17.s:478    .text:00000000000002d4 .L0 
+     /tmp/ccBViA17.s:481    .text:00000000000002dc .L0 
+     /tmp/ccBViA17.s:485    .text:00000000000002e8 .L0 
+     /tmp/ccBViA17.s:486    .text:00000000000002e8 .L0 
+     /tmp/ccBViA17.s:487    .text:00000000000002e8 .L0 
+     /tmp/ccBViA17.s:491    .text:00000000000002f4 .L0 
+     /tmp/ccBViA17.s:492    .text:00000000000002f4 .L0 
+     /tmp/ccBViA17.s:494    .text:00000000000002f8 .L0 
+     /tmp/ccBViA17.s:497    .text:0000000000000300 .L0 
+     /tmp/ccBViA17.s:499    .text:0000000000000304 .L0 
+     /tmp/ccBViA17.s:500    .text:0000000000000304 .L0 
+     /tmp/ccBViA17.s:502    .text:0000000000000308 .L0 
+     /tmp/ccBViA17.s:504    .text:000000000000030c .L0 
+     /tmp/ccBViA17.s:505    .text:000000000000030c .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 25
+
+
+     /tmp/ccBViA17.s:507    .text:0000000000000310 .L0 
+     /tmp/ccBViA17.s:508    .text:0000000000000310 .L0 
+     /tmp/ccBViA17.s:510    .text:0000000000000314 .L0 
+     /tmp/ccBViA17.s:513    .text:000000000000031c .L0 
+     /tmp/ccBViA17.s:515    .text:0000000000000320 .L0 
+     /tmp/ccBViA17.s:516    .text:0000000000000320 .L0 
+     /tmp/ccBViA17.s:519    .text:000000000000032c .L0 
+     /tmp/ccBViA17.s:520    .text:000000000000032c .L0 
+     /tmp/ccBViA17.s:522    .text:0000000000000330 .L0 
+     /tmp/ccBViA17.s:523    .text:0000000000000330 .L0 
+     /tmp/ccBViA17.s:525    .text:0000000000000334 .L0 
+     /tmp/ccBViA17.s:526    .text:0000000000000334 .L0 
+     /tmp/ccBViA17.s:529    .text:000000000000033c .L0 
+     /tmp/ccBViA17.s:530    .text:000000000000033c .L0 
+     /tmp/ccBViA17.s:532    .text:0000000000000340 .L0 
+     /tmp/ccBViA17.s:535    .text:0000000000000348 .L0 
+     /tmp/ccBViA17.s:536    .text:000000000000034c .L0 
+     /tmp/ccBViA17.s:538    .text:0000000000000350 .L0 
+     /tmp/ccBViA17.s:539    .text:0000000000000350 .L0 
+     /tmp/ccBViA17.s:541    .text:0000000000000354 .L0 
+     /tmp/ccBViA17.s:543    .text:0000000000000358 .L0 
+     /tmp/ccBViA17.s:545    .text:000000000000035c .L0 
+     /tmp/ccBViA17.s:547    .text:0000000000000360 .L0 
+     /tmp/ccBViA17.s:553    .text:0000000000000360 _ZN12KernelThread10popSppSpieEv
+     /tmp/ccBViA17.s:556    .text:0000000000000360 .L0 
+     /tmp/ccBViA17.s:557    .text:0000000000000360 .L0 
+     /tmp/ccBViA17.s:558    .text:0000000000000364 .L0 
+     /tmp/ccBViA17.s:560    .text:0000000000000368 .L0 
+     /tmp/ccBViA17.s:562    .text:000000000000036c .L0 
+     /tmp/ccBViA17.s:564    .text:000000000000036c .L0 
+src/KernelThread.cpp:147    .text:000000000000036c .L0 
+     /tmp/ccBViA17.s:570    .text:0000000000000370 .L0 
+src/KernelThread.cpp:148    .text:0000000000000370 .L0 
+     /tmp/ccBViA17.s:575    .text:0000000000000374 .L0 
+src/KernelThread.cpp:149    .text:0000000000000374 .L0 
+     /tmp/ccBViA17.s:581    .text:0000000000000378 .L0 
+     /tmp/ccBViA17.s:582    .text:000000000000037c .L0 
+     /tmp/ccBViA17.s:583    .text:000000000000037c .L0 
+     /tmp/ccBViA17.s:585    .text:0000000000000380 .L0 
+     /tmp/ccBViA17.s:587    .text:0000000000000384 .L0 
+     /tmp/ccBViA17.s:596    .text:0000000000000384 .L0 
+     /tmp/ccBViA17.s:597    .text:0000000000000384 .L0 
+     /tmp/ccBViA17.s:598    .text:0000000000000388 .L0 
+     /tmp/ccBViA17.s:602    .text:0000000000000394 .L0 
+     /tmp/ccBViA17.s:603    .text:0000000000000394 .L0 
+     /tmp/ccBViA17.s:604    .text:0000000000000394 .L0 
+     /tmp/ccBViA17.s:606    .text:0000000000000398 .L0 
+     /tmp/ccBViA17.s:608    .text:0000000000000398 .L0 
+     /tmp/ccBViA17.s:609    .text:0000000000000398 .L0 
+     /tmp/ccBViA17.s:612    .text:00000000000003a0 .L0 
+     /tmp/ccBViA17.s:613    .text:00000000000003a0 .L0 
+     /tmp/ccBViA17.s:617    .text:00000000000003b0 .L0 
+     /tmp/ccBViA17.s:621    .text:00000000000003b8 .L0 
+     /tmp/ccBViA17.s:622    .text:00000000000003b8 .L0 
+     /tmp/ccBViA17.s:627    .text:00000000000003c8 .L0 
+     /tmp/ccBViA17.s:628    .text:00000000000003c8 .L0 
+     /tmp/ccBViA17.s:631    .text:00000000000003d0 .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 26
+
+
+     /tmp/ccBViA17.s:632    .text:00000000000003d4 .L0 
+     /tmp/ccBViA17.s:634    .text:00000000000003d8 .L0 
+     /tmp/ccBViA17.s:635    .text:00000000000003d8 .L0 
+     /tmp/ccBViA17.s:637    .text:00000000000003dc .L0 
+     /tmp/ccBViA17.s:639    .text:00000000000003e0 .L0 
+     /tmp/ccBViA17.s:641    .text:00000000000003e4 .L0 
+     /tmp/ccBViA17.s:647    .text:00000000000003e4 _ZNK12KernelThread12getTimeSliceEv
+     /tmp/ccBViA17.s:650    .text:00000000000003e4 .L0 
+     /tmp/ccBViA17.s:652    .text:00000000000003e4 .L0 
+     /tmp/ccBViA17.s:653    .text:00000000000003e8 .L0 
+     /tmp/ccBViA17.s:655    .text:00000000000003ec .L0 
+     /tmp/ccBViA17.s:657    .text:00000000000003f0 .L0 
+     /tmp/ccBViA17.s:659    .text:00000000000003f0 .L0 
+     /tmp/ccBViA17.s:660    .text:00000000000003f0 .L0 
+     /tmp/ccBViA17.s:663    .text:00000000000003f8 .L0 
+     /tmp/ccBViA17.s:664    .text:00000000000003f8 .L0 
+     /tmp/ccBViA17.s:666    .text:00000000000003fc .L0 
+     /tmp/ccBViA17.s:668    .text:0000000000000400 .L0 
+     /tmp/ccBViA17.s:674    .text:0000000000000400 _ZN12KernelThread7initPutEv
+     /tmp/ccBViA17.s:677    .text:0000000000000400 .L0 
+     /tmp/ccBViA17.s:678    .text:0000000000000400 .L0 
+     /tmp/ccBViA17.s:679    .text:0000000000000404 .L0 
+     /tmp/ccBViA17.s:684    .text:0000000000000414 .L0 
+     /tmp/ccBViA17.s:685    .text:0000000000000414 .L0 
+     /tmp/ccBViA17.s:686    .text:0000000000000414 .L0 
+     /tmp/ccBViA17.s:687    .text:0000000000000414 .L0 
+     /tmp/ccBViA17.s:689    .text:0000000000000418 .L0 
+     /tmp/ccBViA17.s:692    .text:0000000000000418 .L0 
+     /tmp/ccBViA17.s:693    .text:0000000000000418 .L0 
+     /tmp/ccBViA17.s:694    .text:0000000000000418 .L0 
+     /tmp/ccBViA17.s:698    .text:0000000000000424 .L0 
+     /tmp/ccBViA17.s:699    .text:0000000000000424 .L0 
+     /tmp/ccBViA17.s:702    .text:000000000000042c .L0 
+     /tmp/ccBViA17.s:706    .text:0000000000000438 .L0 
+     /tmp/ccBViA17.s:707    .text:0000000000000438 .L0 
+     /tmp/ccBViA17.s:708    .text:0000000000000438 .L0 
+     /tmp/ccBViA17.s:712    .text:0000000000000444 .L0 
+     /tmp/ccBViA17.s:713    .text:0000000000000444 .L0 
+     /tmp/ccBViA17.s:715    .text:0000000000000448 .L0 
+     /tmp/ccBViA17.s:718    .text:0000000000000450 .L0 
+     /tmp/ccBViA17.s:720    .text:0000000000000454 .L0 
+     /tmp/ccBViA17.s:721    .text:0000000000000454 .L0 
+     /tmp/ccBViA17.s:723    .text:0000000000000458 .L0 
+     /tmp/ccBViA17.s:725    .text:000000000000045c .L0 
+     /tmp/ccBViA17.s:726    .text:000000000000045c .L0 
+     /tmp/ccBViA17.s:728    .text:0000000000000460 .L0 
+     /tmp/ccBViA17.s:729    .text:0000000000000460 .L0 
+     /tmp/ccBViA17.s:731    .text:0000000000000464 .L0 
+     /tmp/ccBViA17.s:734    .text:000000000000046c .L0 
+     /tmp/ccBViA17.s:736    .text:0000000000000470 .L0 
+     /tmp/ccBViA17.s:737    .text:0000000000000470 .L0 
+     /tmp/ccBViA17.s:740    .text:000000000000047c .L0 
+     /tmp/ccBViA17.s:741    .text:000000000000047c .L0 
+     /tmp/ccBViA17.s:744    .text:0000000000000484 .L0 
+     /tmp/ccBViA17.s:745    .text:0000000000000484 .L0 
+     /tmp/ccBViA17.s:747    .text:0000000000000488 .L0 
+     /tmp/ccBViA17.s:749    .text:000000000000048c .L0 
+GAS LISTING /tmp/ccBViA17.s 			page 27
+
+
+     /tmp/ccBViA17.s:750    .text:000000000000048c .L0 
+     /tmp/ccBViA17.s:752    .text:0000000000000490 .L0 
+     /tmp/ccBViA17.s:753    .text:0000000000000490 .L0 
+     /tmp/ccBViA17.s:756    .text:0000000000000498 .L0 
+     /tmp/ccBViA17.s:757    .text:0000000000000498 .L0 
+     /tmp/ccBViA17.s:760    .text:00000000000004a0 .L0 
+     /tmp/ccBViA17.s:761    .text:00000000000004a4 .L0 
+     /tmp/ccBViA17.s:763    .text:00000000000004a8 .L0 
+     /tmp/ccBViA17.s:764    .text:00000000000004a8 .L0 
+     /tmp/ccBViA17.s:766    .text:00000000000004ac .L0 
+     /tmp/ccBViA17.s:768    .text:00000000000004b0 .L0 
+     /tmp/ccBViA17.s:770    .text:00000000000004b4 .L0 
+     /tmp/ccBViA17.s:772    .text:00000000000004b8 .L0 
+     /tmp/ccBViA17.s:778    .text:00000000000004b8 _ZN12KernelThread5startEPS_
+     /tmp/ccBViA17.s:781    .text:00000000000004b8 .L0 
+     /tmp/ccBViA17.s:783    .text:00000000000004b8 .L0 
+     /tmp/ccBViA17.s:784    .text:00000000000004b8 .L0 
+     /tmp/ccBViA17.s:785    .text:00000000000004b8 .L0 
+     /tmp/ccBViA17.s:787    .text:00000000000004bc .L0 
+     /tmp/ccBViA17.s:789    .text:00000000000004c0 .L0 
+     /tmp/ccBViA17.s:790    .text:00000000000004c4 .L0 
+     /tmp/ccBViA17.s:793    .text:00000000000004cc .L0 
+     /tmp/ccBViA17.s:794    .text:00000000000004cc .L0 
+     /tmp/ccBViA17.s:796    .text:00000000000004d0 .L0 
+     /tmp/ccBViA17.s:798    .text:00000000000004d0 .L0 
+     /tmp/ccBViA17.s:799    .text:00000000000004d0 .L0 
+     /tmp/ccBViA17.s:802    .text:00000000000004d8 .L0 
+     /tmp/ccBViA17.s:803    .text:00000000000004d8 .L0 
+     /tmp/ccBViA17.s:806    .text:00000000000004e0 .L0 
+     /tmp/ccBViA17.s:807    .text:00000000000004e0 .L0 
+     /tmp/ccBViA17.s:809    .text:00000000000004e4 .L0 
+     /tmp/ccBViA17.s:810    .text:00000000000004e8 .L0 
+     /tmp/ccBViA17.s:812    .text:00000000000004ec .L0 
+     /tmp/ccBViA17.s:813    .text:00000000000004ec .L0 
+     /tmp/ccBViA17.s:815    .text:00000000000004f0 .L0 
+     /tmp/ccBViA17.s:820    .text:00000000000004f4 .L0 
+     /tmp/ccBViA17.s:823    .text:00000000000004f8 .L0 
+     /tmp/ccBViA17.s:824    .text:00000000000004fc .L0 
+     /tmp/ccBViA17.s:837    .bss:0000000000000000 _ZN12KernelThread10mainThreadE
+     /tmp/ccBViA17.s:849    .bss:0000000000000018 _ZN12KernelThread9putThreadE
+     /tmp/ccBViA17.s:853    .bss:0000000000000020 _ZN12KernelThread16timeSliceCounterE
+     /tmp/ccBViA17.s:845    .bss:0000000000000010 _ZN12KernelThread10idleThreadE
+     /tmp/ccBViA17.s:841    .bss:0000000000000008 _ZN12KernelThread7runningE
+     /tmp/ccBViA17.s:834    .bss:0000000000000000 .LANCHOR0
+     /tmp/ccBViA17.s:862    .text:00000000000004fc .L0 
+     /tmp/ccBViA17.s:82     .text:0000000000000078 .L0 
+     /tmp/ccBViA17.s:174    .text:0000000000000108 .L0 
+     /tmp/ccBViA17.s:311    .text:00000000000001ac .L0 
+     /tmp/ccBViA17.s:357    .text:0000000000000208 .L0 
+     /tmp/ccBViA17.s:414    .text:0000000000000268 .L0 
+     /tmp/ccBViA17.s:481    .text:00000000000002dc .L0 
+     /tmp/ccBViA17.s:516    .text:0000000000000320 .L0 
+     /tmp/ccBViA17.s:613    .text:00000000000003a0 .L0 
+     /tmp/ccBViA17.s:702    .text:000000000000042c .L0 
+     /tmp/ccBViA17.s:737    .text:0000000000000470 .L0 
+     /tmp/ccBViA17.s:147    .text:00000000000000e0 .L12
+     /tmp/ccBViA17.s:153    .text:00000000000000e8 .L14
+GAS LISTING /tmp/ccBViA17.s 			page 28
+
+
+     /tmp/ccBViA17.s:171    .text:0000000000000108 .L6
+     /tmp/ccBViA17.s:166    .text:0000000000000100 .L7
+     /tmp/ccBViA17.s:186    .text:0000000000000124 .L9
+     /tmp/ccBViA17.s:110    .text:00000000000000b0 .L11
+     /tmp/ccBViA17.s:191    .text:000000000000012c .L15
+     /tmp/ccBViA17.s:44     .text:0000000000000040 .L2
+     /tmp/ccBViA17.s:161    .text:00000000000000f8 .L4
+     /tmp/ccBViA17.s:117    .text:00000000000000b8 .L5
+     /tmp/ccBViA17.s:93     .text:0000000000000094 .L8
+     /tmp/ccBViA17.s:105    .text:00000000000000a8 .L10
+     /tmp/ccBViA17.s:331    .text:00000000000001dc .L23
+     /tmp/ccBViA17.s:378    .text:0000000000000238 .L27
+     /tmp/ccBViA17.s:354    .text:0000000000000208 .L24
+     /tmp/ccBViA17.s:348    .text:00000000000001fc .L25
+     /tmp/ccBViA17.s:818    .text:00000000000004f4 .L42
+     /tmp/ccBViA17.s:2035   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccBViA17.s:3404   .debug_str:00000000000005f8 .LASF97
+     /tmp/ccBViA17.s:3284   .debug_str:000000000000023b .LASF98
+     /tmp/ccBViA17.s:3278   .debug_str:00000000000001b4 .LASF99
+     /tmp/ccBViA17.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccBViA17.s:856    .text:00000000000004fc .Letext0
+     /tmp/ccBViA17.s:3226   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccBViA17.s:3336   .debug_str:00000000000003d2 .LASF0
+     /tmp/ccBViA17.s:3356   .debug_str:0000000000000459 .LASF1
+     /tmp/ccBViA17.s:3324   .debug_str:0000000000000378 .LASF2
+     /tmp/ccBViA17.s:3298   .debug_str:00000000000002ba .LASF4
+     /tmp/ccBViA17.s:3388   .debug_str:0000000000000558 .LASF3
+     /tmp/ccBViA17.s:3242   .debug_str:0000000000000089 .LASF5
+     /tmp/ccBViA17.s:3358   .debug_str:000000000000046c .LASF6
+     /tmp/ccBViA17.s:3334   .debug_str:00000000000003bf .LASF7
+     /tmp/ccBViA17.s:3428   .debug_str:000000000000078c .LASF8
+     /tmp/ccBViA17.s:3412   .debug_str:00000000000006fe .LASF9
+     /tmp/ccBViA17.s:3290   .debug_str:000000000000028e .LASF10
+     /tmp/ccBViA17.s:3370   .debug_str:00000000000004b2 .LASF11
+     /tmp/ccBViA17.s:3406   .debug_str:00000000000006bc .LASF12
+     /tmp/ccBViA17.s:3246   .debug_str:0000000000000097 .LASF13
+     /tmp/ccBViA17.s:3232   .debug_str:0000000000000029 .LASF14
+     /tmp/ccBViA17.s:3254   .debug_str:00000000000000ea .LASF15
+     /tmp/ccBViA17.s:3384   .debug_str:000000000000053c .LASF16
+     /tmp/ccBViA17.s:3262   .debug_str:0000000000000126 .LASF17
+     /tmp/ccBViA17.s:3320   .debug_str:0000000000000349 .LASF21
+     /tmp/ccBViA17.s:3258   .debug_str:0000000000000118 .LASF20
+     /tmp/ccBViA17.s:3434   .debug_str:00000000000007d8 .LASF18
+     /tmp/ccBViA17.s:3398   .debug_str:00000000000005c4 .LASF19
+     /tmp/ccBViA17.s:3228   .debug_str:0000000000000000 .LASF34
+     /tmp/ccBViA17.s:3268   .debug_str:000000000000015e .LASF23
+     /tmp/ccBViA17.s:3272   .debug_str:00000000000001a0 .LASF22
+     /tmp/ccBViA17.s:3432   .debug_str:00000000000007ab .LASF24
+     /tmp/ccBViA17.s:3364   .debug_str:000000000000048f .LASF46
+     /tmp/ccBViA17.s:3402   .debug_str:00000000000005dc .LASF48
+     /tmp/ccBViA17.s:3244   .debug_str:0000000000000090 .LASF25
+     /tmp/ccBViA17.s:3372   .debug_str:00000000000004c1 .LASF27
+     /tmp/ccBViA17.s:3274   .debug_str:00000000000001aa .LASF26
+     /tmp/ccBViA17.s:3380   .debug_str:0000000000000514 .LASF28
+     /tmp/ccBViA17.s:3400   .debug_str:00000000000005c9 .LASF29
+     /tmp/ccBViA17.s:3280   .debug_str:0000000000000205 .LASF30
+     /tmp/ccBViA17.s:3368   .debug_str:00000000000004a8 .LASF31
+GAS LISTING /tmp/ccBViA17.s 			page 29
+
+
+     /tmp/ccBViA17.s:3310   .debug_str:00000000000002fa .LASF32
+     /tmp/ccBViA17.s:3292   .debug_str:000000000000029c .LASF33
+     /tmp/ccBViA17.s:3266   .debug_str:0000000000000159 .LASF35
+     /tmp/ccBViA17.s:3330   .debug_str:0000000000000399 .LASF36
+     /tmp/ccBViA17.s:3250   .debug_str:00000000000000ac .LASF100
+     /tmp/ccBViA17.s:3296   .debug_str:00000000000002a6 .LASF38
+     /tmp/ccBViA17.s:3260   .debug_str:0000000000000120 .LASF37
+     /tmp/ccBViA17.s:3410   .debug_str:00000000000006e8 .LASF101
+     /tmp/ccBViA17.s:3422   .debug_str:000000000000076d .LASF39
+     /tmp/ccBViA17.s:3376   .debug_str:0000000000000502 .LASF40
+     /tmp/ccBViA17.s:3236   .debug_str:0000000000000041 .LASF41
+     /tmp/ccBViA17.s:3360   .debug_str:000000000000047f .LASF55
+     /tmp/ccBViA17.s:3312   .debug_str:00000000000002ff .LASF57
+     /tmp/ccBViA17.s:3326   .debug_str:0000000000000386 .LASF42
+     /tmp/ccBViA17.s:3332   .debug_str:000000000000039e .LASF43
+     /tmp/ccBViA17.s:3420   .debug_str:000000000000075d .LASF44
+     /tmp/ccBViA17.s:3286   .debug_str:0000000000000250 .LASF45
+     /tmp/ccBViA17.s:3378   .debug_str:000000000000050f .LASF102
+     /tmp/ccBViA17.s:3386   .debug_str:0000000000000552 .LASF47
+     /tmp/ccBViA17.s:3308   .debug_str:00000000000002e0 .LASF49
+     /tmp/ccBViA17.s:3350   .debug_str:0000000000000443 .LASF52
+     /tmp/ccBViA17.s:3304   .debug_str:00000000000002cf .LASF50
+     /tmp/ccBViA17.s:3264   .debug_str:000000000000013c .LASF51
+     /tmp/ccBViA17.s:3430   .debug_str:00000000000007a0 .LASF53
+     /tmp/ccBViA17.s:3390   .debug_str:000000000000056a .LASF54
+     /tmp/ccBViA17.s:3318   .debug_str:000000000000033c .LASF56
+     /tmp/ccBViA17.s:3338   .debug_str:00000000000003df .LASF58
+     /tmp/ccBViA17.s:3366   .debug_str:0000000000000494 .LASF59
+     /tmp/ccBViA17.s:3270   .debug_str:0000000000000177 .LASF60
+     /tmp/ccBViA17.s:3234   .debug_str:0000000000000039 .LASF61
+     /tmp/ccBViA17.s:3396   .debug_str:00000000000005a8 .LASF62
+     /tmp/ccBViA17.s:3288   .debug_str:0000000000000284 .LASF63
+     /tmp/ccBViA17.s:3282   .debug_str:0000000000000230 .LASF64
+     /tmp/ccBViA17.s:3354   .debug_str:0000000000000453 .LASF65
+     /tmp/ccBViA17.s:3252   .debug_str:00000000000000ce .LASF66
+     /tmp/ccBViA17.s:3348   .debug_str:0000000000000439 .LASF67
+     /tmp/ccBViA17.s:3314   .debug_str:0000000000000320 .LASF103
+     /tmp/ccBViA17.s:3418   .debug_str:000000000000073a .LASF104
+     /tmp/ccBViA17.s:3302   .debug_str:00000000000002ca .LASF68
+     /tmp/ccBViA17.s:3342   .debug_str:000000000000040b .LASF69
+     /tmp/ccBViA17.s:3300   .debug_str:00000000000002c1 .LASF70
+     /tmp/ccBViA17.s:3344   .debug_str:0000000000000411 .LASF71
+     /tmp/ccBViA17.s:3352   .debug_str:000000000000044b .LASF72
+     /tmp/ccBViA17.s:3382   .debug_str:0000000000000531 .LASF73
+     /tmp/ccBViA17.s:3392   .debug_str:000000000000057b .LASF74
+     /tmp/ccBViA17.s:3416   .debug_str:0000000000000733 .LASF75
+     /tmp/ccBViA17.s:3306   .debug_str:00000000000002d8 .LASF76
+     /tmp/ccBViA17.s:3316   .debug_str:000000000000032e .LASF77
+     /tmp/ccBViA17.s:3238   .debug_str:0000000000000049 .LASF78
+     /tmp/ccBViA17.s:3240   .debug_str:000000000000007b .LASF79
+     /tmp/ccBViA17.s:3374   .debug_str:00000000000004df .LASF80
+     /tmp/ccBViA17.s:3394   .debug_str:000000000000059b .LASF81
+     /tmp/ccBViA17.s:3256   .debug_str:00000000000000f6 .LASF82
+     /tmp/ccBViA17.s:3340   .debug_str:0000000000000402 .LASF83
+     /tmp/ccBViA17.s:3408   .debug_str:00000000000006cb .LASF84
+     /tmp/ccBViA17.s:3276   .debug_str:00000000000001af .LASF85
+     /tmp/ccBViA17.s:3362   .debug_str:000000000000048a .LASF86
+GAS LISTING /tmp/ccBViA17.s 			page 30
+
+
+     /tmp/ccBViA17.s:3436   .debug_str:00000000000007dd .LASF87
+     /tmp/ccBViA17.s:3346   .debug_str:000000000000041a .LASF88
+     /tmp/ccBViA17.s:3414   .debug_str:000000000000070e .LASF89
+     /tmp/ccBViA17.s:3230   .debug_str:000000000000000c .LASF90
+     /tmp/ccBViA17.s:3322   .debug_str:0000000000000359 .LASF91
+     /tmp/ccBViA17.s:779    .text:00000000000004b8 .LFB12
+     /tmp/ccBViA17.s:825    .text:00000000000004fc .LFE12
+     /tmp/ccBViA17.s:2917   .debug_loc:0000000000000000 .LLST17
+     /tmp/ccBViA17.s:804    .text:00000000000004e0 .LVL55
+     /tmp/ccBViA17.s:675    .text:0000000000000400 .LFB11
+     /tmp/ccBViA17.s:773    .text:00000000000004b8 .LFE11
+     /tmp/ccBViA17.s:2942   .debug_loc:0000000000000062 .LLST15
+     /tmp/ccBViA17.s:2957   .debug_loc:000000000000009d .LLST16
+     /tmp/ccBViA17.s:696    .text:0000000000000424 .LVL48
+     /tmp/ccBViA17.s:700    .text:000000000000042c .LVL49
+     /tmp/ccBViA17.s:710    .text:0000000000000444 .LVL51
+     /tmp/ccBViA17.s:716    .text:0000000000000450 .LVL52
+     /tmp/ccBViA17.s:758    .text:00000000000004a0 .LVL53
+     /tmp/ccBViA17.s:648    .text:00000000000003e4 .LFB10
+     /tmp/ccBViA17.s:669    .text:0000000000000400 .LFE10
+     /tmp/ccBViA17.s:3426   .debug_str:0000000000000787 .LASF92
+     /tmp/ccBViA17.s:2968   .debug_loc:00000000000000d3 .LLST14
+     /tmp/ccBViA17.s:554    .text:0000000000000360 .LFB9
+     /tmp/ccBViA17.s:588    .text:0000000000000384 .LFE9
+     /tmp/ccBViA17.s:454    .text:00000000000002b0 .LFB8
+     /tmp/ccBViA17.s:548    .text:0000000000000360 .LFE8
+     /tmp/ccBViA17.s:2982   .debug_loc:000000000000010c .LLST12
+     /tmp/ccBViA17.s:2997   .debug_loc:0000000000000147 .LLST13
+     /tmp/ccBViA17.s:475    .text:00000000000002d4 .LVL36
+     /tmp/ccBViA17.s:479    .text:00000000000002dc .LVL37
+     /tmp/ccBViA17.s:489    .text:00000000000002f4 .LVL39
+     /tmp/ccBViA17.s:495    .text:0000000000000300 .LVL40
+     /tmp/ccBViA17.s:594    .text:0000000000000384 .LFB7
+     /tmp/ccBViA17.s:642    .text:00000000000003e4 .LFE7
+     /tmp/ccBViA17.s:610    .text:00000000000003a0 .LVL41
+     /tmp/ccBViA17.s:625    .text:00000000000003c8 .LVL43
+     /tmp/ccBViA17.s:629    .text:00000000000003d0 .LVL44
+     /tmp/ccBViA17.s:393    .text:0000000000000248 .LFB6
+     /tmp/ccBViA17.s:448    .text:00000000000002b0 .LFE6
+     /tmp/ccBViA17.s:3008   .debug_loc:000000000000017d .LLST11
+     /tmp/ccBViA17.s:411    .text:0000000000000268 .LVL29
+     /tmp/ccBViA17.s:420    .text:000000000000027c .LVL31
+     /tmp/ccBViA17.s:428    .text:0000000000000290 .LVL32
+     /tmp/ccBViA17.s:432    .text:0000000000000298 .LVL33
+     /tmp/ccBViA17.s:294    .text:0000000000000194 .LFB5
+     /tmp/ccBViA17.s:387    .text:0000000000000248 .LFE5
+     /tmp/ccBViA17.s:3015   .debug_loc:00000000000001a0 .LLST10
+     /tmp/ccBViA17.s:317    .text:00000000000001c0 .LVL20
+     /tmp/ccBViA17.s:328    .text:00000000000001d8 .LVL21
+     /tmp/ccBViA17.s:336    .text:00000000000001e8 .LVL22
+     /tmp/ccBViA17.s:347    .text:00000000000001fc .LVL23
+     /tmp/ccBViA17.s:353    .text:0000000000000208 .LVL24
+     /tmp/ccBViA17.s:361    .text:0000000000000220 .LVL25
+     /tmp/ccBViA17.s:384    .text:0000000000000244 .LVL28
+     /tmp/ccBViA17.s:259    .text:0000000000000174 .LFB4
+     /tmp/ccBViA17.s:288    .text:0000000000000194 .LFE4
+     /tmp/ccBViA17.s:232    .text:0000000000000158 .LFB3
+GAS LISTING /tmp/ccBViA17.s 			page 31
+
+
+     /tmp/ccBViA17.s:253    .text:0000000000000174 .LFE3
+     /tmp/ccBViA17.s:3424   .debug_str:0000000000000781 .LASF93
+     /tmp/ccBViA17.s:205    .text:000000000000013c .LFB2
+     /tmp/ccBViA17.s:226    .text:0000000000000158 .LFE2
+     /tmp/ccBViA17.s:3026   .debug_loc:00000000000001d6 .LLST9
+     /tmp/ccBViA17.s:10     .text:0000000000000000 .LFB1
+     /tmp/ccBViA17.s:199    .text:000000000000013c .LFE1
+     /tmp/ccBViA17.s:3328   .debug_str:0000000000000392 .LASF94
+     /tmp/ccBViA17.s:3040   .debug_loc:000000000000020f .LLST0
+     /tmp/ccBViA17.s:3066   .debug_loc:0000000000000281 .LLST1
+     /tmp/ccBViA17.s:3092   .debug_loc:00000000000002f3 .LLST2
+     /tmp/ccBViA17.s:3248   .debug_str:00000000000000a7 .LASF95
+     /tmp/ccBViA17.s:3118   .debug_loc:0000000000000365 .LLST3
+     /tmp/ccBViA17.s:3294   .debug_str:00000000000002a1 .LASF96
+     /tmp/ccBViA17.s:3144   .debug_loc:00000000000003d7 .LLST4
+     /tmp/ccBViA17.s:3169   .debug_loc:0000000000000439 .LLST5
+     /tmp/ccBViA17.s:3180   .debug_loc:000000000000046f .LLST6
+     /tmp/ccBViA17.s:3195   .debug_loc:00000000000004a9 .LLST7
+     /tmp/ccBViA17.s:3202   .debug_loc:00000000000004cc .LLST8
+     /tmp/ccBViA17.s:52     .text:000000000000004c .LVL3
+     /tmp/ccBViA17.s:57     .text:0000000000000054 .LVL4
+     /tmp/ccBViA17.s:160    .text:00000000000000f8 .LVL14
+     /tmp/ccBViA17.s:196    .text:0000000000000138 .LVL15
+     /tmp/ccBViA17.s:782    .text:00000000000004b8 .LVL54
+     /tmp/ccBViA17.s:817    .text:00000000000004f4 .LVL56
+     /tmp/ccBViA17.s:821    .text:00000000000004f8 .LVL57
+     /tmp/ccBViA17.s:691    .text:0000000000000418 .LVL47
+     /tmp/ccBViA17.s:705    .text:0000000000000438 .LVL50
+     /tmp/ccBViA17.s:651    .text:00000000000003e4 .LVL45
+     /tmp/ccBViA17.s:661    .text:00000000000003f4 .LVL46
+     /tmp/ccBViA17.s:470    .text:00000000000002c8 .LVL35
+     /tmp/ccBViA17.s:484    .text:00000000000002e8 .LVL38
+     /tmp/ccBViA17.s:416    .text:0000000000000274 .LVL30
+     /tmp/ccBViA17.s:443    .text:00000000000002a8 .LVL34
+     /tmp/ccBViA17.s:313    .text:00000000000001b8 .LVL19
+     /tmp/ccBViA17.s:371    .text:000000000000022c .LVL26
+     /tmp/ccBViA17.s:377    .text:0000000000000238 .LVL27
+     /tmp/ccBViA17.s:208    .text:000000000000013c .LVL16
+     /tmp/ccBViA17.s:218    .text:000000000000014c .LVL17
+     /tmp/ccBViA17.s:14     .text:0000000000000000 .LVL0
+     /tmp/ccBViA17.s:50     .text:0000000000000044 .LVL2
+     /tmp/ccBViA17.s:139    .text:00000000000000d4 .LVL10
+     /tmp/ccBViA17.s:146    .text:00000000000000e0 .LVL12
+     /tmp/ccBViA17.s:152    .text:00000000000000e8 .LVL13
+     /tmp/ccBViA17.s:136    .text:00000000000000d0 .LVL9
+     /tmp/ccBViA17.s:133    .text:00000000000000cc .LVL8
+     /tmp/ccBViA17.s:130    .text:00000000000000c8 .LVL7
+     /tmp/ccBViA17.s:45     .text:0000000000000040 .LVL1
+     /tmp/ccBViA17.s:142    .text:00000000000000d8 .LVL11
+     /tmp/ccBViA17.s:59     .text:0000000000000058 .LVL5
+     /tmp/ccBViA17.s:127    .text:00000000000000c4 .LVL6
+     /tmp/ccBViA17.s:863    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+_ZN15MemoryAllocator18roundToNumOfBlocksEm
+_ZN15MemoryAllocator6mallocEm
+_ZN15MemoryAllocator4freeEPv
+GAS LISTING /tmp/ccBViA17.s 			page 32
+
+
+_ZN9Scheduler3putEP12KernelThread
+_ZN9Scheduler3getEv
+_ZN12KernelThread13contextSwitchEPNS_7ContextES1_
+_ZN12KernelThread13pushRegistersEv
+_ZN12KernelThread12popRegistersEv
+_Z12idleFunctionv
+_Z11putFunctionv
