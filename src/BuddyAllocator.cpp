@@ -22,7 +22,7 @@ void BuddyAllocator::init(void* startAdr, size_t size) {
 
 void *BuddyAllocator::buddy_alloc(size_t size) {
     size_t numOfBlocks = findNearest2(size);
-    if(numOfBlocks > NUM_OF_ENTRYS)return nullptr;//exception;
+    if(numOfBlocks > (size_t)NUM_OF_ENTRYS)return nullptr;//exception;
     for(int current = numOfBlocks; current < NUM_OF_ENTRYS; current++){
         FreeMem* p = get(current);
         if(!p)continue;//split(p,16,0)
