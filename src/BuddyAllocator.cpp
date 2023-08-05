@@ -3,7 +3,6 @@
 //
 
 #include "../h/BuddyAllocator.hpp"
-#include "../test/printing.hpp"
 
 BuddyAllocator::FreeMem** BuddyAllocator::entrys = nullptr;
 void* BuddyAllocator::start=nullptr;

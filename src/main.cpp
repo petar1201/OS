@@ -1,6 +1,7 @@
 #include "../h/syscall_c.hpp"
 #include "../h/BuddyAllocator.hpp"
 #include "../test/userMain.hpp"
+
 extern "C" void supervisorTrap();
 
 void main(){
@@ -25,7 +26,7 @@ void main(){
                 while(KernelBuffer::ulaz->getCnt()>0)getc();
     }*/
 
-    BuddyAllocator::init(HEAP_START_ADDR, ((char*)HEAP_START_ADDR - (char*)HEAP_END_ADDR)/8 )
+    BuddyAllocator::init((void*)HEAP_START_ADDR, ((char*)HEAP_START_ADDR - (char*)HEAP_END_ADDR)/8 );
 
     BuddyAllocator::printEntrys();
     printString("\n");

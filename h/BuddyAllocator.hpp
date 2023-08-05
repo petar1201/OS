@@ -9,6 +9,8 @@
 
 #include "../lib/hw.h"
 #include "../lib/console.h"
+#include "../test/printing.hpp"
+
 
 class BuddyAllocator {
 private:
