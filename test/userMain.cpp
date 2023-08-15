@@ -27,8 +27,8 @@ void memset(const void *data, int size, int value) {
 
 void construct(void *data) {
     static int i = 1;
-    printString(i++);
-    printInt(" Shared object constructed.\n");
+    printInt(i++);
+    printString(" Shared object constructed.\n");
    // printf("%d Shared object constructed.\n", i++);
     memset(data, shared_size, MASK);
 }
