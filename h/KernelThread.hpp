@@ -7,6 +7,7 @@
 
 #include "../lib/hw.h"
 #include "../h/Scheduler.hpp"
+#include "../h/Cache.hpp"
 
 
 class KernelThread{
@@ -19,7 +20,7 @@ public:
 
     using Body = void (*)(void*);
 
-    static int createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*s, void* args,uint64 flag);
+    static int createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*stack, void* args,uint64 flag);
 
     static void yield();
 
@@ -37,11 +38,20 @@ public:
 
     static void initPut();
 
+    static void initCaches();
+
+
 
     static KernelThread* putThread;
     static KernelThread* mainThread;
 
     static int start(KernelThread* k);
+
+    static Cache* threadCache;
+    static Cache* stackCache;
+
+
+
 
 private:
 
