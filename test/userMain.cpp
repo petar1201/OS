@@ -35,7 +35,7 @@ void construct(void *data) {
 
 int check(void *data, size_t size) {
     int ret = 1;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < (int)size; i++) {
         if (((unsigned char *)data)[i] != MASK) {
             ret = 0;
         }
@@ -99,7 +99,7 @@ void runs(void(*work)(void*), struct data_s* data, int num) {
 }
 
 void userMain() {
-    kmem_cache_t *shared = kmem_cache_create("shared object", shared_size, construct, NULL);
+    kmem_cache_t *shared = kmem_cache_create("shared object", shared_size, construct, nullptr);
 
     struct data_s data;
     data.shared = shared;
