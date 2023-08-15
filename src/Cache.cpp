@@ -118,7 +118,6 @@ void *Cache::alloc(Cache *ch) {
     else{
         addIn(ch->headMid,tempE);
     }
-    ()(tr)->constructor()
     if(ch->constructor)ch->constructor(tr);
     return tr;
 
