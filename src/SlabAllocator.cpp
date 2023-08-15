@@ -131,7 +131,7 @@ SlabAllocator *SlabAllocator::initBuff(size_t sz, size_t N) {
     sb = (SlabAllocator*)BuddyAllocator::buddy_alloc(sz);
     if(sb == nullptr)return nullptr;
     sb->sizeOfObj = sz;
-    sb->sizeOfSlab = (1<<N*BLOCK_SIZE);
+    sb->sizeOfSlab = (1<<N)*BLOCK_SIZE;
     sb->numOfObjs = (sb->sizeOfSlab - sizeof(SlabAllocator))/(sz+sizeof(FreeMem));
     sb->head = (FreeMem*)((char*)sb+sizeof(SlabAllocator));
     //head->prev = nullptr;

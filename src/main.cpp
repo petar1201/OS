@@ -1,5 +1,6 @@
 #include "../h/syscall_c.hpp"
 #include "../h/BuddyAllocator.hpp"
+#include "../h/Cache.hpp"
 #include "../test/userMain.hpp"
 
 extern "C" void supervisorTrap();
@@ -14,6 +15,7 @@ void main(){
     KernelThread::initIdle();
     KernelThread::initPut();
     KernelBuffer::createBuff();
+    Cache::initBuffs();
 
     changeToUserMode();
 

@@ -41,18 +41,21 @@ Cache *Cache::init(const char *name, size_t size, void (*ctor)(void *), void (*d
 size_t Cache::deallocSlabList(SlabAllocator *sb) {
     SlabAllocator*temp = sb;
     size_t ret=0;
-    while(1){
+ /*   while(1){
         if(temp == nullptr)return ret;
         else{
             SlabAllocator*tr = temp;
             ret += SlabAllocator::getSizeOfSlab(temp);
             temp = temp->next;
-            SlabAllocator::doDestructors(tr, destructor);
+          //  SlabAllocator::doDestructors(tr, destructor);
             //DONE PozoviDestrukoreZaSveObjekteKojiPostojeNaPloci --- Dodati fju za to u klasi SlabAllocator
             //DONE i samo prosledjivati fju destruktor
-            BuddyAllocator::buddy_free(tr);
+         //   BuddyAllocator::buddy_free(tr);
         }
-    }
+    }*/
+       BuddyAllocator::buddy_free(temp);
+    return ret;
+
 }
 
 void Cache::destroy(Cache *ch) {
