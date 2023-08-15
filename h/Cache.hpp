@@ -34,7 +34,6 @@ public:
     static void removeFrom(SlabAllocator*head,SlabAllocator*add);
     static void* allocSmallBuff(size_t sz);
     static void deallocSmallBuff(void * p);
-    Cache:alloc(velicinu){};
     static Cache* ch32;
     static Cache* ch64;
     static Cache* ch128;
