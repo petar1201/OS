@@ -73,8 +73,8 @@ void work(void* pdata) {
         size++;
     }
 
- //   kmem_cache_info(cache);
-   // kmem_cache_info(data.shared);
+     kmem_cache_info(cache);
+     kmem_cache_info(data.shared);
 
     for (int i = 0; i < size; i++) {
         if (!check(objs[i].data, (cache == objs[i].cache) ? object_size : shared_size)) {

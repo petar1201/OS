@@ -3,6 +3,7 @@
 //
 
 #include "printing.hpp"
+#include "../lib/console.h"
 
 uint64 lockPrint = 0;
 
