@@ -21,7 +21,7 @@ const char * const CACHE_NAMES[] = {"tc_0",
 
 void memset(const void *data, int size, int value) {
     for (int j = 0; j < size; j++) {
-        *(char *)data = value;
+        *((char*)data+j) = value;
     }
 }
 
@@ -62,7 +62,7 @@ void work(void* pdata) {
             objs[size].data = kmem_cache_alloc(data.shared);
             objs[size].cache = data.shared;
             if (!check(objs[size].data, shared_size)) {
-                printf("Value not correct!");
+                printString("Value not correct!");
             }
         }
         else {
@@ -78,7 +78,7 @@ void work(void* pdata) {
 
     for (int i = 0; i < size; i++) {
         if (!check(objs[i].data, (cache == objs[i].cache) ? object_size : shared_size)) {
-            printf("Value not correct!");
+            printString("Value not correct!");
         }
         kmem_cache_free(objs[i].cache, objs[i].data);
     }
