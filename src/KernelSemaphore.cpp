@@ -43,12 +43,12 @@ int KernelSemaphore::destroy(KernelSemaphore*p) {
             tr->info->retVal=-1;
             KernelSemaphore::node* temp = tr;
             tr = tr->next;
-            int r = Cache::deallocSmallBuff(temp);
-            if(r != 0) vrati = -1;
+            Cache::deallocSmallBuff(temp);
+            //if(r != 0) vrati = -1;
         }
     }
-    int r = Cache::deallocSmallBuff(p);
-    if(r!=0)vrati = -1;
+    Cache::deallocSmallBuff(p);
+    //if(r!=0)vrati = -1;
     return vrati;
 }
 

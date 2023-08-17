@@ -4,7 +4,7 @@ Scheduler::node* Scheduler::head = nullptr;
 
 Scheduler::node* Scheduler::tail = nullptr;
 
-void Scheduler::put(KernelThread * k) {
+int Scheduler::put(KernelThread * k) {
 
     size_t size = sizeof(Scheduler::node);
 
@@ -23,6 +23,7 @@ void Scheduler::put(KernelThread * k) {
         tail->next=tr;
         tail = tail->next;
     }
+    return 0;
 }
 
 KernelThread *Scheduler::get() {

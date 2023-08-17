@@ -21,7 +21,7 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
 
 
     uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
-    if(!s)return = -1;
+    if(!s)return -1;
     KernelThread* tr;
 
     tr = (KernelThread*)Cache::alloc(Cache::threadCache);

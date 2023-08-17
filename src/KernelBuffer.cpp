@@ -31,13 +31,13 @@ char KernelBuffer::get() {
 void KernelBuffer::createBuff() {
     size_t size = sizeof(KernelBuffer);
 
-    ulaz = (KernelBuffer*)Cache::allocSmallBuff(size)
-    izlaz = (KernelBuffer*)Cache::allocSmallBuff(size)
+    ulaz = (KernelBuffer*)Cache::allocSmallBuff(size);
+    izlaz = (KernelBuffer*)Cache::allocSmallBuff(size);
 
     size = sizeof(char)*DEFAULT_BUFFER_SIZE;
 
-    ulaz->buffer = (char*)Cache::allocSmallBuff(size)
-    izlaz->buffer = (char*)Cache::allocSmallBuff(size)
+    ulaz->buffer = (char*)Cache::allocSmallBuff(size);
+    izlaz->buffer = (char*)Cache::allocSmallBuff(size);
 
     ulaz->cap = DEFAULT_BUFFER_SIZE;
     izlaz->cap = DEFAULT_BUFFER_SIZE;
