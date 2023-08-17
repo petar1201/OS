@@ -24,7 +24,7 @@ void main(){
 
     changeToUserMode();
 
-    userMain();
+    userMain1();
 
         while(KernelBuffer::ulaz->getCnt()>0 || KernelBuffer::izlaz->getCnt()>0){
                 while(KernelBuffer::ulaz->getCnt()>0)getc();

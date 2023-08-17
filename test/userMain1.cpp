@@ -64,7 +64,7 @@ private:
 };
 
 
-void userMain() {
+void userMain1() {
 
     ForkThread thread(1);
 
