@@ -21,6 +21,8 @@ Cache* Cache:: ch16384= nullptr;
 Cache* Cache:: ch32768= nullptr;
 Cache* Cache:: ch65536= nullptr;
 Cache* Cache:: ch131072= nullptr;
+Cache* Cache:: threadCache= nullptr;
+Cache* Cache:: stackCache= nullptr;
 
 Cache *Cache::init(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *)) {
     Cache* ch;
@@ -306,13 +308,18 @@ void Cache::removeFrom(SlabAllocator *head,SlabAllocator*add) {
 
 void Cache::initBuffs() {
     ch32= initOneBuff("ch32", 0, 32, nullptr, nullptr);
+//    threadCache = initOneBuff("threadCache", 0, 64, nullptr, nullptr);
+
     ch64 = initOneBuff("ch64", 0, 64, nullptr, nullptr);
+    threadCache = ch64;
     ch128 = initOneBuff("ch128", 0, 128, nullptr, nullptr);
     ch256 = initOneBuff("ch256", 0, 256, nullptr, nullptr);
     ch512 = initOneBuff("ch512", 0, 512, nullptr, nullptr);
     ch1024 = initOneBuff("ch1024",0, 1024, nullptr, nullptr);
     ch2048 = initOneBuff("ch2048",0, 2048, nullptr, nullptr);
     ch4096 = initOneBuff("ch4096",1, 4096, nullptr, nullptr);
+//    stackCache = initOneBuff("stackCache",1, 4096, nullptr, nullptr);
+    stackCache=ch4096;
     ch8192 = initOneBuff("ch8192",2, 8192, nullptr, nullptr);
     ch16384 = initOneBuff("ch16384",3, 16384, nullptr, nullptr);
     ch32768 = initOneBuff("ch32768",4, 32768, nullptr, nullptr);

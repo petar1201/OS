@@ -12,8 +12,7 @@ KernelThread *KernelThread::idleThread = nullptr;
 uint64 KernelThread::timeSliceCounter=0;
 KernelThread *KernelThread::putThread = nullptr;
 KernelThread *KernelThread::mainThread = nullptr;
-Cache* KernelThread::threadCache=nullptr;
-Cache* KernelThread::stackCache=nullptr;
+
 
 int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*stack, void* args,uint64 flag) {
     bool f;
@@ -21,13 +20,13 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
     else f = true;
 
 
-    uint64* s = (uint64*)Cache::alloc(stackCache);
+    uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
 
     KernelThread* tr;
 
-    tr = (KernelThread*)Cache::alloc(threadCache);
+    tr = (KernelThread*)Cache::alloc(Cache::threadCache);
     if(!tr){
-        if(s)Cache::free(stackCache, s);
+        if(s)Cache::free(Cache::stackCache, s);
         return -1;
     }
 
@@ -89,8 +88,8 @@ void KernelThread::dispatch(){
 
 
     if(old->isFinished()){
-        if(old->stack)Cache::free(stackCache, old->stack);
-        Cache::free(threadCache, old);
+        if(old->stack)Cache::free(Cache::stackCache, old->stack);
+        Cache::free(Cache::threadCache, old);
     }
 
     KernelThread::contextSwitch(&old->context, &running->context);
@@ -119,8 +118,8 @@ void KernelThread::threadWrapper() {
 }
 
 void KernelThread::initIdle() {
-    idleThread = (KernelThread*)Cache::alloc(threadCache);
-    idleThread->stack = (uint64*)Cache::alloc(stackCache);
+    idleThread = (KernelThread*)Cache::alloc(Cache::threadCache);
+    idleThread->stack = (uint64*)Cache::alloc(Cache::stackCache);
     idleThread->body = nullptr;
     idleThread->argument= nullptr;
     idleThread->context.sp = (uint64)&idleThread->stack[DEFAULT_STACK_SIZE];
@@ -146,8 +145,8 @@ uint64 KernelThread::getTimeSlice() const {
 
 
 void KernelThread::initPut() {
-    putThread = (KernelThread*)Cache::alloc(threadCache);
-    putThread->stack = (uint64*)Cache::alloc(stackCache);
+    putThread = (KernelThread*)Cache::alloc(Cache::threadCache);
+    putThread->stack = (uint64*)Cache::alloc(Cache::stackCache);
     putThread->body = nullptr;
     putThread->argument= nullptr;
     putThread->context.sp = (uint64)&putThread->stack[DEFAULT_STACK_SIZE];
@@ -166,9 +165,4 @@ int KernelThread::start(KernelThread*k) {
         Scheduler::put(k);
         return 0;
     }
-}
-
-void KernelThread::initCaches() {
-    threadCache=Cache::init("threadCache", sizeof(KernelThread),nullptr, nullptr);
-    stackCache=Cache::init("stackCache", DEFAULT_STACK_SIZE,nullptr, nullptr);
 }

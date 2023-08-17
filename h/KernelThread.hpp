@@ -38,7 +38,6 @@ public:
 
     static void initPut();
 
-    static void initCaches();
 
 
 
@@ -47,8 +46,6 @@ public:
 
     static int start(KernelThread* k);
 
-    static Cache* threadCache;
-    static Cache* stackCache;
 
 
 

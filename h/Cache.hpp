@@ -47,6 +47,8 @@ public:
     static Cache* ch32768;
     static Cache* ch65536;
     static Cache* ch131072;
+    static Cache* threadCache;
+    static Cache* stackCache;
 };
 
 

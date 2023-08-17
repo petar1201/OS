@@ -13,7 +13,6 @@ void main(){
     thread_t mainThread;
     Cache::initBuffs();
 
-    KernelThread::initCaches();
 
 
     thread_create(&mainThread, nullptr, nullptr);
