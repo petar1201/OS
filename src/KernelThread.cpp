@@ -11,21 +11,20 @@ KernelThread *KernelThread::running = nullptr;
 KernelThread *KernelThread::idleThread = nullptr;
 uint64 KernelThread::timeSliceCounter=0;
 KernelThread *KernelThread::putThread = nullptr;
+
 KernelThread *KernelThread::mainThread = nullptr;
-
-
 int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*s, void* args,uint64 flag) {
     bool f;
     if(flag==0)f=false;
     else f = true;
+    size_t size = sizeof(KernelThread);
+    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
-
-    if(!s)return -1;
     KernelThread* tr;
 
-    tr = (KernelThread*)Cache::alloc(Cache::threadCache);
+    tr = (KernelThread*)MemoryAllocator::malloc(sz);
     if(!tr){
-        MemoryAllocator::free(s);
+        if(s)MemoryAllocator::free(s);
         return -1;
     }
 
@@ -72,9 +71,9 @@ void KernelThread::yield() {
     __asm__ volatile("li a0, 0x13");
     __asm__ volatile("ecall");
 
- //   KernelThread::pushRegisters();
+    //   KernelThread::pushRegisters();
 
-   // KernelThread::dispatch();
+    // KernelThread::dispatch();
 
     //KernelThread::popRegisters();
 }
@@ -86,10 +85,10 @@ void KernelThread::dispatch(){
     if (old!=idleThread && !old->isFinished()) { Scheduler::put(old); }
 
 
-    if(old->isFinished()){
-//        if(old->stack)Cache::free(Cache::stackCache, old->stack);
-//        Cache::free(Cache::threadCache, old);
-    }
+//     if(old->isFinished()){
+//        if(old->stack)MemoryAllocator::free(old->stack);
+//        MemoryAllocator::free(old);
+//    }
 
     KernelThread::contextSwitch(&old->context, &running->context);
 
@@ -103,6 +102,12 @@ void KernelThread::dispatchNoScheduler(){
     running = Scheduler::get();
     KernelThread::contextSwitch(&old->context, &running->context);
 
+/*
+    if(old->isFinished()){
+        if(old->stack)MemoryAllocator::free(old->stack);
+        MemoryAllocator::free(old);
+    }
+*/
     KernelThread::popRegisters();
 }
 
@@ -117,8 +122,14 @@ void KernelThread::threadWrapper() {
 }
 
 void KernelThread::initIdle() {
-    idleThread = (KernelThread*)Cache::alloc(Cache::threadCache);
-    idleThread->stack = (uint64*)Cache::alloc(Cache::stackCache);
+    size_t size = sizeof(KernelThread);
+    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+
+    idleThread = (KernelThread*)MemoryAllocator::malloc(sz);
+    size = DEFAULT_STACK_SIZE;
+    sz = MemoryAllocator::roundToNumOfBlocks(size);
+
+    idleThread->stack = (uint64*)MemoryAllocator::malloc(sz);
     idleThread->body = nullptr;
     idleThread->argument= nullptr;
     idleThread->context.sp = (uint64)&idleThread->stack[DEFAULT_STACK_SIZE];
@@ -144,8 +155,14 @@ uint64 KernelThread::getTimeSlice() const {
 
 
 void KernelThread::initPut() {
-    putThread = (KernelThread*)Cache::alloc(Cache::threadCache);
-    putThread->stack = (uint64*)Cache::alloc(Cache::stackCache);
+    size_t size = sizeof(KernelThread);
+    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+
+    putThread = (KernelThread*)MemoryAllocator::malloc(sz);
+    size = DEFAULT_STACK_SIZE;
+    sz = MemoryAllocator::roundToNumOfBlocks(size);
+
+    putThread->stack = (uint64*)MemoryAllocator::malloc(sz);
     putThread->body = nullptr;
     putThread->argument= nullptr;
     putThread->context.sp = (uint64)&putThread->stack[DEFAULT_STACK_SIZE];
