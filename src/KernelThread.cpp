@@ -14,13 +14,12 @@ KernelThread *KernelThread::putThread = nullptr;
 KernelThread *KernelThread::mainThread = nullptr;
 
 
-int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*stack, void* args,uint64 flag) {
+int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, uint64*s, void* args,uint64 flag) {
     bool f;
     if(flag==0)f=false;
     else f = true;
 
 
-    uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
     if(!s)return -1;
     KernelThread* tr;
 

@@ -30,9 +30,10 @@ int mem_free(void * addr) {
 
 int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
     if(handle==nullptr)return -1;
+    uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
 
     __asm__ volatile("mv a5, %0"::"r"(1));
-    __asm__ volatile ("mv a4, %0"::"r"(nullptr));
+    __asm__ volatile ("mv a4, %0"::"r"(s));
     __asm__ volatile ("mv a3, %0"::"r"(arg));
     __asm__ volatile ("mv a2, %0"::"r"(start_routine));
     __asm__ volatile ("mv a1, %0"::"r"(handle));
@@ -173,9 +174,10 @@ int thread_start(thread_t handle){
 
 int thread_create_v2(thread_t *handle, void (*start_routine)(void *), void *arg) {
     if(handle==nullptr)return -1;
+    uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
 
     __asm__ volatile("mv a5, %0"::"r"(0));
-    __asm__ volatile ("mv a4, %0"::"r"(nullptr));
+    __asm__ volatile ("mv a4, %0"::"r"(s));
     __asm__ volatile ("mv a3, %0"::"r"(arg));
     __asm__ volatile ("mv a2, %0"::"r"(start_routine));
     __asm__ volatile ("mv a1, %0"::"r"(handle));

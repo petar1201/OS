@@ -13,7 +13,7 @@ public:
     virtual void run() {
         printString("Started thread id:");
         printInt(id);
-        printString("\n")
+        printString("\n");
 
         ForkThread* thread = new ForkThread(id + 1);
         ForkThread** threads = (ForkThread** ) mem_alloc(sizeof(ForkThread*) * id);
@@ -49,7 +49,7 @@ public:
 
         printString("Finished thread id:");
         printInt(id);
-        printString("\n")
+        printString("\n");
 
         finished = true;
     }
