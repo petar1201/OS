@@ -17,6 +17,7 @@ void main(){
 
     thread_create(&mainThread, nullptr, nullptr);
     KernelThread::running = mainThread;
+    KernelThread::mainThread=mainThread;
     KernelThread::initIdle();
     KernelThread::initPut();
     KernelBuffer::createBuff();

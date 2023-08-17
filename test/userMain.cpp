@@ -26,7 +26,7 @@ public:
             if (thread != nullptr) {
                 if (thread->start() == 0) {
 
-                    for (int i = 0; i < 5000; i++) {
+                    for (int i = 0; i < 1; i++) {
                         for (int j = 0; j < 5000; j++) {
 
                         }
@@ -65,6 +65,7 @@ private:
 
 
 void userMain() {
+
     ForkThread thread(1);
 
     thread.start();

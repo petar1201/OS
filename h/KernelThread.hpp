@@ -52,6 +52,8 @@ public:
 
 private:
 
+
+
     uint64 timeSlice;
 
     static void threadWrapper();

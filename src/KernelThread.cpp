@@ -17,16 +17,18 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
     bool f;
     if(flag==0)f=false;
     else f = true;
-    size_t size = sizeof(KernelThread);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
+//    size_t size = sizeof(KernelThread);
+//    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
     KernelThread* tr;
-
-    tr = (KernelThread*)MemoryAllocator::malloc(sz);
+    if(!s)return -1;
+//    tr = (KernelThread*)MemoryAllocator::malloc(sz);
+    tr = (KernelThread*)Cache::alloc(Cache::threadCache);
     if(!tr){
-        if(s)MemoryAllocator::free(s);
+        MemoryAllocator::free(s);
         return -1;
     }
+
 
     tr->body = bod;
     tr->argument = args;
@@ -80,7 +82,7 @@ void KernelThread::yield() {
 
 void KernelThread::dispatch(){
     KernelThread *old = running;
-
+    if(old == mainThread)old->setFinished(false);
     running = Scheduler::get();
     if (old!=idleThread && !old->isFinished()) { Scheduler::put(old); }
 
@@ -125,7 +127,8 @@ void KernelThread::initIdle() {
     size_t size = sizeof(KernelThread);
     size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
-    idleThread = (KernelThread*)MemoryAllocator::malloc(sz);
+//    idleThread = (KernelThread*)MemoryAllocator::malloc(sz);
+    idleThread = (KernelThread*)Cache::alloc(Cache::threadCache);
     size = DEFAULT_STACK_SIZE;
     sz = MemoryAllocator::roundToNumOfBlocks(size);
 
@@ -158,7 +161,8 @@ void KernelThread::initPut() {
     size_t size = sizeof(KernelThread);
     size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
-    putThread = (KernelThread*)MemoryAllocator::malloc(sz);
+//    putThread = (KernelThread*)MemoryAllocator::malloc(sz);
+    putThread = (KernelThread*)Cache::alloc(Cache::threadCache);
     size = DEFAULT_STACK_SIZE;
     sz = MemoryAllocator::roundToNumOfBlocks(size);
 
