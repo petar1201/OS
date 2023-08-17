@@ -21,7 +21,7 @@ private:
     static node* head;
     static node* tail;
 public:
-    static void put(KernelThread* k) ;
+    static int put(KernelThread* k) ;
     static KernelThread* get();
     static bool empty();
 

@@ -43,21 +43,20 @@ int KernelSemaphore::destroy(KernelSemaphore*p) {
             tr->info->retVal=-1;
             KernelSemaphore::node* temp = tr;
             tr = tr->next;
-            int r = MemoryAllocator::free(temp);
+            int r = Cache::deallocSmallBuff(temp);
             if(r != 0) vrati = -1;
         }
     }
-    int r = MemoryAllocator::free(p);
+    int r = Cache::deallocSmallBuff(p);
     if(r!=0)vrati = -1;
     return vrati;
 }
 
 int KernelSemaphore::createSemaphore(KernelSemaphore **handle, int startVal) {
     size_t size = sizeof(KernelSemaphore);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
     KernelSemaphore*tr;
-    tr = (KernelSemaphore*)MemoryAllocator::malloc(sz);
+    tr = (KernelSemaphore*)Cache::allocSmallBuff(size);
     if(!tr)return -1;
     tr->head=nullptr;
     tr->tail=nullptr;
@@ -72,23 +71,22 @@ KernelThread *KernelSemaphore::get() {
     head = head->next;
     if(!head)tail=nullptr;
     KernelThread*ret = tr->info;
-    MemoryAllocator::free((void*)tr);
+    Cache::deallocSmallBuff((void*)tr);
     return ret;
 }
 
 void KernelSemaphore::put(KernelThread* k) {
     size_t size = sizeof(node);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
     if(!head){
-        head =(node*)MemoryAllocator::malloc(sz);
+        head =(node*)Cache::allocSmallBuff(size);
         head->next = nullptr;
         head->info =k;
         tail = head;
     }
     else{
         node* tr;
-        tr = (node*)MemoryAllocator::malloc(sz);
+        tr = (node*)Cache::allocSmallBuff(size);
         tr->next = nullptr;
         tr->info = k;
         tail->next=tr;

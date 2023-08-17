@@ -30,14 +30,14 @@ char KernelBuffer::get() {
 
 void KernelBuffer::createBuff() {
     size_t size = sizeof(KernelBuffer);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
-    ulaz = (KernelBuffer*)MemoryAllocator::malloc(sz);
-    izlaz = (KernelBuffer*)MemoryAllocator::malloc(sz);
+
+    ulaz = (KernelBuffer*)Cache::allocSmallBuff(size)
+    izlaz = (KernelBuffer*)Cache::allocSmallBuff(size)
 
     size = sizeof(char)*DEFAULT_BUFFER_SIZE;
-    sz = MemoryAllocator::roundToNumOfBlocks(size);
-    ulaz->buffer = (char*)MemoryAllocator::malloc(sz);
-    izlaz->buffer = (char*)MemoryAllocator::malloc(sz);
+
+    ulaz->buffer = (char*)Cache::allocSmallBuff(size)
+    izlaz->buffer = (char*)Cache::allocSmallBuff(size)
 
     ulaz->cap = DEFAULT_BUFFER_SIZE;
     izlaz->cap = DEFAULT_BUFFER_SIZE;
@@ -57,17 +57,17 @@ void KernelBuffer::createBuff() {
 }
 
 void KernelBuffer::destroyBuffs() {
-    MemoryAllocator::free((void*)ulaz->buffer);
+    Cache::deallocSmallBuff((void*)ulaz->buffer);
     KernelSemaphore::destroy(ulaz->itemAvailable);
     KernelSemaphore::destroy(ulaz->spaceAvailable);
 
-    MemoryAllocator::free((void*)izlaz->buffer);
+    Cache::deallocSmallBuff((void*)izlaz->buffer);
     KernelSemaphore::destroy(izlaz->itemAvailable);
     KernelSemaphore::destroy(izlaz->spaceAvailable);
 
 
-    MemoryAllocator::free((void*)ulaz);
-    MemoryAllocator::free((void*)izlaz);
+    Cache::deallocSmallBuff((void*)ulaz);
+    Cache::deallocSmallBuff((void*)izlaz);
 
 }
 

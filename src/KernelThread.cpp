@@ -21,7 +21,7 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
 
 
     uint64* s = (uint64*)Cache::alloc(Cache::stackCache);
-
+    if(!s)return = -1;
     KernelThread* tr;
 
     tr = (KernelThread*)Cache::alloc(Cache::threadCache);
@@ -162,7 +162,6 @@ int KernelThread::start(KernelThread*k) {
     if(k->started)return -1;
     else{
         k->started=true;
-        Scheduler::put(k);
-        return 0;
+        return Scheduler::put(k);
     }
 }

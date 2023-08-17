@@ -7,17 +7,17 @@ Scheduler::node* Scheduler::tail = nullptr;
 void Scheduler::put(KernelThread * k) {
 
     size_t size = sizeof(Scheduler::node);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
     if(!head){
-        head =(Scheduler::node*)MemoryAllocator::malloc(sz);
+        head =(Scheduler::node*)Cache::allocSmallBuff(size);
         head->next = nullptr;
         head->info =k;
         tail = head;
     }
     else{
         Scheduler::node* tr;
-        tr = (Scheduler::node*)MemoryAllocator::malloc(sz);
+        tr = (Scheduler::node*)Cache::allocSmallBuff(size);
+        if(!tr)return -1;
         tr->next = nullptr;
         tr->info = k;
         tail->next=tr;
@@ -31,7 +31,7 @@ KernelThread *Scheduler::get() {
     head = head->next;
     if(!head)tail=nullptr;
     KernelThread*ret = tr->info;
-    MemoryAllocator::free((void*)tr);
+    Cache::deallocSmallBuff((void*)tr);
     return ret;
 }
 

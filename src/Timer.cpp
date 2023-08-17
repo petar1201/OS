@@ -13,10 +13,9 @@ int Timer:: addInList(KernelThread *k, uint64 t) {
     if(t==0)return -1;
     node* temp;
     size_t size = sizeof(Timer::node);
-    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
 
-    temp = (node*)MemoryAllocator::malloc(sz);
+    temp = (node*)Cache::allocSmallBuff(size);
     if(!temp)return -1;
     temp->next= nullptr;
     temp->timeSliceCounter=t;
@@ -89,7 +88,7 @@ void Timer::checkAll() {
                     head = head->next;
                     node* temp =tr;
                     tr = tr->next;
-                    MemoryAllocator::free(temp);
+                    Cache::deallocSmallBuff(temp);
                 }
                 else{
                     node* temp = head;
@@ -100,7 +99,7 @@ void Timer::checkAll() {
                     temp->next = tr->next;
                     temp = tr;
                     tr = tr->next;
-                    MemoryAllocator::free(temp);
+                    Cache::deallocSmallBuff(temp);
                 }
             }
             else{

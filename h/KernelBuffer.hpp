@@ -6,6 +6,7 @@
 #define PROJECT_BASE_KERNELBUFFER_HPP
 
 #include "../h/syscall_c.hpp"
+#include "../h/Cache.hpp"
 
 class KernelBuffer {
 private:
