@@ -25,7 +25,7 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
 
     tr = (KernelThread*)Cache::alloc(Cache::threadCache);
     if(!tr){
-        if(s)Cache::free(Cache::stackCache, s);
+        MemoryAllocator::free(s);
         return -1;
     }
 
@@ -87,8 +87,8 @@ void KernelThread::dispatch(){
 
 
     if(old->isFinished()){
-        if(old->stack)Cache::free(Cache::stackCache, old->stack);
-        Cache::free(Cache::threadCache, old);
+//        if(old->stack)Cache::free(Cache::stackCache, old->stack);
+//        Cache::free(Cache::threadCache, old);
     }
 
     KernelThread::contextSwitch(&old->context, &running->context);
