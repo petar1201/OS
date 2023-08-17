@@ -2,7 +2,7 @@ DIR_BUILD = build
 DIR_LIBS  = lib
 DIR_INC   = h
 
-DEBUG_FLAG = -D DEBUG_PRINT=0
+DEBUG_FLAG = -D DEBUG_PRINT=0 -fcheck-new
 
 KERNEL_IMG = kernel
 KERNEL_ASM = kernel.asm
@@ -47,6 +47,7 @@ CFLAGS += -march=rv64ima -mabi=lp64 -mcmodel=medany -mno-relax
 CFLAGS += -fno-omit-frame-pointer -ffreestanding -fno-common
 CFLAGS += $(shell ${CC} -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += ${DEBUG_FLAG}
+CFLAGS += -fcheck-new
 #CFLAGS += -I./${DIR_LIBS} -I./${DIR_INC}
 CFLAGS += -MMD -MP -MF"${@:%.o=%.d}"
 
@@ -67,6 +68,7 @@ CXXFLAGS += -fno-rtti -fno-threadsafe-statics
 CXXFLAGS += $(shell ${CXX} -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CXXFLAGS += ${DEBUG_FLAG}
 CXXFLAGS += -MMD -MP -MF"${@:%.o=%.d}"
+CXXFLAGS += -fcheck-new
 
 LDSCRIPT = kernel.ld
 LDFLAGS  = -z max-page-size=4096 --script ${LDSCRIPT}
