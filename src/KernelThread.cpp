@@ -21,11 +21,12 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
 //    size_t sz = MemoryAllocator::roundToNumOfBlocks(size);
 
     KernelThread* tr;
-    if(!s)return -1;
+//    if(!s)return -1;
 //    tr = (KernelThread*)MemoryAllocator::malloc(sz);
+
     tr = (KernelThread*)Cache::alloc(Cache::threadCache);
     if(!tr){
-        MemoryAllocator::free(s);
+        if(s)MemoryAllocator::free(s);
         return -1;
     }
 
@@ -40,6 +41,7 @@ int KernelThread::createCoroutine(KernelThread**handle,KernelThread::Body bod, u
         tr->stack = s;
         if(f)tr->started=true;
         else tr->started=false;
+        if(!s)tr->started=true;
     }
     else{
         mainThread = tr;

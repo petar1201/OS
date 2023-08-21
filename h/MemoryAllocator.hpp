@@ -1,5 +1,5 @@
 //
-// Created by os on 2/11/23.
+// Created by petar on 15/8/23.
 //
 
 #ifndef PROJECT_BASE_V1_1_MEMORYALLOCATOR_HPP
@@ -14,9 +14,7 @@ private:
         size_t size;
     }FreeMem;
 
-    static FreeMem* freeMemHead;
-
-    MemoryAllocator();
+    static FreeMem* head;
 
     static int tryToJoin(FreeMem *cur);
 
@@ -29,8 +27,6 @@ public:
     static int free(void *address);
 
     static size_t roundToNumOfBlocks(size_t sz);
-
-
 };
 
 #endif //PROJECT_BASE_V1_1_MEMORYALLOCATOR_HPP
